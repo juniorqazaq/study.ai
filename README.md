@@ -287,7 +287,7 @@ This is a private project. For collaboration inquiries:
 
 <div align="center">
 
-**Built with ❤️ by the Study.ai Team**
+**Built with ❤️ by the Tunyq Team**
 
 *Empowering learners worldwide through intelligent technology*
 
