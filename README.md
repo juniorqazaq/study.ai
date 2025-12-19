@@ -291,6 +291,6 @@ This is a private project. For collaboration inquiries:
 
 *Empowering learners worldwide through intelligent technology*
 
-© 2025 Study.ai. All rights reserved.
+© 2025 Tunyq. All rights reserved.
 
 </div>
