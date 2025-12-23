@@ -106,39 +106,7 @@ Import from PDFs, TXT files, URLs, or GitHub repositories.
 
 ---
 
-## 📁 Project Structure
 
-```
-Study.Ai/
-├── src/
-│   ├── components/
-│   │   ├── ui/                  # shadcn/ui components
-│   │   ├── landing/             # Landing page sections
-│   │   ├── layout/              # Header, Footer
-│   │   ├── study/               # Study mode components
-│   │   └── theme-provider.tsx   # Dark/Light theme manager
-│   │
-│   ├── pages/
-│   │   ├── LandingPage.tsx     # Marketing page
-│   │   ├── DashboardPage.tsx   # Main dashboard
-│   │   ├── UploadPage.tsx      # Material upload
-│   │   ├── QuizPage.tsx        # Interactive quizzes
-│   │   ├── NotesPage.tsx       # Note-taking
-│   │   ├── MindMapPage.tsx     # Mind maps
-│   │   ├── StatisticsPage.tsx  # Analytics
-│   │   └── auth/               # Login, Register
-│   │
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── globals.css
-│
-├── public/
-├── tailwind.config.js
-├── vite.config.ts
-└── package.json
-```
-
----
 
 ## 🎨 Design System
 
