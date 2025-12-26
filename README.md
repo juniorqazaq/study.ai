@@ -205,13 +205,13 @@ backdrop-blur + opacity effects on Header
 <tr>
 <td align="center">
 <img src="https://github.com/Sanat-07.png" width="100px;" alt="Sanat"/><br />
-<sub><b>Sanat Bogenbaev</b></sub><br />
+<sub><b>Sanat Bogenbaev </b></sub><br />
 <sub>CEO & Co-founder</sub><br />
 <a href="https://github.com/Sanat-07">GitHub</a>
 </td>
 <td align="center">
 <img src="https://github.com/Oralkhan-coder.png" width="100px;" alt="Oralxhan"/><br />
-<sub><b>Oralxhan Seilxhan</b></sub><br />
+<sub><b>Oralxhan Seilxhan </b></sub><br />
 <sub>CTO & Co-founder</sub><br />
 <a href="https://github.com/Oralkhan-coder">GitHub</a>
 </td>
