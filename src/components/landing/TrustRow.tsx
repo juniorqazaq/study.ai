@@ -23,7 +23,7 @@ export function TrustRow() {
                 </p>
             </div>
 
-            <div className="relative w-full overflow-hidden">
+            <div className="relative w-full overflow-hidden mask-edge-fade">
                 <div className="flex w-max animate-marquee items-center">
                     {/* First set of logos */}
                     <div className="flex items-center gap-16 mx-8">

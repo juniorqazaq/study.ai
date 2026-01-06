@@ -13,7 +13,7 @@ import {
   Panel,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Download, Plus, Layout, Share2, ArrowLeft } from 'lucide-react';
+import { Download, Layout, Share2, ArrowLeft } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import MindMapNode from './mindmap/MindMapNode';
 import { FloatingToolbar } from './mindmap/FloatingToolbar';
@@ -74,7 +74,6 @@ const Flow = () => {
     // Simple fan-out logic: 
     // If it's the first child, place it to the right.
     // Subsequent children get vertical offsets.
-    const baseOffset = 150;
     const verticalSpacing = 100;
     // Alternate up/down for subsequent nodes to balance the tree
     const verticalOffset = childCount === 0 ? 0 :

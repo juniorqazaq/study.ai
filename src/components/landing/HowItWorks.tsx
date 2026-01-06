@@ -1,62 +1,125 @@
-import { Upload, Wand2, GraduationCap, ArrowRight } from "lucide-react";
+import { UserPlus, Sparkles, BookOpen, BarChart3, RotateCw, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
+const steps = [
+    {
+        id: "01",
+        title: "Sign In & Set Goals",
+        desc: "Enter your subjects, level, and learning objectives to kickoff your journey.",
+        icon: UserPlus,
+        color: "bg-blue-500",
+        delay: 0.1
+    },
+    {
+        id: "02",
+        title: "Generate Study Plan",
+        desc: "Study.ai creates a personalized plan with recommended materials and exercises.",
+        icon: Sparkles,
+        color: "bg-purple-500",
+        delay: 0.2
+    },
+    {
+        id: "03",
+        title: "Engage with Resources",
+        desc: "Use notes, flashcards, quizzes, and videos to study efficiently.",
+        icon: BookOpen,
+        color: "bg-indigo-500",
+        delay: 0.3
+    },
+    {
+        id: "04",
+        title: "Track Progress",
+        desc: "AI monitors your performance and adapts your plan for maximum results.",
+        icon: BarChart3,
+        color: "bg-teal-500",
+        delay: 0.4
+    },
+    {
+        id: "05",
+        title: "Revise & Improve",
+        desc: "Regularly review weak areas and strengthen knowledge with AI-guided repetition.",
+        icon: RotateCw,
+        color: "bg-rose-500",
+        delay: 0.5
+    },
+];
 
 export function HowItWorks() {
-    const steps = [
-        {
-            step: 1,
-            title: "Upload",
-            desc: "Upload any PDF, notes, or video.",
-            icon: Upload,
-            color: "bg-blue-100 text-blue-600"
-        },
-        {
-            step: 2,
-            title: "AI Converts",
-            desc: "We generate flashcards & quizzes instantly.",
-            icon: Wand2,
-            color: "bg-purple-100 text-purple-600"
-        },
-        {
-            step: 3,
-            title: "Practice",
-            desc: "Study, track progress, and ace exams.",
-            icon: GraduationCap,
-            color: "bg-teal-100 text-teal-600"
-        },
-    ];
-
     return (
-        <section className="py-20 md:py-32 bg-background" id="how-it-works">
-            <div className="container mx-auto px-4 md:px-6 text-center">
-                <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 text-foreground">How it Works</h2>
-                <p className="text-muted-foreground mb-16 max-w-2xl mx-auto">
-                    From raw notes to active recall in seconds. No more manual data entry.
-                </p>
+        <section className="py-24 md:py-40 bg-slate-50 relative overflow-hidden" id="how-it-works">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
 
-                <div className="grid md:grid-cols-3 gap-8 relative items-start">
-                    {/* Connector Line (Desktop) */}
-                    <div className="hidden md:block absolute top-[2.5rem] left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-transparent via-border to-transparent -z-10" />
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="max-w-3xl mx-auto text-center mb-20 md:mb-32">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight mb-8">
+                            How It Works
+                        </h2>
+                        <p className="text-xl text-slate-500 font-medium">
+                            A simple, proven process to achieve your academic goals.
+                        </p>
+                    </motion.div>
+                </div>
 
-                    {steps.map((s) => (
-                        <div key={s.step} className="flex flex-col items-center relative group">
-                            <div className={`w-20 h-20 rounded-2xl ${s.color} flex items-center justify-center mb-6 shadow-sm border border-white/50 group-hover:scale-110 transition-transform duration-300 relative z-10`}>
-                                <s.icon size={32} />
-                                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-foreground text-background font-bold flex items-center justify-center text-sm shadow-md">
-                                    {s.step}
+                <div className="relative">
+                    {/* Connection Line (Desktop) */}
+                    <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 -translate-y-1/2 opacity-50" />
+
+                    <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 relative">
+                        {steps.map((s) => (
+                            <motion.div
+                                key={s.id}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: s.delay }}
+                                className="group relative"
+                            >
+                                <div className="flex flex-col items-center text-center space-y-6">
+                                    {/* Icon Container */}
+                                    <div className="relative">
+                                        <div className={`w-20 h-20 rounded-3xl ${s.color} flex items-center justify-center text-white shadow-2xl shadow-${s.color.split('-')[1]}-500/30 group-hover:scale-110 transition-transform duration-500 relative z-10`}>
+                                            <s.icon size={32} strokeWidth={2.5} />
+                                        </div>
+                                        {/* Step Number Overlay */}
+                                        <div className="absolute -top-4 -right-4 w-10 h-10 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-slate-900 font-black text-sm z-20">
+                                            {s.id}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <h3 className="text-xl font-bold text-slate-900 tracking-tight group-hover:text-primary transition-colors">
+                                            {s.title}
+                                        </h3>
+                                        <p className="text-sm text-slate-500 font-medium leading-relaxed px-4">
+                                            {s.desc}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <h3 className="font-bold text-xl mb-2">{s.title}</h3>
-                            <p className="text-muted-foreground text-sm max-w-[200px]">{s.desc}</p>
-                        </div>
-                    ))}
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
 
-                <div className="mt-16">
-                    <Button size="lg" className="rounded-full px-8">
-                        Try with your file <ArrowRight className="ml-2 w-4 h-4" />
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="mt-24 md:mt-32 text-center"
+                >
+                    <Button size="lg" className="h-16 px-10 rounded-2xl bg-slate-900 hover:bg-black text-white font-bold text-lg shadow-xl shadow-slate-900/20 active:scale-95 transition-all">
+                        Start Your Journey <ArrowRight className="ml-3 w-5 h-5" />
                     </Button>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

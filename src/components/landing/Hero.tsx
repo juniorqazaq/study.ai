@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowRight, Sparkles, Zap, CheckCircle2, Play } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Play } from 'lucide-react';
 import { generateFlashcard, FlashcardData } from '@/services/gemini';
 import { Link } from 'react-router-dom';
+import { LiquidBackground } from '../layout/LiquidBackground';
 
 export function Hero() {
     const [demoTopic, setDemoTopic] = useState('');
@@ -28,12 +29,15 @@ export function Hero() {
     };
 
     return (
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
-            {/* Background Decor */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-blue-100/40 rounded-full blur-[100px] mix-blend-multiply animate-blob"></div>
-                <div className="absolute top-[10%] right-[0%] w-[50%] h-[60%] bg-purple-100/40 rounded-full blur-[100px] mix-blend-multiply animate-blob animation-delay-2000"></div>
-                <div className="absolute -bottom-[20%] left-[20%] w-[60%] h-[60%] bg-indigo-100/40 rounded-full blur-[100px] mix-blend-multiply animate-blob animation-delay-4000"></div>
+        <LiquidBackground className="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+            {/* Background Brand Text */}
+            <div className="absolute top-[10%] -right-[5%] pointer-events-none select-none z-0 text-primary opacity-[0.03] hidden lg:block">
+                <h1
+                    className="text-[200px] xl:text-[300px] font-black leading-none tracking-tighter"
+                    style={{ WebkitTextStroke: '2px currentColor', color: 'transparent' }}
+                >
+                    STUDY AI
+                </h1>
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -41,37 +45,38 @@ export function Hero() {
 
                     {/* Text Content */}
                     <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-[#0066FF] font-semibold text-sm mb-8 border border-blue-100/50 shadow-sm">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 text-primary font-bold text-xs mb-8 border border-primary/10 shadow-sm uppercase tracking-widest">
                             <Sparkles className="w-4 h-4" />
-                            <span>New: Gemini 2.5 AI Model</span>
+                            <span>Alpha Testing: Q1 2026</span>
                         </div>
 
-                        <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-8 leading-[1.1]">
-                            Study smarter.<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0066FF] to-blue-500">Learn faster.</span>
+                        <h1 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tight mb-8 leading-[1.1]">
+                            The future of learning is <span className="text-primary italic">liquid.</span>
                         </h1>
 
-                        <p className="text-xl text-slate-600 mb-10 leading-relaxed">
-                            Convert your notes, PDFs, and videos into flashcards, quizzes, and practice tests — instantly. Stop wasting time making materials and start learning.
+                        <p className="text-xl text-slate-600 mb-10 leading-relaxed font-medium">
+                            We are building an AI that adapts to your brain's unique rhythms. No more rote memorization. Just pure, effortless mastery.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-                            <Link to="/register" className="bg-[#0066FF] hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-2">
+                            <Link to="/register" className="bg-primary hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-2">
                                 Get Started Free
                                 <ArrowRight className="w-5 h-5" />
                             </Link>
-                            <button className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                            <button className="bg-white/40 backdrop-blur-md hover:bg-white/60 text-slate-700 border border-white/40 px-8 py-5 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
                                 <Play className="w-5 h-5 fill-current" />
                                 See demo
                             </button>
                         </div>
 
-                        <div className="flex items-center justify-center lg:justify-start gap-8 text-slate-500 text-sm font-medium">
+                        <div className="flex items-center justify-center lg:justify-start gap-8 text-slate-500 text-sm font-bold uppercase tracking-widest">
                             <div className="flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5 text-green-500" /> No credit card required
+                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                                1,240 on waitlist
                             </div>
                             <div className="flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5 text-green-500" /> 7-day free trial
+                                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                50 alpha spots left
                             </div>
                         </div>
                     </div>
@@ -86,7 +91,7 @@ export function Hero() {
                                     <div className="w-3 h-3 rounded-full bg-[#FEBC2E] shadow-sm"></div>
                                     <div className="w-3 h-3 rounded-full bg-[#28C840] shadow-sm"></div>
                                 </div>
-                                <div className="text-xs font-medium text-slate-400 select-none">Study.ai - Flashcard Generator</div>
+                                <div className="text-xs font-medium text-slate-400 select-none">STUDY AI - Flashcard Generator</div>
                                 <div className="w-10"></div> {/* Spacer for centering */}
                             </div>
 
@@ -190,6 +195,6 @@ export function Hero() {
 
                 </div>
             </div>
-        </section>
+        </LiquidBackground>
     );
 };

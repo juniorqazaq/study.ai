@@ -12,7 +12,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
-import logo from "@/assets/logos/logo.png";
 
 const MOCK_CHART_DATA = [
     { name: 'Mon', hours: 2.5 },

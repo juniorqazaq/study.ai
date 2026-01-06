@@ -2,10 +2,9 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/landing/Hero";
 import { TrustRow } from "@/components/landing/TrustRow";
-
-import { Testimonials } from "@/components/landing/Testimonials";
-import { PricingSnapshot } from "@/components/landing/PricingSnapshot";
-import { ComparisonSection } from "@/components/landing/ComparisonSection";
+import { LearningScience } from "@/components/landing/LearningScience";
+import { Roadmap } from "@/components/landing/Roadmap";
+import { LandingFeatures } from "@/components/landing/LandingFeatures";
 
 export function LandingPage() {
     return (
@@ -15,10 +14,9 @@ export function LandingPage() {
             <main>
                 <Hero />
                 <TrustRow />
-
-                <Testimonials />
-                <ComparisonSection />
-                <PricingSnapshot />
+                <LearningScience />
+                <Roadmap />
+                <LandingFeatures />
             </main>
 
             <Footer />

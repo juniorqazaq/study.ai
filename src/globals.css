@@ -152,4 +152,59 @@
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+
+  .mask-radial-faded {
+    mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+  }
+
+  .mask-edge-fade {
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes mesh {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite alternate ease-in-out;
+}
+
+.animate-mesh {
+  background-size: 200% 200%;
+  animation: mesh 15s infinite ease-in-out;
+}
+
+.liquid-mesh-primary {
+  background-image: radial-gradient(at 0% 0%, hsla(221, 83%, 53%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(221, 83%, 53%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(221, 83%, 53%, 0.15) 0px, transparent 50%);
 }

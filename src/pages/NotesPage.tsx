@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Bold, Italic, Underline, List, Send, Sparkles, X, ChevronLeft, Layout, Quote, Code, Minus, MessageSquare, Link, Table, Image } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { chatWithAI } from '../services/geminiService';
@@ -7,11 +7,44 @@ import { useNavigate } from 'react-router-dom';
 const NotesPage: React.FC = () => {
     const navigate = useNavigate();
     const [isChatOpen, setIsChatOpen] = useState(true);
+    const [sidebarWidth, setSidebarWidth] = useState(350);
+    const [isResizing, setIsResizing] = useState(false);
+    const sidebarRef = useRef<HTMLDivElement>(null);
+
     const [messages, setMessages] = useState<{ role: 'user' | 'ai', text: string }[]>([
         { role: 'ai', text: "I'm here to help you formatting your notes or explaining concepts from the text!" }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    const startResizing = useCallback((mouseDownEvent: React.MouseEvent) => {
+        setIsResizing(true);
+    }, []);
+
+    const stopResizing = useCallback(() => {
+        setIsResizing(false);
+    }, []);
+
+    const resize = useCallback(
+        (mouseMoveEvent: MouseEvent) => {
+            if (isResizing) {
+                const newWidth = window.innerWidth - mouseMoveEvent.clientX;
+                if (newWidth > 250 && newWidth < 800) {
+                    setSidebarWidth(newWidth);
+                }
+            }
+        },
+        [isResizing]
+    );
+
+    useEffect(() => {
+        window.addEventListener("mousemove", resize);
+        window.addEventListener("mouseup", stopResizing);
+        return () => {
+            window.removeEventListener("mousemove", resize);
+            window.removeEventListener("mouseup", stopResizing);
+        };
+    }, [resize, stopResizing]);
 
     const handleSendMessage = async () => {
         if (!inputValue.trim()) return;
@@ -122,9 +155,21 @@ const NotesPage: React.FC = () => {
                     </div>
                 </div>
 
+                {/* Resize Handle */}
+                {isChatOpen && (
+                    <div
+                        onMouseDown={startResizing}
+                        className="w-1.5 h-full cursor-col-resize hover:bg-blue-500/30 active:bg-blue-500/50 transition-colors z-20 shrink-0"
+                    />
+                )}
+
                 {/* AI Companion Sidebar */}
                 {isChatOpen && (
-                    <div className="w-[350px] bg-[#050505] border-l border-white/5 flex flex-col shrink-0 animate-in slide-in-from-right duration-300">
+                    <div
+                        ref={sidebarRef}
+                        style={{ width: `${sidebarWidth}px` }}
+                        className="bg-[#050505] border-l border-white/5 flex flex-col shrink-0 animate-in slide-in-from-right duration-300"
+                    >
                         <div className="h-12 border-b border-white/5 flex items-center justify-between px-4">
                             <div className="flex items-center gap-2 text-blue-400 font-semibold text-sm">
                                 <Sparkles size={16} /> AI Companion
