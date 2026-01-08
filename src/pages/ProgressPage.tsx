@@ -36,115 +36,168 @@ export function ProgressPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white p-8">
-      <div className="max-w-7xl mx-auto pt-4">
+    <div className="min-h-screen bg-black text-white p-8 relative overflow-hidden">
+      {/* Liquid Background Blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="liquid-blob liquid-blob-1" />
+        <div className="liquid-blob liquid-blob-2" />
+        <div className="liquid-blob liquid-blob-3" />
+      </div>
+
+      <div className="max-w-7xl mx-auto pt-4 relative z-10">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Your Progress</h1>
-          <p className="text-gray-500">Track your learning journey and achievements</p>
+        <div className="mb-12">
+          <h1 className="text-5xl font-extrabold mb-3 tracking-tight bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">
+            Your Progress
+          </h1>
+          <p className="text-gray-400 text-lg">Track your learning journey and achievements</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {/* Books Completed */}
-          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 relative group hover:border-white/20 transition-all">
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
-                <BookOpen size={20} />
+          <div className="liquid-glass liquid-glow squircle-lg p-8 group transition-all duration-500 hover:scale-[1.02]">
+            <div className="flex justify-between items-start mb-6">
+              <div className="w-12 h-12 squircle-lg bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+                <BookOpen size={24} />
               </div>
-              <ArrowUpRight className="text-green-500 w-4 h-4" />
+              <ArrowUpRight className="text-blue-500 w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="text-3xl font-bold mb-1">{booksCompleted}</div>
-            <div className="text-xs text-gray-500">Books Completed</div>
+            <div className="text-4xl font-bold mb-2 tabular-nums">{booksCompleted}</div>
+            <div className="text-sm font-medium text-gray-400 uppercase tracking-wider">Books Completed</div>
           </div>
 
           {/* Average Score */}
-          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 relative group hover:border-white/20 transition-all">
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 border border-purple-500/20">
-                <Award size={20} />
+          <div className="liquid-glass liquid-glow squircle-lg p-8 group transition-all duration-500 hover:scale-[1.02]">
+            <div className="flex justify-between items-start mb-6">
+              <div className="w-12 h-12 squircle-lg bg-purple-500/10 flex items-center justify-center text-purple-500 border border-purple-500/20 shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                <Award size={24} />
               </div>
-              <ArrowUpRight className="text-green-500 w-4 h-4" />
+              <ArrowUpRight className="text-purple-500 w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="text-3xl font-bold mb-1">95%</div>
-            <div className="text-xs text-gray-500">Average Score</div>
+            <div className="text-4xl font-bold mb-2 tabular-nums">95%</div>
+            <div className="text-sm font-medium text-gray-400 uppercase tracking-wider">Average Score</div>
           </div>
 
           {/* Total Study Time */}
-          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 relative group hover:border-white/20 transition-all">
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
-                <Clock size={20} />
+          <div className="liquid-glass liquid-glow squircle-lg p-8 group transition-all duration-500 hover:scale-[1.02]">
+            <div className="flex justify-between items-start mb-6">
+              <div className="w-12 h-12 squircle-lg bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20 shadow-[0_0_20px_rgba(34,197,94,0.15)]">
+                <Clock size={24} />
               </div>
-              <ArrowUpRight className="text-green-500 w-4 h-4" />
+              <ArrowUpRight className="text-green-500 w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="text-3xl font-bold mb-1">{totalStudyHours}h</div>
-            <div className="text-xs text-gray-500">Total Study Time</div>
+            <div className="text-4xl font-bold mb-2 tabular-nums">{totalStudyHours}h</div>
+            <div className="text-sm font-medium text-gray-400 uppercase tracking-wider">Total Study Time</div>
           </div>
 
           {/* Day Streak */}
-          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 relative group hover:border-white/20 transition-all">
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-500/20">
-                <TrendingUp size={20} />
+          <div className="liquid-glass liquid-glow squircle-lg p-8 group transition-all duration-500 hover:scale-[1.02]">
+            <div className="flex justify-between items-start mb-6">
+              <div className="w-12 h-12 squircle-lg bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-500/20 shadow-[0_0_20px_rgba(249,115,22,0.15)]">
+                <TrendingUp size={24} />
               </div>
-              <ArrowUpRight className="text-green-500 w-4 h-4" />
+              <ArrowUpRight className="text-orange-500 w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="text-3xl font-bold mb-1">{streak}</div>
-            <div className="text-xs text-gray-500">Day Streak</div>
+            <div className="text-4xl font-bold mb-2 tabular-nums">{streak}</div>
+            <div className="text-sm font-medium text-gray-400 uppercase tracking-wider">Day Streak</div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
           {/* Weekly Activity */}
-          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-gray-400" />
+          <div className="liquid-glass squircle-lg p-8 hover:bg-white/[0.07] transition-all duration-500">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold flex items-center gap-3">
+                <div className="p-2 bg-blue-500/10 rounded-lg">
+                  <TrendingUp className="w-5 h-5 text-blue-500" />
+                </div>
                 Weekly Activity
               </h2>
-              <button className="text-gray-500 hover:text-white">
-                <MoreHorizontal size={20} />
+              <button className="text-gray-500 hover:text-white transition-colors">
+                <MoreHorizontal size={24} />
               </button>
             </div>
 
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={weeklyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-                <XAxis dataKey="name" stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '8px', color: '#fff' }}
-                  itemStyle={{ color: '#fff' }}
-                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                />
-                <Bar dataKey="hours" fill="#0066FF" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={weeklyData}>
+                  <defs>
+                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
+                      <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.1} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#ffffff40"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    dy={10}
+                  />
+                  <YAxis
+                    stroke="#ffffff40"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    dx={-10}
+                  />
+                  <Tooltip
+                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                    contentStyle={{
+                      backgroundColor: 'rgba(20, 20, 20, 0.8)',
+                      backdropFilter: 'blur(12px)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '12px',
+                      padding: '12px'
+                    }}
+                  />
+                  <Bar
+                    dataKey="hours"
+                    fill="url(#barGradient)"
+                    radius={[6, 6, 0, 0]}
+                    maxBarSize={40}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
           {/* Skills Overview */}
-          <div className="bg-[#111] border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold flex items-center gap-2">
-                <Award className="w-4 h-4 text-gray-400" />
+          <div className="liquid-glass squircle-lg p-8 hover:bg-white/[0.07] transition-all duration-500">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold flex items-center gap-3">
+                <div className="p-2 bg-purple-500/10 rounded-lg">
+                  <Award className="w-5 h-5 text-purple-500" />
+                </div>
                 Skills Overview
               </h2>
-              <button className="text-gray-500 hover:text-white">
-                <MoreHorizontal size={20} />
+              <button className="text-gray-500 hover:text-white transition-colors">
+                <MoreHorizontal size={24} />
               </button>
             </div>
-            <ResponsiveContainer width="100%" height={250}>
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={skillData}>
-                <PolarGrid stroke="#333" />
-                <PolarAngleAxis dataKey="subject" stroke="#888" fontSize={12} />
-                <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                <Radar name="Score" dataKey="score" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.5} />
-              </RadarChart>
-            </ResponsiveContainer>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={skillData}>
+                  <PolarGrid stroke="#ffffff10" />
+                  <PolarAngleAxis dataKey="subject" stroke="#ffffff60" fontSize={12} />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                  <Radar
+                    name="Score"
+                    dataKey="score"
+                    stroke="#a855f7"
+                    fill="#a855f7"
+                    fillOpacity={0.3}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
+

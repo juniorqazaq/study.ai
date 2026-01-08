@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
 export function PricingSnapshot() {
@@ -33,48 +32,55 @@ export function PricingSnapshot() {
     ];
 
     return (
-        <section className="py-20 md:py-32" id="pricing">
-            <div className="container mx-auto px-4 md:px-6">
-                <div className="text-center mb-16">
-                    <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">Simple, transparent pricing</h2>
-                    <p className="text-muted-foreground">Start for free, upgrade when you need more power.</p>
+        <section className="py-20 md:py-32 relative overflow-hidden" id="pricing">
+            <div className="container mx-auto px-4 md:px-6 relative z-10">
+                <div className="text-center mb-24">
+                    <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter text-white">Transparent <span className="text-blue-600">Calibration</span></h2>
+                    <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Start for free, upgrade to expand your neural reach.</p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
                     {plans.map((plan) => (
                         <div
                             key={plan.name}
-                            className={`relative rounded-2xl p-8 border flex flex-col ${plan.popular ? 'bg-card shadow-2xl scale-105 border-primary z-10' : 'bg-background border-border shadow-lg hover:shadow-xl hover:border-primary/50 transition-all'}`}
+                            className={`relative squircle-2xl p-10 border liquid-glass flex flex-col transition-all duration-700 group ${plan.popular ? 'border-blue-500 shadow-[0_0_50px_rgba(37,99,235,0.2)] scale-105 z-10' : 'border-white/5 shadow-2xl hover:border-white/20 hover:-translate-y-2'}`}
                         >
                             {plan.popular && (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                                    Most Popular
+                                <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-2 squircle-lg text-[10px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(37,99,235,0.5)]">
+                                    Highly Compatible
                                 </div>
                             )}
-                            <div className="mb-6">
-                                <h3 className="font-bold text-xl mb-2">{plan.name}</h3>
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-4xl font-extrabold">{plan.price}</span>
-                                    <span className="text-muted-foreground text-sm">{plan.period}</span>
+
+                            {/* Decorative Glow for popular card */}
+                            {plan.popular && (
+                                <div className="absolute -inset-1 bg-blue-500 blur-2xl opacity-5 -z-10 rounded-[40px]" />
+                            )}
+
+                            <div className="mb-10 text-center">
+                                <h3 className="text-gray-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4">{plan.name} Tier</h3>
+                                <div className="flex items-baseline justify-center gap-1 mb-4">
+                                    <span className="text-5xl font-black text-white tracking-tighter">{plan.price}</span>
+                                    <span className="text-gray-600 font-bold text-sm">{plan.period}</span>
                                 </div>
-                                <p className="text-sm text-muted-foreground mt-2">{plan.desc}</p>
+                                <p className="text-sm text-gray-400 font-bold italic opacity-60 leading-relaxed">{plan.desc}</p>
                             </div>
 
-                            <ul className="space-y-4 mb-8 flex-grow">
+                            <ul className="space-y-5 mb-12 flex-grow">
                                 {plan.features.map((f, i) => (
-                                    <li key={i} className="flex items-center gap-3 text-sm">
-                                        <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                                    <li key={i} className="flex items-center gap-4 text-xs font-bold text-gray-300">
+                                        <div className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                            <Check className="w-3 h-3 text-blue-400" />
+                                        </div>
                                         <span>{f}</span>
                                     </li>
                                 ))}
                             </ul>
 
-                            <Button
-                                className={`w-full ${plan.popular ? 'default' : 'variant="outline"'}`}
-                                variant={plan.popular ? 'default' : 'outline'}
+                            <button
+                                className={`w-full py-5 squircle-xl font-black uppercase tracking-[0.2em] text-xs transition-all duration-500 active:scale-95 ${plan.popular ? 'bg-white text-black hover:bg-blue-600 hover:text-white shadow-xl' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'}`}
                             >
                                 {plan.cta}
-                            </Button>
+                            </button>
                         </div>
                     ))}
                 </div>

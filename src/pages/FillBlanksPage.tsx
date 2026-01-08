@@ -44,93 +44,124 @@ export function FillBlanksPage() {
     };
 
     return (
-        <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: '#0A0A0A' }}>
+        <div className="min-h-screen bg-black text-white relative overflow-hidden">
+            {/* Liquid Background Blobs */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                <div className="liquid-blob liquid-blob-1" style={{ opacity: 0.1 }} />
+                <div className="liquid-blob liquid-blob-2" style={{ opacity: 0.1 }} />
+            </div>
+
             <StudyHeader
                 title="Fill in the Blanks"
-                progress={showResults ? "Complete" : `${Object.keys(answers).length}/${questions.length} Answered`}
+                progress={showResults ? "Module Decrypted" : `${Object.keys(answers).length}/${questions.length} Encrypted`}
                 onBack={() => window.history.back()}
             />
 
-            <div className="max-w-4xl mx-auto px-6 py-12">
+            <div className="max-w-4xl mx-auto px-6 py-12 relative z-10">
                 {!showResults ? (
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                         {questions.map((q, index) => (
-                            <ActivityCard key={q.id}>
-                                <div className="flex items-baseline gap-2 text-lg md:text-xl leading-relaxed flex-wrap">
-                                    <span className="text-gray-400 select-none mr-2">{index + 1}.</span>
-                                    <span className="text-white">{q.textBefore}</span>
-                                    <input
-                                        type="text"
-                                        value={answers[q.id] || ''}
-                                        onChange={(e) => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
-                                        className="bg-white/5 border border-white/20 rounded-lg px-3 py-1 text-center min-w-[120px] focus:outline-none focus:border-blue-500 text-blue-400 font-medium placeholder-gray-600 focus:bg-white/10 transition-all"
-                                        placeholder="type here..."
-                                    />
-                                    <span className="text-white">{q.textAfter}</span>
+                            <ActivityCard key={q.id} className="liquid-glass border-white/5 squircle-xl p-8 hover:bg-white/10 transition-all duration-500 shadow-2xl group">
+                                <div className="flex items-baseline gap-4 text-xl md:text-2xl leading-relaxed flex-wrap font-bold tracking-tight">
+                                    <span className="text-gray-700 font-black tabular-nums">{String(index + 1).padStart(2, '0')}.</span>
+                                    <span className="text-white/90">{q.textBefore}</span>
+                                    <div className="relative group/input">
+                                        <input
+                                            type="text"
+                                            value={answers[q.id] || ''}
+                                            onChange={(e) => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                                            className="bg-white/5 border-b-2 border-white/10 px-4 py-1 text-center min-w-[160px] focus:outline-none focus:border-blue-500 text-blue-400 font-black placeholder-gray-800 transition-all duration-500"
+                                            placeholder="..."
+                                        />
+                                        <div className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-blue-500 group-focus-within/input:w-full transition-all duration-700 shadow-[0_0_15px_rgba(59,130,246,0.8)]" />
+                                    </div>
+                                    <span className="text-white/90">{q.textAfter}</span>
                                 </div>
+
+                                {/* Decorator */}
+                                <div className="absolute top-4 right-4 w-1.5 h-1.5 rounded-full bg-white/5 group-hover:bg-blue-500/50 transition-colors" />
                             </ActivityCard>
                         ))}
 
-                        <div className="pt-6">
+                        <div className="pt-12">
                             <button
                                 onClick={handleSubmit}
                                 disabled={Object.keys(answers).length === 0}
-                                className="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-lg shadow-lg shadow-blue-900/20"
+                                className="w-full py-6 bg-white text-black hover:bg-blue-600 hover:text-white squircle-xl disabled:opacity-30 disabled:cursor-not-allowed transition-all font-black text-xl uppercase tracking-[0.2em] shadow-2xl active:scale-95 duration-500 border border-white/10"
                             >
-                                Check Answers
+                                Validate Neural Inputs
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <div className="space-y-8">
+                    <div className="space-y-12">
                         {/* Results Card */}
-                        <div className="bg-[#111] border border-white/10 rounded-2xl p-8 text-center">
-                            <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-                            <h2 className="text-3xl font-bold text-white mb-2">Quiz Complete!</h2>
-                            <div className="text-gray-400 mb-6">You scored</div>
-                            <div className="text-6xl font-bold text-blue-400 mb-8">{Math.round((score / questions.length) * 100)}%</div>
+                        <div className="liquid-glass border-white/10 squircle-2xl p-16 text-center relative overflow-hidden shadow-2xl">
+                            <div className="absolute -top-24 -left-24 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full pointer-events-none" />
 
-                            <div className="flex gap-4 justify-center">
-                                <Link to={`/book/${bookId}`} className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-lg font-medium transition-colors">
-                                    Back to Book
-                                </Link>
-                                <button
-                                    onClick={handleRetry}
-                                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-colors flex items-center gap-2"
-                                >
-                                    <RefreshCw className="w-5 h-5" /> Retry
-                                </button>
+                            <div className="relative z-10">
+                                <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10 shadow-inner">
+                                    <Trophy className="w-12 h-12 text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]" />
+                                </div>
+                                <h2 className="text-5xl font-black text-white mb-2 tracking-tighter bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">Decryption Results</h2>
+                                <div className="text-gray-500 font-black uppercase tracking-widest text-xs mb-10">Neural Compatibility Score</div>
+
+                                <div className="relative inline-block mb-12">
+                                    <div className="text-8xl font-black text-blue-500 tabular-nums tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">{Math.round((score / questions.length) * 100)}<span className="text-3xl text-blue-900/50 ml-1">%</span></div>
+                                    <div className="absolute -inset-8 bg-blue-500/5 blur-3xl -z-10 rounded-full" />
+                                </div>
+
+                                <div className="flex gap-6 justify-center">
+                                    <Link to={`/book/${bookId}`} className="px-10 py-4 liquid-glass border-white/10 squircle-xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-all active:scale-95 duration-500">
+                                        Back to Node
+                                    </Link>
+                                    <button
+                                        onClick={handleRetry}
+                                        className="px-10 py-4 bg-white text-black hover:bg-blue-600 hover:text-white squircle-xl font-black uppercase tracking-widest text-xs transition-all flex items-center gap-3 active:scale-95 duration-500 shadow-xl"
+                                    >
+                                        <RefreshCw className="w-4 h-4" /> Reset Module
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         {/* Answers Review */}
-                        <div className="space-y-4">
-                            <h3 className="text-xl font-bold text-white px-2">Review</h3>
+                        <div className="space-y-6">
+                            <h3 className="text-xs font-black text-gray-500 uppercase tracking-[0.3em] px-4 flex items-center gap-4">
+                                <div className="w-8 h-0.5 bg-white/10 rounded-full" />
+                                Cryptographic Review
+                            </h3>
                             {questions.map((q) => {
                                 const userAnswer = answers[q.id]?.trim().toLowerCase();
                                 const isCorrect = userAnswer === q.blank.toLowerCase();
 
                                 return (
-                                    <ActivityCard key={q.id} className={isCorrect ? "border-green-500/20 bg-green-500/5" : "border-red-500/20 bg-red-500/5"}>
-                                        <div className="flex items-start gap-4">
+                                    <ActivityCard key={q.id} className={`liquid-glass border-white/10 squircle-xl p-8 shadow-xl ${isCorrect ? "bg-green-500/5 border-green-500/20" : "bg-red-500/5 border-red-500/20"}`}>
+                                        <div className="flex items-start gap-6">
                                             <div className="mt-1">
                                                 {isCorrect ? (
-                                                    <CheckCircle className="w-6 h-6 text-green-400" />
+                                                    <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center border border-green-500/30">
+                                                        <CheckCircle className="w-5 h-5 text-green-400" />
+                                                    </div>
                                                 ) : (
-                                                    <XCircle className="w-6 h-6 text-red-400" />
+                                                    <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30">
+                                                        <XCircle className="w-5 h-5 text-red-400" />
+                                                    </div>
                                                 )}
                                             </div>
-                                            <div>
-                                                <div className="flex items-baseline gap-2 text-lg flex-wrap mb-2">
-                                                    <span className="text-gray-300">{q.textBefore}</span>
-                                                    <span className={`font-bold border-b-2 px-1 ${isCorrect ? "text-green-400 border-green-500/50" : "text-red-400 border-red-500/50"}`}>
-                                                        {answers[q.id] || '(empty)'}
+                                            <div className="flex-1">
+                                                <div className="flex items-baseline gap-3 text-xl font-bold tracking-tight flex-wrap mb-4">
+                                                    <span className="text-white/60">{q.textBefore}</span>
+                                                    <span className={`font-black border-b-2 px-2 pb-1 ${isCorrect ? "text-green-400 border-green-500/50" : "text-red-400 border-red-500/50"}`}>
+                                                        {answers[q.id] || 'NULL'}
                                                     </span>
-                                                    <span className="text-gray-300">{q.textAfter}</span>
+                                                    <span className="text-white/60">{q.textAfter}</span>
                                                 </div>
                                                 {!isCorrect && (
-                                                    <div className="text-sm text-green-400 font-medium">
-                                                        Correct answer: {q.blank}
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="text-[10px] font-black uppercase tracking-widest text-green-400 bg-green-400/10 px-3 py-1 squircle-lg border border-green-400/20">
+                                                            Solution: {q.blank}
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>

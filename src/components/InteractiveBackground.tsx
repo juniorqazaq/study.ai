@@ -63,7 +63,7 @@ export function InteractiveBackground() {
         const dx = mouseRef.current.x - blobScreenX;
         const dy = mouseRef.current.y - blobScreenY;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
         let finalX = blobScreenX;
         let finalY = blobScreenY;
 

@@ -41,7 +41,6 @@ export function UploadPage() {
     setFiles(prev => [...newFiles, ...prev]);
 
     newFiles.forEach((newFileMetadata, index) => {
-      // const originalFile = fileList[index];
       let progress = 0;
       const interval = setInterval(() => {
         progress += 10;
@@ -84,66 +83,66 @@ export function UploadPage() {
   }, []);
 
   return (
-    <div className="min-h-screen p-8 bg-[#000000] text-white">
-      <div className="max-w-6xl mx-auto pt-4">
+    <div className="min-h-screen p-8 bg-black text-white relative overflow-hidden">
+      {/* Liquid Background Blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="liquid-blob liquid-blob-1" style={{ opacity: 0.1, left: '20%', top: '10%' }} />
+        <div className="liquid-blob liquid-blob-3" style={{ opacity: 0.1, right: '20%', bottom: '10%' }} />
+      </div>
+
+      <div className="max-w-6xl mx-auto pt-4 relative z-10">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <UploadCloudIcon />
-            <h1 className="text-3xl font-bold">Upload Resources</h1>
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="p-3 liquid-glass squircle-lg shrink-0">
+              <UploadCloudIcon />
+            </div>
+            <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">
+              Upload Resources
+            </h1>
           </div>
-          <p className="text-gray-400">Upload books, documents, or import content from URLs and GitHub repositories</p>
+          <p className="text-gray-400 text-lg">Upload books, documents, or import content from URLs and GitHub repositories</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8">
-          <button
-            onClick={() => setActiveTab('files')}
-            className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-medium transition-all ${activeTab === 'files'
-              ? 'bg-[#0066FF] text-white'
-              : 'bg-[#111] text-gray-400 hover:bg-[#1A1A1A] border border-white/5'
-              }`}
-          >
-            <Upload className="w-5 h-5" />
-            Files
-          </button>
-          <button
-            onClick={() => setActiveTab('url')}
-            className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-medium transition-all ${activeTab === 'url'
-              ? 'bg-[#0066FF] text-white'
-              : 'bg-[#111] text-gray-400 hover:bg-[#1A1A1A] border border-white/5'
-              }`}
-          >
-            <LinkIcon className="w-5 h-5" />
-            URL
-          </button>
-          <button
-            onClick={() => setActiveTab('github')}
-            className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-medium transition-all ${activeTab === 'github'
-              ? 'bg-[#0066FF] text-white'
-              : 'bg-[#111] text-gray-400 hover:bg-[#1A1A1A] border border-white/5'
-              }`}
-          >
-            <Code className="w-5 h-5" />
-            GitHub
-          </button>
+        <div className="grid grid-cols-3 gap-6 mb-12">
+          {[
+            { id: 'files', icon: Upload, label: 'Files' },
+            { id: 'url', icon: LinkIcon, label: 'URL' },
+            { id: 'github', icon: Code, label: 'GitHub' }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex items-center justify-center gap-3 px-8 py-5 squircle-lg font-bold transition-all duration-500 relative overflow-hidden ${activeTab === tab.id
+                ? 'bg-blue-600 text-white'
+                : 'liquid-glass text-gray-500 hover:text-white hover:bg-white/10'
+                }`}
+            >
+              <tab.icon className="w-6 h-6" />
+              {tab.label}
+
+            </button>
+          ))}
         </div>
 
         {/* Upload Area */}
-        <div className="border border-dashed border-white/10 rounded-3xl p-1 mb-8" style={{ minHeight: '400px' }}>
+        <div
+          className={`liquid-glass squircle-xl p-2 mb-12 transition-all duration-700 ${isDragging ? 'shadow-[0_0_50px_rgba(59,130,246,0.2)] scale-[1.01]' : ''}`}
+        >
           <div
-            className={`w-full h-full rounded-[20px] flex flex-col items-center justify-center p-12 transition-all ${isDragging ? 'bg-[#111] border-blue-500' : 'bg-[#050505]'}`}
+            className={`w-full h-[400px] squircle-xl flex flex-col items-center justify-center p-12 transition-all duration-700 bg-black/40 ${isDragging ? 'bg-blue-500/5' : ''}`}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
           >
             {activeTab === 'files' && (
               <>
-                <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mb-6">
-                  <Upload className="w-8 h-8 text-blue-500" />
+                <div className="w-24 h-28 bg-blue-500/10 squircle-lg flex items-center justify-center mb-8 mx-auto">
+                  <Upload size={48} className="text-blue-500" />
                 </div>
-                <h3 className="text-2xl font-bold mb-3">Drag & drop your files here</h3>
-                <p className="text-gray-500 mb-8">or click to browse from your computer</p>
+                <h3 className="text-3xl font-bold mb-4 tracking-tight">Drag & drop your files here</h3>
+                <p className="text-gray-500 text-lg mb-10">or click to browse from your computer</p>
 
                 <input
                   type="file"
@@ -154,50 +153,56 @@ export function UploadPage() {
                 />
                 <label
                   htmlFor="file-upload"
-                  className="px-8 py-3 bg-[#0066FF] hover:bg-blue-600 text-white rounded-lg font-medium cursor-pointer transition-colors"
+                  className="px-10 py-4 bg-blue-600 hover:bg-blue-500 text-white squircle-lg font-bold cursor-pointer transition-all duration-300 shadow-lg hover:shadow-blue-600/20 active:scale-95"
                 >
                   Browse Files
                 </label>
 
-                <div className="flex gap-2 mt-8">
+                <div className="flex flex-wrap justify-center gap-3 mt-12">
                   {['PDF', 'EPUB', 'TXT', 'DOCX', 'PPTX', 'Images'].map(ext => (
-                    <span key={ext} className="px-3 py-1 bg-[#111] border border-white/5 rounded text-xs text-gray-500 font-medium">
+                    <span key={ext} className="px-5 py-2 liquid-glass squircle-lg text-sm text-gray-400 font-bold hover:text-white transition-colors cursor-default">
                       {ext}
                     </span>
                   ))}
                 </div>
-                <p className="text-xs text-gray-600 mt-4">Max file size: 50MB</p>
+                <p className="text-sm text-gray-600 mt-6 font-medium">Max file size: 50MB</p>
               </>
             )}
             {activeTab === 'url' && (
-              <div className="w-full max-w-xl text-center">
-                <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                  <LinkIcon className="w-8 h-8 text-blue-500" />
+              <div className="w-full max-w-2xl text-center">
+                <div className="w-24 h-28 bg-blue-500/10 squircle-lg flex items-center justify-center mb-8 mx-auto">
+                  <LinkIcon size={48} className="text-blue-500" />
                 </div>
-                <h3 className="text-2xl font-bold mb-3">Import from URL</h3>
-                <div className="flex gap-2 relative mt-6">
+                <h3 className="text-3xl font-bold mb-4 tracking-tight">Import from URL</h3>
+                <p className="text-gray-500 mb-10">Enter any web link to import content directly</p>
+                <div className="flex gap-4 relative">
                   <input
                     type="url"
-                    placeholder="Paste your link here..."
-                    className="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                    placeholder="https://example.com/document.pdf"
+                    className="w-full bg-white/5 border border-white/10 squircle-lg px-6 py-5 text-white focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all text-lg"
                   />
-                  <button className="px-6 py-3 bg-blue-600 rounded-lg font-medium">Import</button>
+                  <button className="px-10 py-5 bg-blue-600 rounded-2xl font-bold hover:bg-blue-500 transition-all shadow-lg active:scale-95 whitespace-nowrap">
+                    Import
+                  </button>
                 </div>
               </div>
             )}
             {activeTab === 'github' && (
-              <div className="w-full max-w-xl text-center">
-                <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 mx-auto">
-                  <Code className="w-8 h-8 text-blue-500" />
+              <div className="w-full max-w-2xl text-center">
+                <div className="w-24 h-28 bg-blue-500/10 squircle-lg flex items-center justify-center mb-8 mx-auto">
+                  <Code size={48} className="text-blue-500" />
                 </div>
-                <h3 className="text-2xl font-bold mb-3">Import from GitHub</h3>
-                <div className="flex gap-2 relative mt-6">
+                <h3 className="text-3xl font-bold mb-4 tracking-tight">Import from GitHub</h3>
+                <p className="text-gray-500 mb-10">Enter a repository path to import its documentation</p>
+                <div className="flex gap-4 relative">
                   <input
                     type="text"
                     placeholder="username/repository"
-                    className="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/5 border border-white/10 squircle-lg px-6 py-5 text-white focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all text-lg"
                   />
-                  <button className="px-6 py-3 bg-blue-600 rounded-lg font-medium">Import</button>
+                  <button className="px-10 py-5 bg-blue-600 rounded-2xl font-bold hover:bg-blue-500 transition-all shadow-lg active:scale-95 whitespace-nowrap">
+                    Connect
+                  </button>
                 </div>
               </div>
             )}
@@ -206,28 +211,40 @@ export function UploadPage() {
 
         {/* Recent Uploads */}
         {files.length > 0 && (
-          <div className="border border-white/10 rounded-2xl p-6 bg-[#0A0A0A]">
-            <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
-              <FileText className="w-5 h-5" />
+          <div className="liquid-glass squircle-xl p-10">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-4">
+              <div className="p-3 bg-blue-500/10 rounded-xl">
+                <FileText className="w-6 h-6 text-blue-500" />
+              </div>
               Recent Uploads
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {files.map((file) => (
-                <div key={file.id} className="flex items-center justify-between p-4 bg-[#111] border border-white/5 rounded-xl hover:bg-[#161616] transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded bg-blue-500/10 flex items-center justify-center text-blue-400">
-                      <FileText size={20} />
+                <div key={file.id} className="flex items-center justify-between p-6 bg-white/[0.03] border border-white/5 squircle-lg hover:bg-white/[0.07] transition-all duration-300 group">
+                  <div className="flex items-center gap-6">
+                    <div className="w-14 h-14 squircle-lg bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/10 group-hover:scale-105 transition-transform">
+                      <FileText size={28} />
                     </div>
                     <div>
-                      <div className="font-medium text-white">{file.name}</div>
-                      <div className="text-xs text-gray-500">{file.size} • Uploaded just now</div>
+                      <div className="font-bold text-lg text-white mb-1">{file.name}</div>
+                      <div className="text-sm font-medium text-gray-500">{file.size} • Uploaded just now</div>
                     </div>
                   </div>
                   <div>
                     {file.status === 'success' ? (
-                      <span className="px-3 py-1 bg-green-500/10 text-green-500 text-xs font-medium rounded-full">Processed</span>
+                      <span className="px-5 py-2 bg-green-500/10 text-green-500 text-xs font-bold rounded-full border border-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                        PROCESSED
+                      </span>
                     ) : (
-                      <span className="px-3 py-1 bg-blue-500/10 text-blue-500 text-xs font-medium rounded-full">Uploading...</span>
+                      <div className="flex items-center gap-4">
+                        <div className="w-32 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-blue-500 transition-all duration-300"
+                            style={{ width: `${file.progress}%` }}
+                          />
+                        </div>
+                        <span className="text-blue-500 text-xs font-bold">UPLOADING</span>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -239,6 +256,7 @@ export function UploadPage() {
     </div>
   );
 }
+
 
 function UploadCloudIcon() {
   return (

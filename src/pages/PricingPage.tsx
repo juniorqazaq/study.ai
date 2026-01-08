@@ -4,17 +4,34 @@ import { PricingSnapshot } from "@/components/landing/PricingSnapshot";
 
 export function PricingPage() {
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground font-body">
+        <div className="min-h-screen bg-black text-white relative overflow-hidden font-body flex flex-col">
+            {/* Liquid Background Blobs */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                <div className="liquid-blob liquid-blob-2" style={{ opacity: 0.12 }} />
+                <div className="liquid-blob liquid-blob-1" style={{ opacity: 0.08 }} />
+            </div>
+
             <Header />
-            <main className="flex-grow pt-20">
-                <div className="py-10">
-                    <div className="container mx-auto px-4 text-center mb-10">
-                        <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Plans & Pricing</h1>
-                        <p className="text-xl text-muted-foreground">Choose the plan that fits your study needs.</p>
+
+            <main className="flex-grow pt-40 pb-20 relative z-10">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-20">
+                        <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
+                            System <span className="text-blue-600 drop-shadow-[0_0_20px_rgba(37,99,235,0.4)]">Access</span>
+                        </h1>
+                        <p className="text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto font-bold uppercase tracking-tight opacity-70">
+                            Select your cognitive subscription tier.
+                        </p>
                     </div>
-                    <PricingSnapshot />
+
+                    <div className="relative group">
+                        {/* Decorative background glow for the pricing cards */}
+                        <div className="absolute -inset-40 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+                        <PricingSnapshot />
+                    </div>
                 </div>
             </main>
+
             <Footer />
         </div>
     );

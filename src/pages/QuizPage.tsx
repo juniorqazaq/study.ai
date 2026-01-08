@@ -68,83 +68,133 @@ const QuizPage: React.FC = () => {
     }
   };
 
-  const getOptionClass = (id: string) => {
-    if (!isSubmitted) {
-      return id === selectedOption
-        ? 'border-primary bg-primary/10 text-white'
-        : 'border-white/10 hover:border-white/30 hover:bg-white/5 text-gray-300';
-    }
-    if (id === question.correctId) return 'border-green-500 bg-green-500/10 text-green-500';
-    if (id === selectedOption) return 'border-red-500 bg-red-500/10 text-red-500';
-    return 'border-white/10 opacity-50';
-  };
 
   return (
-    <PageTransition className="max-w-4xl mx-auto h-[calc(100vh-140px)] flex flex-col justify-center">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold font-heading">Introduction to Psychology - Quiz</h2>
-        <div className="text-gray-400">
-          Question {currentQuestionIndex + 1} of {mockQuestions.length} • Score: {score}/{currentQuestionIndex + (isSubmitted ? 1 : 0)}
-        </div>
+    <div className="min-h-screen bg-black text-white relative overflow-hidden flex items-center justify-center p-8">
+      {/* Liquid Background Blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="liquid-blob liquid-blob-1" style={{ opacity: 0.1 }} />
+        <div className="liquid-blob liquid-blob-3" style={{ opacity: 0.1 }} />
       </div>
 
-      <div className="bg-[#111] border border-white/5 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
-        {/* Progress Bar Top */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-white/5">
-          <div
-            className="h-full bg-primary transition-all duration-300"
-            style={{ width: `${((currentQuestionIndex + 1) / mockQuestions.length) * 100}%` }}
-          />
+      <PageTransition className="max-w-4xl w-full relative z-10">
+        <div className="flex justify-between items-end mb-8">
+          <div>
+            <h2 className="text-4xl font-black tracking-tight bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent mb-2">
+              Psychology Quiz
+            </h2>
+            <div className="text-gray-500 font-bold uppercase tracking-widest text-xs">
+              Introduction to Psychology
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-2xl font-black tabular-nums text-blue-400">
+              {score}/{currentQuestionIndex + (isSubmitted ? 1 : 0)}
+            </div>
+            <div className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">
+              Current Score
+            </div>
+          </div>
         </div>
 
-        <div className="mb-8">
-          <span className="inline-block px-3 py-1 bg-primary/20 text-primary rounded-full text-xs font-bold uppercase tracking-wider mb-4">
-            Question {currentQuestionIndex + 1}
-          </span>
-          <h3 className="text-2xl md:text-3xl font-bold leading-tight">{question.question}</h3>
-        </div>
+        <div className="liquid-glass squircle-xl p-8 md:p-16 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+          {/* Progress Bar Top */}
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-white/5">
+            <div
+              className="h-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-700 ease-out"
+              style={{ width: `${((currentQuestionIndex + 1) / mockQuestions.length) * 100}%` }}
+            />
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {question.options.map(opt => (
-            <button
-              key={opt.id}
-              onClick={() => handleOptionSelect(opt.id)}
-              className={`p-6 rounded-2xl border-2 text-left transition-all duration-200 flex items-center gap-4 ${getOptionClass(opt.id)}`}
-            >
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center border font-bold shrink-0 ${isSubmitted && opt.id === question.correctId ? 'border-green-500 bg-green-500 text-white' :
-                  isSubmitted && opt.id === selectedOption && opt.id !== question.correctId ? 'border-red-500 bg-red-500 text-white' :
-                    opt.id === selectedOption ? 'border-primary bg-primary text-white' :
-                      'border-white/20 text-gray-400'
-                }`}>
-                {opt.id}
+          <div className="mb-12 relative">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="px-4 py-1.5 liquid-glass squircle-lg text-blue-400 text-xs font-black uppercase tracking-widest border-blue-500/20">
+                Question {currentQuestionIndex + 1}
+              </span>
+              <div className="h-px flex-1 bg-gradient-to-r from-blue-500/20 to-transparent" />
+            </div>
+            <h3 className="text-3xl md:text-4xl font-black leading-tight tracking-tight text-white group-hover:scale-[1.01] transition-transform duration-700">
+              {question.question}
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {question.options.map(opt => {
+              const isCorrect = isSubmitted && opt.id === question.correctId;
+              const isWrong = isSubmitted && opt.id === selectedOption && opt.id !== question.correctId;
+              const isSelected = opt.id === selectedOption;
+
+              return (
+                <button
+                  key={opt.id}
+                  onClick={() => handleOptionSelect(opt.id)}
+                  disabled={isSubmitted}
+                  className={`p-8 squircle-lg border-2 text-left transition-all duration-500 flex items-center gap-6 relative group/opt overflow-hidden ${!isSubmitted
+                    ? isSelected
+                      ? 'bg-blue-600 border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.3)] scale-[1.02] text-white'
+                      : 'liquid-glass border-white/5 hover:border-blue-500/30 hover:bg-white/5 text-gray-400'
+                    : isCorrect
+                      ? 'bg-green-600/20 border-green-500/50 text-green-400 scale-[1.02] shadow-[0_0_30px_rgba(34,197,94,0.2)]'
+                      : isWrong
+                        ? 'bg-red-600/20 border-red-500/50 text-red-400 opacity-80'
+                        : 'liquid-glass border-white/5 opacity-40 grayscale'
+                    }`}
+                >
+                  <div className={`w-12 h-12 squircle-lg flex items-center justify-center border-2 font-black shrink-0 transition-all duration-500 ${isSelected || isCorrect || isWrong
+                    ? 'bg-white text-black border-white'
+                    : 'border-white/20 text-gray-400 group-hover/opt:border-white/40'
+                    }`}>
+                    {opt.id}
+                  </div>
+                  <span className="font-bold text-xl tracking-tight">{opt.text}</span>
+
+                  {isCorrect && (
+                    <div className="ml-auto p-2 bg-green-500/20 rounded-full animate-in zoom-in duration-500">
+                      <CheckCircle className="text-green-500 w-6 h-6" />
+                    </div>
+                  )}
+                  {isWrong && (
+                    <div className="ml-auto p-2 bg-red-500/20 rounded-full animate-in zoom-in duration-500">
+                      <XCircle className="text-red-500 w-6 h-6" />
+                    </div>
+                  )}
+
+                  {!isSubmitted && isSelected && (
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-12 flex justify-end items-center gap-8">
+            {isSubmitted && (
+              <div className="text-gray-500 font-bold uppercase tracking-widest text-xs animate-in fade-in slide-in-from-left duration-700">
+                {selectedOption === question.correctId ? 'Correct! Excellent work.' : 'Keep learning, you got this!'}
               </div>
-              <span className="font-medium text-lg">{opt.text}</span>
-              {isSubmitted && opt.id === question.correctId && <CheckCircle className="ml-auto text-green-500" />}
-              {isSubmitted && opt.id === selectedOption && opt.id !== question.correctId && <XCircle className="ml-auto text-red-500" />}
-            </button>
-          ))}
-        </div>
+            )}
 
-        <div className="mt-8 flex justify-end">
-          {!isSubmitted ? (
-            <button
-              onClick={handleSubmit}
-              disabled={!selectedOption}
-              className="px-8 py-4 bg-primary hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-900/20"
-            >
-              Submit Answer
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all flex items-center gap-2"
-            >
-              {currentQuestionIndex < mockQuestions.length - 1 ? 'Next Question' : 'Finish Quiz'} <ChevronRight size={20} />
-            </button>
-          )}
+            {!isSubmitted ? (
+              <button
+                onClick={handleSubmit}
+                disabled={!selectedOption}
+                className="px-12 py-5 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:grayscale text-white font-black squircle-lg transition-all shadow-xl shadow-blue-900/40 hover:scale-105 active:scale-95 border border-white/10"
+              >
+                Submit Answer
+              </button>
+            ) : (
+              <button
+                onClick={handleNext}
+                className="px-12 py-5 liquid-glass hover:bg-white/10 text-white font-black squircle-lg transition-all flex items-center gap-4 hover:scale-105 active:scale-95 border-white/20"
+              >
+                {currentQuestionIndex < mockQuestions.length - 1 ? 'Next Question' : 'Finish Quiz'}
+                <ChevronRight size={24} className="text-blue-500" />
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </PageTransition>
+      </PageTransition>
+    </div>
   );
 };
 

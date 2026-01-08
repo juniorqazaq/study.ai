@@ -164,49 +164,49 @@ const Flow = () => {
         onPaneClick={onPaneClick}
         nodeTypes={nodeTypes}
         fitView
-        className="bg-[#050505]"
+        className="bg-transparent"
       >
-        <Background gap={16} size={1} color="rgba(255, 255, 255, 0.05)" />
-        <Controls className="bg-[#111] border border-white/10 fill-white text-white" />
+        <Background gap={24} size={1} color="rgba(255, 255, 255, 0.03)" />
+        <Controls className="liquid-glass border-white/10 fill-white text-white squircle-lg mb-6 ml-6 overflow-hidden [&_button]:bg-transparent [&_button]:border-none [&_button:hover]:bg-white/10" />
 
         {/* Top Controls Panel */}
-        <Panel position="top-right" className="flex gap-2">
+        <Panel position="top-right" className="flex gap-3 mr-4 mt-4">
           <button
             onClick={() => onLayout('TB')}
-            className="p-2 bg-[#111] border border-white/10 rounded-lg text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm font-medium"
+            className="px-4 py-2.5 liquid-glass border-white/10 rounded-xl text-white hover:bg-white/10 transition-all flex items-center gap-3 text-sm font-black uppercase tracking-widest active:scale-95 shadow-xl"
             title="Vertical Layout"
           >
-            <Layout size={16} /> Tree
+            <Layout size={18} className="text-blue-400" /> Tree
           </button>
           <button
             onClick={() => onLayout('LR')}
-            className="p-2 bg-[#111] border border-white/10 rounded-lg text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm font-medium"
+            className="px-4 py-2.5 liquid-glass border-white/10 rounded-xl text-white hover:bg-white/10 transition-all flex items-center gap-3 text-sm font-black uppercase tracking-widest active:scale-95 shadow-xl"
             title="Horizontal Layout"
           >
-            <Layout size={16} className="rotate-90" /> Flow
+            <Layout size={18} className="rotate-90 text-purple-400" /> Flow
           </button>
         </Panel>
 
         {/* Legend Panel */}
-        <Panel position="bottom-left" className="m-4">
-          <div className="bg-[#111]/90 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-xl w-48">
-            <h4 className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-3">Legend</h4>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
-                <span className="text-xs text-gray-300">Central Idea</span>
+        <Panel position="bottom-left" className="m-6">
+          <div className="liquid-glass border-white/10 squircle-xl p-6 shadow-2xl w-60 backdrop-blur-3xl">
+            <h4 className="text-[10px] font-black uppercase text-gray-500 tracking-[0.2em] mb-4 border-b border-white/5 pb-2">Visualization Key</h4>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4 group/item">
+                <div className="w-4 h-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.6)] group-hover/item:scale-125 transition-transform duration-500"></div>
+                <span className="text-xs font-bold text-gray-300 tracking-tight">Central Concept</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
-                <span className="text-xs text-gray-300">Main Branch</span>
+              <div className="flex items-center gap-4 group/item">
+                <div className="w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.6)] group-hover/item:scale-125 transition-transform duration-500"></div>
+                <span className="text-xs font-bold text-gray-300 tracking-tight">Main Branch</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.5)]"></div>
-                <span className="text-xs text-gray-300">Sub Topic</span>
+              <div className="flex items-center gap-4 group/item">
+                <div className="w-4 h-4 rounded-full bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)] group-hover/item:scale-125 transition-transform duration-500"></div>
+                <span className="text-xs font-bold text-gray-300 tracking-tight">Sub Topic</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></div>
-                <span className="text-xs text-gray-300">Note / Detail</span>
+              <div className="flex items-center gap-4 group/item">
+                <div className="w-4 h-4 rounded-full bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.6)] group-hover/item:scale-125 transition-transform duration-500"></div>
+                <span className="text-xs font-bold text-gray-300 tracking-tight">Detail Note</span>
               </div>
             </div>
           </div>
@@ -223,34 +223,40 @@ const Flow = () => {
 
 const MindMapPage: React.FC = () => {
   return (
-    <PageTransition className="h-screen flex flex-col overflow-hidden bg-background">
+    <PageTransition className="h-screen flex flex-col overflow-hidden bg-black relative">
+      {/* Liquid Background Blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="liquid-blob liquid-blob-1" style={{ opacity: 0.1, width: '800px', height: '800px' }} />
+        <div className="liquid-blob liquid-blob-3" style={{ opacity: 0.1, width: '600px', height: '600px', right: '-10%', bottom: '-10%' }} />
+      </div>
+
       {/* Header */}
-      <div className="flex justify-between items-center px-6 py-4 border-b border-white/5 bg-[#0A0A0A]">
-        <div className="flex items-center gap-4">
-          <Link to="/features" className="p-2 rounded-full hover:bg-white/5 transition-colors text-muted-foreground hover:text-white">
-            <ArrowLeft size={20} />
+      <div className="flex justify-between items-center px-10 py-6 border-b border-white/10 liquid-glass relative z-10 shadow-2xl">
+        <div className="flex items-center gap-6">
+          <Link to="/features" className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 squircle-lg transition-all text-gray-400 hover:text-white active:scale-95 group">
+            <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
-            <h2 className="text-lg font-bold font-heading text-white">Mind Map</h2>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Psychology 101</span>
+            <h2 className="text-2xl font-black tracking-tight text-white mb-1">Mind Map</h2>
+            <div className="flex items-center gap-3 text-xs font-bold">
+              <span className="text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded uppercase tracking-widest">Psychology 101</span>
               <span className="w-1 h-1 rounded-full bg-white/20" />
-              <span>Last edited just now</span>
+              <span className="text-gray-500 uppercase tracking-widest">Last edited just now</span>
             </div>
           </div>
         </div>
-        <div className="flex gap-3">
-          <button className="px-4 py-2 text-sm font-medium bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2">
-            <Share2 size={16} /> Share
+        <div className="flex gap-4">
+          <button className="px-6 py-2.5 text-sm font-black liquid-glass border-white/10 text-white squircle-lg hover:bg-white/10 transition-all flex items-center gap-2 active:scale-95">
+            <Share2 size={18} /> Share
           </button>
-          <button className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2">
-            <Download size={16} /> Export
+          <button className="px-6 py-2.5 text-sm font-black bg-blue-600 text-white squircle-lg hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] flex items-center gap-2 active:scale-95 border border-white/10">
+            <Download size={18} /> Export
           </button>
         </div>
       </div>
 
       {/* Main Canvas */}
-      <div className="flex-1 w-full h-full">
+      <div className="flex-1 w-full h-full relative z-0">
         <ReactFlowProvider>
           <Flow />
         </ReactFlowProvider>

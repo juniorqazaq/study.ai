@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BookOpen, Map, Mail } from 'lucide-react';
+import { Menu, X, BookOpen, Zap, HelpCircle, CreditCard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-    { name: 'Methodology', href: '#methodology', icon: BookOpen },
-    { name: 'Roadmap', href: '#roadmap', icon: Map },
-    { name: 'Features', href: '#features', icon: Mail },
+    { name: 'How It Works', href: '/how-it-works', icon: HelpCircle },
+    { name: 'Features', href: '/features', icon: Zap },
+    { name: 'Resources', href: '/resources', icon: BookOpen },
+    { name: 'Pricing', href: '/pricing', icon: CreditCard },
 ];
 
 export function Header() {
@@ -33,8 +34,9 @@ export function Header() {
             <div
                 className={cn(
                     "max-w-7xl mx-auto rounded-2xl transition-all duration-300 border",
+                    "max-w-7xl mx-auto rounded-2xl transition-all duration-300 border",
                     scrolled
-                        ? "bg-white/10 backdrop-blur-2xl shadow-xl border-white/20 py-2 ring-1 ring-black/5"
+                        ? "bg-white/90 backdrop-blur-2xl shadow-xl border-slate-200/50 py-2 ring-1 ring-black/5"
                         : "bg-transparent border-transparent py-4"
                 )}
             >
@@ -46,7 +48,7 @@ export function Header() {
                             whileTap={{ scale: 0.95 }}
                             className="flex items-center"
                         >
-                            <span className="text-2xl font-black text-slate-900 tracking-tighter uppercase">
+                            <span className="text-2xl font-black text-slate-900 tracking-tighter uppercase shrink-0">
                                 STUDY<span className="text-primary italic"> AI</span>
                             </span>
                         </motion.div>
@@ -64,10 +66,10 @@ export function Header() {
                                             key={item.name}
                                             to={item.href}
                                             className={cn(
-                                                "relative px-4 py-2 text-sm font-semibold transition-all duration-300 rounded-full",
+                                                "relative px-4 py-2 text-sm font-bold transition-all duration-300 rounded-full uppercase tracking-wider",
                                                 isActive
                                                     ? "text-primary"
-                                                    : "text-slate-600 hover:text-slate-950"
+                                                    : "text-slate-500 hover:text-slate-900"
                                             )}
                                         >
                                             {isActive && (
@@ -90,7 +92,7 @@ export function Header() {
                     <div className="hidden md:flex items-center space-x-2">
                         <Link
                             to="/login"
-                            className="text-sm font-bold text-slate-700 hover:text-slate-900 px-4 py-2 transition-colors"
+                            className="text-sm font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 px-4 py-2 transition-colors"
                         >
                             Log in
                         </Link>

@@ -67,56 +67,56 @@ function TiltCard({ p, i }: { p: typeof principles[0], i: number }) {
                 rotateY,
                 transformStyle: "preserve-3d",
             }}
-            className="group relative p-8 rounded-[40px] bg-white/40 backdrop-blur-xl border border-white/40 hover:border-primary/30 transition-colors duration-500 shadow-xl hover:shadow-2xl"
+            className="group relative p-10 squircle-xl bg-white border border-slate-100 hover:border-blue-500/30 transition-all duration-500 shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:bg-slate-50"
         >
             <div style={{ transform: "translateZ(50px)" }} className="relative z-10">
                 <div className={cn(
-                    "w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-8 shadow-2xl transition-transform duration-500 group-hover:scale-110",
+                    "w-20 h-20 rounded-2xl flex items-center justify-center text-white mb-10 shadow-2xl transition-all duration-500 group-hover:scale-110 border border-white/10",
                     "bg-gradient-to-br", p.color, p.glow
                 )}>
-                    <p.icon size={28} />
+                    <p.icon size={32} />
                 </div>
-                <h3 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">{p.title}</h3>
-                <p className="text-slate-500 font-medium leading-relaxed group-hover:text-slate-700 transition-colors">
+                <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tighter uppercase italic">{p.title}</h3>
+                <p className="text-slate-500 font-bold uppercase tracking-widest text-xs leading-relaxed group-hover:text-slate-700 transition-colors">
                     {p.description}
                 </p>
             </div>
 
             {/* Inner Glow Effect */}
-            <div className="absolute inset-0 rounded-[40px] bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 squircle-xl bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </motion.div>
     );
 }
 
 export function LearningScience() {
     return (
-        <section className="relative overflow-hidden" id="methodology">
-            <LiquidBackground className="py-24 md:py-32">
+        <section className="py-16 bg-white border-y border-slate-100 overflow-hidden" id="methodology">
+            <LiquidBackground className="py-24 md:py-40">
                 {/* Background Brand Text with Mask */}
-                <div className="absolute top-[20%] -left-[10%] pointer-events-none select-none z-0 text-primary opacity-[0.03] mask-radial-faded">
+                <div className="absolute top-[20%] -left-[10%] pointer-events-none select-none z-0 text-slate-900 opacity-[0.03] mask-radial-faded hidden xl:block">
                     <h1
-                        className="text-[150px] md:text-[250px] font-black leading-none tracking-tighter"
-                        style={{ WebkitTextStroke: '2px currentColor', color: 'transparent' }}
+                        className="text-[150px] md:text-[250px] font-black leading-none tracking-tighter uppercase whitespace-nowrap"
+                        style={{ WebkitTextStroke: '1px currentColor', color: 'transparent' }}
                     >
                         SCIENCE
                     </h1>
                 </div>
 
                 <div className="container mx-auto px-6 relative z-10">
-                    <div className="text-center max-w-3xl mx-auto mb-20">
+                    <div className="text-center max-w-4xl mx-auto mb-28">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-primary/20"
+                            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] mb-10 border border-blue-100"
                         >
                             <BookOpen size={14} />
                             Scientific Methodology
                         </motion.div>
-                        <h2 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 tracking-tighter leading-[0.9]">
-                            How we make learning <span className="text-primary italic">inevitable.</span>
+                        <h2 className="text-4xl sm:text-6xl md:text-8xl font-black text-slate-900 mb-10 tracking-tighter leading-[0.9] uppercase text-balance">
+                            How we make learning <span className="text-blue-600 italic">inevitable.</span>
                         </h2>
-                        <p className="text-xl text-slate-500 font-medium max-w-2xl mx-auto">
+                        <p className="text-xl font-black text-slate-400 font-heading uppercase tracking-[0.2em] italic">
                             We don't just use AI because it's cool. We automate the most effective study methods known to neuroscientists.
                         </p>
                     </div>

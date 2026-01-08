@@ -29,12 +29,12 @@ export function Hero() {
     };
 
     return (
-        <LiquidBackground className="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <LiquidBackground className="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white text-slate-900">
             {/* Background Brand Text */}
-            <div className="absolute top-[10%] -right-[5%] pointer-events-none select-none z-0 text-primary opacity-[0.03] hidden lg:block">
+            <div className="absolute top-[10%] -right-[5%] pointer-events-none select-none z-0 text-slate-900 opacity-[0.03] hidden xl:block">
                 <h1
-                    className="text-[200px] xl:text-[300px] font-black leading-none tracking-tighter"
-                    style={{ WebkitTextStroke: '2px currentColor', color: 'transparent' }}
+                    className="text-[200px] xl:text-[300px] font-black leading-none tracking-tighter uppercase whitespace-nowrap"
+                    style={{ WebkitTextStroke: '1px currentColor', color: 'transparent' }}
                 >
                     STUDY AI
                 </h1>
@@ -45,45 +45,34 @@ export function Hero() {
 
                     {/* Text Content */}
                     <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 text-primary font-bold text-xs mb-8 border border-primary/10 shadow-sm uppercase tracking-widest">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-600 font-bold text-xs mb-8 border border-blue-100 shadow-sm uppercase tracking-widest">
                             <Sparkles className="w-4 h-4" />
                             <span>Alpha Testing: Q1 2026</span>
                         </div>
 
-                        <h1 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tight mb-8 leading-[1.1]">
-                            The future of learning is <span className="text-primary italic">liquid.</span>
+                        <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black text-slate-900 tracking-tighter mb-8 leading-[0.9] uppercase text-balance">
+                            The future of learning is <span className="text-blue-600 italic">liquid.</span>
                         </h1>
 
-                        <p className="text-xl text-slate-600 mb-10 leading-relaxed font-medium">
+                        <p className="text-xl text-slate-500 mb-10 leading-relaxed font-bold uppercase tracking-wide">
                             We are building an AI that adapts to your brain's unique rhythms. No more rote memorization. Just pure, effortless mastery.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-                            <Link to="/register" className="bg-primary hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-2">
+                            <Link to="/register" className="bg-slate-900 text-white hover:bg-blue-600 px-10 py-5 squircle-xl font-black text-lg transition-all shadow-2xl flex items-center justify-center gap-2 uppercase tracking-widest active:scale-95 duration-500">
                                 Get Started Free
                                 <ArrowRight className="w-5 h-5" />
                             </Link>
-                            <button className="bg-white/40 backdrop-blur-md hover:bg-white/60 text-slate-700 border border-white/40 px-8 py-5 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                            <button className="bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-900 px-8 py-5 squircle-xl font-black text-lg transition-all flex items-center justify-center gap-2 shadow-sm uppercase tracking-widest active:scale-95 duration-500">
                                 <Play className="w-5 h-5 fill-current" />
                                 See demo
                             </button>
-                        </div>
-
-                        <div className="flex items-center justify-center lg:justify-start gap-8 text-slate-500 text-sm font-bold uppercase tracking-widest">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-green-500" />
-                                1,240 on waitlist
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                50 alpha spots left
-                            </div>
                         </div>
                     </div>
 
                     {/* Interactive Demo UI - Redesigned to match screenshot */}
                     <div className="relative w-full max-w-lg mx-auto lg:max-w-full">
-                        <div className="relative bg-white rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-slate-100 p-2 animate-float">
+                        <div className="relative bg-white/80 backdrop-blur-xl squircle-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100 p-2 animate-float">
                             {/* Browser Header */}
                             <div className="px-6 py-4 border-b border-slate-100/50 flex items-center justify-between mb-2">
                                 <div className="flex gap-2">
@@ -96,7 +85,7 @@ export function Hero() {
                             </div>
 
                             {/* Card Body */}
-                            <div className="p-4 sm:p-6 bg-slate-50/50 rounded-2xl min-h-[400px] flex flex-col">
+                            <div className="p-4 sm:p-6 bg-slate-50/80 rounded-2xl min-h-[400px] flex flex-col">
                                 <div className="mb-6 space-y-3">
                                     <label className="block text-sm font-semibold text-slate-700 ml-1">
                                         Try it now: What do you want to study?
@@ -108,17 +97,17 @@ export function Hero() {
                                             value={demoTopic}
                                             onChange={(e) => setDemoTopic(e.target.value)}
                                             placeholder="e.g., Mitosis, World War II, Calculus..."
-                                            className="flex-1 px-5 py-4 rounded-2xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF]/50 shadow-sm"
+                                            className="flex-1 px-5 py-4 squircle-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-all font-bold shadow-sm"
                                         />
                                         <button
                                             type="submit"
                                             disabled={isLoading || !demoTopic}
-                                            className="bg-[#0066FF] hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white p-4 rounded-2xl font-medium transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:-translate-y-0.5 aspect-square flex items-center justify-center"
+                                            className="bg-white text-black hover:bg-blue-600 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed p-4 squircle-xl transition-all shadow-2xl aspect-square flex items-center justify-center group/btn"
                                         >
                                             {isLoading ? (
-                                                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                <div className="w-6 h-6 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
                                             ) : (
-                                                <Zap className="w-6 h-6 fill-current" />
+                                                <Zap className="w-6 h-6 fill-current group-hover/btn:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
                                             )}
                                         </button>
                                     </form>
@@ -157,28 +146,28 @@ export function Hero() {
                                         >
                                             {/* Front Card */}
                                             <div
-                                                className="absolute inset-0 bg-white border border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center backface-hidden hover:shadow-2xl transition-shadow"
+                                                className="absolute inset-0 bg-white border border-slate-100 squircle-xl shadow-xl p-8 flex flex-col items-center justify-center text-center backface-hidden hover:bg-slate-50 transition-all duration-500"
                                                 style={{ backfaceVisibility: 'hidden' }}
                                             >
-                                                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                                                    <span className="font-bold text-[#0066FF]">Q</span>
+                                                <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4 border border-blue-100">
+                                                    <span className="font-black text-blue-600 text-xl">Q</span>
                                                 </div>
-                                                <h3 className="text-xl md:text-2xl font-bold text-slate-800 leading-snug">{flashcard.question}</h3>
-                                                <div className="absolute bottom-6 flex items-center gap-2 text-sm font-semibold text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full">
+                                                <h3 className="text-xl md:text-3xl font-black text-slate-900 leading-tight tracking-tighter uppercase">{flashcard.question}</h3>
+                                                <div className="absolute bottom-6 flex items-center gap-2 text-[10px] font-black text-slate-400 bg-slate-50 border border-slate-100 px-4 py-2 squircle-xl uppercase tracking-widest">
                                                     Click to flip <ArrowRight className="w-4 h-4" />
                                                 </div>
                                             </div>
 
                                             {/* Back Card */}
                                             <div
-                                                className="absolute inset-0 bg-slate-900 border border-slate-800 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center backface-hidden"
+                                                className="absolute inset-0 bg-blue-600 border border-white/20 squircle-xl shadow-2xl p-8 flex flex-col items-center justify-center text-center backface-hidden"
                                                 style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                                             >
-                                                <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mb-4">
-                                                    <span className="font-bold text-white">A</span>
+                                                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-4 border border-white/20">
+                                                    <span className="font-bold text-white text-xl">A</span>
                                                 </div>
-                                                <h3 className="text-lg md:text-xl font-medium text-white/90 leading-relaxed">{flashcard.answer}</h3>
-                                                <div className="absolute bottom-6 flex items-center gap-2 text-sm font-semibold text-slate-500 bg-slate-800 px-3 py-1.5 rounded-full">
+                                                <h3 className="text-lg md:text-xl font-bold text-white leading-relaxed tracking-tight">{flashcard.answer}</h3>
+                                                <div className="absolute bottom-6 flex items-center gap-2 text-[10px] font-black text-white/60 bg-white/10 px-4 py-2 squircle-xl uppercase tracking-widest">
                                                     Click to flip <ArrowRight className="w-4 h-4" />
                                                 </div>
                                             </div>
