@@ -87,7 +87,7 @@ export function RegisterPage() {
                             <div className="w-10 h-10 rounded-xl bg-[#0066FF] flex items-center justify-center shadow-lg shadow-blue-500/30">
                                 <Sparkles size={18} className="text-white" />
                             </div>
-                            <span className="text-2xl font-bold tracking-tight text-[#0066FF]">Study AI</span>
+                            <span className="text-2xl font-bold tracking-tight text-slate-900">Study<span className="text-[#0066FF]">.ai</span></span>
                         </div>
                         <h1 className="text-3xl font-bold tracking-tight text-foreground">Create Account</h1>
                         <p className="text-muted-foreground text-base">Start your learning journey today</p>

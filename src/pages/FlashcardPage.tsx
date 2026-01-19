@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import { useParams, useNavigate } from 'react-router-dom';
+import { lessonsData } from '../shared/data/lessonData';
 
 const mockFlashcards = [
     { id: 1, front: "What is the primary focus of psychology as a scientific discipline?", back: "The scientific study of behavior and mental processes." },
@@ -11,20 +13,25 @@ const mockFlashcards = [
 ];
 
 const FlashcardPage: React.FC = () => {
+    const { bookId } = useParams();
+    const navigate = useNavigate();
+    const lesson = bookId ? lessonsData[bookId] : null;
+    const flashcards = lesson ? lesson.flashcards : mockFlashcards;
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
 
     const handleNext = () => {
         setIsFlipped(false);
         setTimeout(() => {
-            setCurrentIndex((prev) => (prev + 1) % mockFlashcards.length);
+            setCurrentIndex((prev) => (prev + 1) % flashcards.length);
         }, 150);
     };
 
     const handlePrev = () => {
         setIsFlipped(false);
         setTimeout(() => {
-            setCurrentIndex((prev) => (prev - 1 + mockFlashcards.length) % mockFlashcards.length);
+            setCurrentIndex((prev) => (prev - 1 + flashcards.length) % flashcards.length);
         }, 150);
     };
 
@@ -40,14 +47,17 @@ const FlashcardPage: React.FC = () => {
                 <div className="w-full flex items-end justify-between mb-12">
                     <div>
                         <h2 className="text-4xl font-black tracking-tight bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent mb-2">
-                            Flashcards
+                            {lesson?.title || "Flashcards"}
                         </h2>
                         <div className="text-gray-500 font-bold uppercase tracking-widest text-xs">
-                            Introduction to Psychology
+                            {lesson?.subject || "Introduction to Psychology"}
                         </div>
                     </div>
                     <div className="text-right">
-                        <button className="p-3 bg-white/5 hover:bg-red-500/20 squircle-lg transition-all text-gray-500 hover:text-red-400 border border-white/5 group">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="p-3 bg-white/5 hover:bg-red-500/20 squircle-lg transition-all text-gray-500 hover:text-red-400 border border-white/5 group"
+                        >
                             <X size={20} className="group-hover:rotate-90 transition-transform duration-500" />
                         </button>
                     </div>
@@ -64,7 +74,7 @@ const FlashcardPage: React.FC = () => {
                             </div>
 
                             <h3 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-white group-hover:scale-[1.02] transition-transform duration-700">
-                                {mockFlashcards[currentIndex].front}
+                                {flashcards[currentIndex].front}
                             </h3>
 
                             <div className="mt-12 flex items-center gap-3 px-6 py-2 liquid-glass border-white/5 squircle-lg opacity-40 group-hover:opacity-100 transition-all duration-700">
@@ -80,7 +90,7 @@ const FlashcardPage: React.FC = () => {
                             </div>
 
                             <h3 className="text-3xl md:text-4xl font-bold leading-relaxed tracking-tight text-blue-50 group-hover:scale-[1.01] transition-transform duration-700">
-                                {mockFlashcards[currentIndex].back}
+                                {flashcards[currentIndex].back}
                             </h3>
 
                             <div className="mt-12 flex items-center gap-3 px-6 py-2 bg-blue-500/10 border border-blue-500/20 squircle-lg">
@@ -104,12 +114,12 @@ const FlashcardPage: React.FC = () => {
 
                     <div className="flex flex-col items-center gap-2">
                         <div className="text-3xl font-black tracking-tighter text-white tabular-nums">
-                            {currentIndex + 1} <span className="text-gray-700 mx-1">/</span> {mockFlashcards.length}
+                            {currentIndex + 1} <span className="text-gray-700 mx-1">/</span> {flashcards.length}
                         </div>
                         <div className="h-1 w-24 bg-white/5 squircle-full overflow-hidden">
                             <div
                                 className="h-full bg-blue-600 transition-all duration-500"
-                                style={{ width: `${((currentIndex + 1) / mockFlashcards.length) * 100}%` }}
+                                style={{ width: `${((currentIndex + 1) / flashcards.length) * 100}%` }}
                             />
                         </div>
                     </div>

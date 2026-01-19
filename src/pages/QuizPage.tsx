@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ChevronRight, CheckCircle, XCircle } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { QuizQuestion } from '../types';
+import { useNavigate, useParams } from 'react-router-dom';
+import { lessonsData } from '../shared/data/lessonData';
 
 const mockQuestions: QuizQuestion[] = [
   {
@@ -14,38 +16,20 @@ const mockQuestions: QuizQuestion[] = [
       { id: 'D', text: "The exploration of physical matter" }
     ],
     correctId: 'B'
-  },
-  {
-    id: '2',
-    question: "Which part of the brain is primarily responsible for memory formation?",
-    options: [
-      { id: 'A', text: "Cerebellum" },
-      { id: 'B', text: "Hippocampus" },
-      { id: 'C', text: "Frontal Lobe" },
-      { id: 'D', text: "Occipital Lobe" }
-    ],
-    correctId: 'B'
-  },
-  {
-    id: '3',
-    question: "Who is known as the father of psychoanalysis?",
-    options: [
-      { id: 'A', text: "B.F. Skinner" },
-      { id: 'B', text: "Carl Jung" },
-      { id: 'C', text: "Sigmund Freud" },
-      { id: 'D', text: "William James" }
-    ],
-    correctId: 'C'
   }
 ];
 
 const QuizPage: React.FC = () => {
+  const { bookId } = useParams();
+  const lesson = bookId ? lessonsData[bookId] : null;
+  const questions = lesson ? lesson.questions : mockQuestions;
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [score, setScore] = useState(0);
 
-  const question = mockQuestions[currentQuestionIndex];
+  const question = questions[currentQuestionIndex];
 
   const handleOptionSelect = (id: string) => {
     if (isSubmitted) return;
@@ -81,10 +65,10 @@ const QuizPage: React.FC = () => {
         <div className="flex justify-between items-end mb-8">
           <div>
             <h2 className="text-4xl font-black tracking-tight bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent mb-2">
-              Psychology Quiz
+              {lesson?.title || "Psychology Quiz"}
             </h2>
             <div className="text-gray-500 font-bold uppercase tracking-widest text-xs">
-              Introduction to Psychology
+              {lesson?.subject || "Introduction to Psychology"}
             </div>
           </div>
           <div className="text-right">
@@ -102,7 +86,7 @@ const QuizPage: React.FC = () => {
           <div className="absolute top-0 left-0 w-full h-1.5 bg-white/5">
             <div
               className="h-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-700 ease-out"
-              style={{ width: `${((currentQuestionIndex + 1) / mockQuestions.length) * 100}%` }}
+              style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
             />
           </div>
 
@@ -187,7 +171,7 @@ const QuizPage: React.FC = () => {
                 onClick={handleNext}
                 className="px-12 py-5 liquid-glass hover:bg-white/10 text-white font-black squircle-lg transition-all flex items-center gap-4 hover:scale-105 active:scale-95 border-white/20"
               >
-                {currentQuestionIndex < mockQuestions.length - 1 ? 'Next Question' : 'Finish Quiz'}
+                {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
                 <ChevronRight size={24} className="text-blue-500" />
               </button>
             )}

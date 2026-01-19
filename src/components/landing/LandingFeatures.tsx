@@ -1,4 +1,4 @@
-import { Twitter, Instagram, Linkedin, Github, Sparkles, Send } from "lucide-react";
+import { Sparkles, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,7 @@ export function LandingFeatures() {
                         className="text-[120px] md:text-[200px] lg:text-[280px] font-black leading-none tracking-tighter whitespace-nowrap uppercase"
                         style={{ WebkitTextStroke: '1px currentColor', color: 'transparent' }}
                     >
-                        STUDY AI
+                        Study.ai
                     </h1>
                 </div>
                 <div className="absolute top-20 right-10 pointer-events-none select-none z-0 text-slate-900 opacity-[0.03] mask-radial-faded hidden md:block">
@@ -22,13 +22,13 @@ export function LandingFeatures() {
                         className="text-[80px] md:text-[150px] font-black leading-none tracking-tighter whitespace-nowrap uppercase"
                         style={{ WebkitTextStroke: '1px currentColor', color: 'transparent' }}
                     >
-                        STUDY AI
+                        Study.ai
                     </h1>
                 </div>
                 {/* Large Dark Brand Text to fill bottom space */}
                 <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 pointer-events-none select-none z-0 text-slate-900 opacity-[0.05] mask-edge-fade hidden lg:block">
                     <h1 className="text-[120px] md:text-[220px] lg:text-[320px] font-black leading-none tracking-tighter whitespace-nowrap uppercase">
-                        STUDY AI
+                        Study.ai
                     </h1>
                 </div>
 
@@ -56,19 +56,7 @@ export function LandingFeatures() {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
-                                    <motion.a
-                                        key={i}
-                                        href="#"
-                                        whileHover={{ scale: 1.1, y: -2 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-primary transition-all border border-slate-100 shadow-sm"
-                                    >
-                                        <Icon size={20} />
-                                    </motion.a>
-                                ))}
-                            </div>
+
                         </motion.div>
 
                         {/* Right Content - Waitlist Form */}

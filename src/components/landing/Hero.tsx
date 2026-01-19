@@ -36,7 +36,7 @@ export function Hero() {
                     className="text-[200px] xl:text-[300px] font-black leading-none tracking-tighter uppercase whitespace-nowrap"
                     style={{ WebkitTextStroke: '1px currentColor', color: 'transparent' }}
                 >
-                    STUDY AI
+                    Study.ai
                 </h1>
             </div>
 
@@ -80,7 +80,7 @@ export function Hero() {
                                     <div className="w-3 h-3 rounded-full bg-[#FEBC2E] shadow-sm"></div>
                                     <div className="w-3 h-3 rounded-full bg-[#28C840] shadow-sm"></div>
                                 </div>
-                                <div className="text-xs font-medium text-slate-400 select-none">STUDY AI - Flashcard Generator</div>
+                                <div className="text-xs font-medium text-slate-400 select-none">Study.ai - Flashcard Generator</div>
                                 <div className="w-10"></div> {/* Spacer for centering */}
                             </div>
 

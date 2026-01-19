@@ -99,7 +99,7 @@ export function LoginPage() {
                             <div className="w-10 h-10 rounded-xl bg-[#0066FF] flex items-center justify-center shadow-lg shadow-blue-500/30">
                                 <Sparkles size={18} className="text-white" />
                             </div>
-                            <span className="text-2xl font-bold tracking-tight text-[#0066FF]">Study AI</span>
+                            <span className="text-2xl font-bold tracking-tight text-slate-900">Study<span className="text-[#0066FF]">.ai</span></span>
                         </div>
                         <h1 className="text-3xl font-bold tracking-tight text-foreground">Welcome Back</h1>
                         <p className="text-muted-foreground text-base">Log in to access your Study Dashboard</p>
@@ -210,7 +210,7 @@ export function LoginPage() {
                 </div>
 
                 <div className="absolute bottom-6 left-0 w-full text-center text-xs text-muted-foreground/60">
-                    &copy; 2024 Study AI. All rights reserved.
+                    &copy; 2024 Study.ai. All rights reserved.
                 </div>
             </div>
 

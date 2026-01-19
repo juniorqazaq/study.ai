@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BookOpen, Zap, HelpCircle, CreditCard } from 'lucide-react';
+import { Menu, X, BookOpen, Zap, HelpCircle, CreditCard, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { HeaderLogo } from './HeaderLogo';
 
 const navItems = [
     { name: 'How It Works', href: '/how-it-works', icon: HelpCircle },
-    { name: 'Features', href: '/features', icon: Zap },
     { name: 'Resources', href: '/resources', icon: BookOpen },
     { name: 'Pricing', href: '/pricing', icon: CreditCard },
 ];
@@ -42,17 +42,8 @@ export function Header() {
             >
                 <div className="px-6 flex justify-between items-center">
                     {/* Logo Section */}
-                    <Link to="/" className="flex items-center gap-2 group relative">
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="flex items-center"
-                        >
-                            <span className="text-2xl font-black text-slate-900 tracking-tighter uppercase shrink-0">
-                                STUDY<span className="text-primary italic"> AI</span>
-                            </span>
-                        </motion.div>
-                        <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
+                    <Link to="/" className="flex items-center gap-3 group relative">
+                        <HeaderLogo />
                     </Link>
 
                     {/* Desktop Navigation - Centered */}

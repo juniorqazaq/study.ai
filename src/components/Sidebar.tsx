@@ -36,7 +36,7 @@ export function Sidebar() {
           <Sparkles size={20} className="text-white" />
         </div>
         {!isCollapsed && (
-          <span className="text-2xl font-black text-white tracking-tighter uppercase italic">Study<span className="text-blue-500">.ai</span></span>
+          <span className="text-2xl font-black text-white tracking-tighter italic">Study<span className="text-blue-500 lowercase">.ai</span></span>
         )}
       </div>
 

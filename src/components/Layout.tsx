@@ -8,7 +8,7 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
-  const { isCollapsed } = useSidebar();
+  const { isCollapsed, isSidebarHidden } = useSidebar();
   const location = useLocation();
 
   // Check if we should show the main sidebar (vs book mode)
@@ -18,7 +18,7 @@ export function Layout({ children }: LayoutProps) {
   const isLandingPage = location.pathname === '/';
   const isAuthPage = ['/login', '/register', '/pricing', '/email-verification-sent', '/features', '/resources', '/how-it-works'].includes(location.pathname);
 
-  const showSidebar = !isLandingPage && !isAuthPage;
+  const showSidebar = !isLandingPage && !isAuthPage && !isSidebarHidden;
 
   return (
     <div className="min-h-screen relative text-white bg-slate-950 font-sans selection:bg-blue-500/30">

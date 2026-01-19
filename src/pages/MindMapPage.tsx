@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import {
   ReactFlow,
   Controls,
@@ -18,7 +19,7 @@ import PageTransition from '../components/PageTransition';
 import MindMapNode from './mindmap/MindMapNode';
 import { FloatingToolbar } from './mindmap/FloatingToolbar';
 import { getLayoutedElements } from './mindmap/MindMapLayouts';
-import { Link } from 'react-router-dom';
+import { lessonsData } from '../shared/data/lessonData';
 
 const initialNodes: Node[] = [
   { id: 'root', type: 'mindMap', data: { label: 'Psychology', isRoot: true, color: '#3b82f6' }, position: { x: 0, y: 0 } },
@@ -33,9 +34,25 @@ const initialEdges: Edge[] = [
   { id: 'e1-3', source: 'root', target: '3', animated: true, style: { stroke: '#f59e0b' } },
 ];
 
+const calculusNodes: Node[] = [
+  { id: 'root', type: 'mindMap', data: { label: 'Calculus I', isRoot: true, color: '#3b82f6' }, position: { x: 0, y: 0 } },
+  { id: '1', type: 'mindMap', data: { label: 'Sets & Logic', color: '#8b5cf6' }, position: { x: -250, y: 50 } },
+  { id: '2', type: 'mindMap', data: { label: 'Intervals', color: '#06b6d4' }, position: { x: -250, y: 150 } },
+  { id: '3', type: 'mindMap', data: { label: 'Functions', color: '#f59e0b' }, position: { x: 250, y: 100 } },
+];
+
+const calculusEdges: Edge[] = [
+  { id: 'e1-1', source: 'root', target: '1', animated: true, style: { stroke: '#8b5cf6' } },
+  { id: 'e1-2', source: 'root', target: '2', animated: true, style: { stroke: '#06b6d4' } },
+  { id: 'e1-3', source: 'root', target: '3', animated: true, style: { stroke: '#f59e0b' } },
+];
+
 const Flow = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const { bookId } = useParams();
+  const isCalculus = bookId === 'calculus-mastery';
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(isCalculus ? calculusNodes : initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(isCalculus ? calculusEdges : initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const nodeTypes = useMemo(() => ({ mindMap: MindMapNode }), []);
@@ -222,6 +239,9 @@ const Flow = () => {
 };
 
 const MindMapPage: React.FC = () => {
+  const { bookId } = useParams();
+  const lesson = bookId ? lessonsData[bookId] : null;
+
   return (
     <PageTransition className="h-screen flex flex-col overflow-hidden bg-black relative">
       {/* Liquid Background Blobs */}
@@ -233,13 +253,13 @@ const MindMapPage: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center px-10 py-6 border-b border-white/10 liquid-glass relative z-10 shadow-2xl">
         <div className="flex items-center gap-6">
-          <Link to="/features" className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 squircle-lg transition-all text-gray-400 hover:text-white active:scale-95 group">
+          <Link to={bookId ? `/book/${bookId}/notes-mode` : "/library"} className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 squircle-lg transition-all text-gray-400 hover:text-white active:scale-95 group">
             <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-white mb-1">Mind Map</h2>
+            <h2 className="text-2xl font-black tracking-tight text-white mb-1">{lesson?.title || "Mind Map"}</h2>
             <div className="flex items-center gap-3 text-xs font-bold">
-              <span className="text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded uppercase tracking-widest">Psychology 101</span>
+              <span className="text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded uppercase tracking-widest">{lesson?.subject || "Psychology 101"}</span>
               <span className="w-1 h-1 rounded-full bg-white/20" />
               <span className="text-gray-500 uppercase tracking-widest">Last edited just now</span>
             </div>

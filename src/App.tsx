@@ -31,10 +31,10 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 }
 
 import { StudySidebar } from './components/study/StudySidebar';
-
-// ... imports remain the same
+import { useSidebar } from './context/SidebarContext';
 
 function AppContent() {
+  const { isSidebarHidden } = useSidebar();
   const location = useLocation();
   const isBookPage = location.pathname.startsWith('/book/');
   const isLandingPage = location.pathname === '/';
@@ -42,7 +42,7 @@ function AppContent() {
 
   return (
     <Layout>
-      {!isLandingPage && !isAuthPage && (
+      {!isLandingPage && !isAuthPage && !isSidebarHidden && (
         isBookPage ? <StudySidebar /> : <Sidebar />
       )}
       <Routes>

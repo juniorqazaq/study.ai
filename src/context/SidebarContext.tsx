@@ -4,36 +4,26 @@ interface SidebarContextType {
     isCollapsed: boolean;
     setIsCollapsed: (value: boolean) => void;
     toggleSidebar: () => void;
+    isSidebarHidden: boolean;
+    setIsSidebarHidden: (value: boolean) => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
     const [isCollapsed, setIsCollapsed] = useState(true); // Default to mini as requested earlier
+    const [isSidebarHidden, setIsSidebarHidden] = useState(false);
 
     const toggleSidebar = () => setIsCollapsed(prev => !prev);
 
-    // Scroll listener removed as per user request to disable auto-toggle on scroll
-    /* 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollThreshold = 50;
-            if (window.scrollY > scrollThreshold) {
-                setIsCollapsed(true);
-            } else {
-                setIsCollapsed(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        handleScroll();
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-    */
-
     return (
-        <SidebarContext.Provider value={{ isCollapsed, setIsCollapsed, toggleSidebar }}>
+        <SidebarContext.Provider value={{
+            isCollapsed,
+            setIsCollapsed,
+            toggleSidebar,
+            isSidebarHidden,
+            setIsSidebarHidden
+        }}>
             {children}
         </SidebarContext.Provider>
     );

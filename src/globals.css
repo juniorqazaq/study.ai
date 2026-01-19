@@ -214,6 +214,11 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+.liquid-glass-light {
+  @apply bg-white/70 backdrop-blur-md border border-slate-200;
+  box-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.1);
+}
+
 .liquid-glass-dark {
   @apply bg-black/40 backdrop-blur-3xl border border-white/5;
 }
