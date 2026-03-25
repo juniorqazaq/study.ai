@@ -49,6 +49,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "es-toolkit": "^1.45.1",
     "framer-motion": "^11.0.20",
     "html-to-image": "^1.11.13",
     "input-otp": "^1.4.2",
@@ -64,7 +65,8 @@
     "recharts": "^3.4.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^2.2.2",
-    "vaul": "^1.1.2"
+    "vaul": "^1.1.2",
+    "victory-vendor": "^37.3.6"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
