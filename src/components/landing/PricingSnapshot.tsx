@@ -35,11 +35,12 @@ const plans = [
 
 export function PricingSnapshot() {
     return (
-        <section className="py-20 md:py-32 bg-[#07090f] relative overflow-hidden" id="pricing">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#0066FF]/5 blur-[100px] rounded-full pointer-events-none" />
+        <section className="py-20 md:py-28 bg-transparent relative overflow-hidden" id="pricing">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#0066FF]/6 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-10 right-[12%] h-56 w-56 rounded-full bg-[#f59e0b]/5 blur-[110px] pointer-events-none" />
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <div className="text-center mb-20">
+                <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter text-[#e2e8f0]">
                         Transparent <span className="text-[#0066FF]">Pricing</span>
                     </h2>
@@ -54,8 +55,8 @@ export function PricingSnapshot() {
                             key={plan.name}
                             className={`relative rounded-3xl p-8 border flex flex-col transition-all duration-300 ${
                                 plan.popular
-                                    ? 'border-[#0066FF]/50 bg-[#0d0f1a] shadow-[0_0_40px_rgba(0,102,255,0.15)] scale-105 z-10'
-                                    : 'border-[#1e2235] bg-[#0d0f1a] hover:border-[#0066FF]/30 hover:-translate-y-1'
+                                    ? 'border-[#0066FF]/45 bg-[#111827]/92 shadow-[0_0_40px_rgba(0,102,255,0.12)] scale-105 z-10'
+                                    : 'border-[#24304a] bg-[#121827]/86 hover:border-[#0066FF]/24 hover:-translate-y-1'
                             }`}
                         >
                             {plan.popular && (
@@ -65,12 +66,12 @@ export function PricingSnapshot() {
                             )}
 
                             <div className="mb-8 text-center">
-                                <h3 className="text-[#e2e8f0]/50 font-black uppercase tracking-[0.3em] text-[10px] mb-4">{plan.name} Tier</h3>
+                                <h3 className="text-[#e2e8f0]/45 font-black uppercase tracking-[0.3em] text-[10px] mb-4">{plan.name} Tier</h3>
                                 <div className="flex items-baseline justify-center gap-1 mb-3">
                                     <span className="text-5xl font-black text-[#e2e8f0] tracking-tighter">{plan.price}</span>
                                     <span className="text-[#e2e8f0]/40 font-bold text-sm">{plan.period}</span>
                                 </div>
-                                <p className="text-sm text-[#e2e8f0]/40 font-medium italic">{plan.desc}</p>
+                                <p className="text-sm text-[#e2e8f0]/48 font-medium italic">{plan.desc}</p>
                             </div>
 
                             <ul className="space-y-4 mb-10 flex-grow">
@@ -90,7 +91,7 @@ export function PricingSnapshot() {
                                 className={`w-full py-4 rounded-2xl font-bold uppercase tracking-[0.15em] text-sm transition-all duration-300 active:scale-95 text-center ${
                                     plan.popular
                                         ? 'bg-[#0066FF] hover:bg-[#0052CC] text-white shadow-[0_0_20px_rgba(0,102,255,0.3)]'
-                                        : 'bg-[#1a1d2e] hover:bg-[#252840] text-[#e2e8f0] border border-[#1e2235]'
+                                        : 'bg-[#1a2234] hover:bg-[#20293d] text-[#e2e8f0] border border-[#2b3550]'
                                 }`}
                             >
                                 {plan.cta}

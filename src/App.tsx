@@ -18,8 +18,8 @@ import { FillBlanksPage } from './pages/FillBlanksPage';
 import { WrittenTestPage } from './pages/WrittenTestPage';
 import { StatisticsPage } from './pages/StatisticsPage';
 import { FeaturesPage } from './pages/FeaturesPage';
-import { HowItWorksPage } from './pages/HowItWorksPage';
 import { ResourcesPage } from './pages/ResourcesPage';
+import { SupportPage } from './pages/SupportPage';
 
 
 function PageTransition({ children }: { children: React.ReactNode }) {
@@ -38,7 +38,7 @@ function AppContent() {
   const location = useLocation();
   const isBookPage = location.pathname.startsWith('/book/');
   const isLandingPage = location.pathname === '/';
-  const isAuthPage = ['/login', '/register', '/pricing', '/email-verification-sent', '/features', '/resources', '/how-it-works'].includes(location.pathname);
+  const isAuthPage = ['/login', '/register', '/pricing', '/email-verification-sent', '/features', '/resources', '/support'].includes(location.pathname);
 
   return (
     <Layout>
@@ -53,8 +53,9 @@ function AppContent() {
         <Route path="/email-verification-sent" element={<EmailVerificationSentPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/features" element={<PageTransition><FeaturesPage /></PageTransition>} />
-        <Route path="/how-it-works" element={<PageTransition><HowItWorksPage /></PageTransition>} />
+        <Route path="/how-it-works" element={<Navigate to="/" replace />} />
         <Route path="/resources" element={<PageTransition><ResourcesPage /></PageTransition>} />
+        <Route path="/support" element={<PageTransition><SupportPage /></PageTransition>} />
 
         {/* Main pages */}
         <Route path="/upload" element={<PageTransition><UploadPage /></PageTransition>} />

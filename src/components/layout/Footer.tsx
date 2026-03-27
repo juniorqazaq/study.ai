@@ -11,10 +11,11 @@ const SOCIALS = [
 
 const NAV_ITEMS = [
   { name: "Home", href: "/" },
-  { name: "Platform", href: "/features" },
-  { name: "Solutions", href: "/resources" },
-  { name: "Company", href: "/how-it-works" },
-  { name: "Contact Us", href: "/register" }
+  { name: "How It Works", href: "/how-it-works" },
+  { name: "Resources", href: "/resources" },
+  { name: "Pricing", href: "/pricing" },
+  { name: "Support", href: "/support" },
+  { name: "Register", href: "/register" }
 ];
 
 export function Footer() {

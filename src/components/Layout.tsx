@@ -16,7 +16,7 @@ export function Layout({ children }: LayoutProps) {
   // but for now we infer it to set the correct padding.
   // const isBookPage = location.pathname.startsWith('/book/');
   const isLandingPage = location.pathname === '/';
-  const isAuthPage = ['/login', '/register', '/pricing', '/email-verification-sent', '/features', '/resources', '/how-it-works'].includes(location.pathname);
+  const isAuthPage = ['/login', '/register', '/pricing', '/email-verification-sent', '/features', '/resources', '/support'].includes(location.pathname);
 
   const showSidebar = !isLandingPage && !isAuthPage && !isSidebarHidden;
 

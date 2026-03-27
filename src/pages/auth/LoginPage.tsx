@@ -99,9 +99,11 @@ export function LoginPage() {
     }, [navigate]);
 
     return (
-        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-sans bg-[#07090f]">
-            {/* Left Side - Login Form */}
-            <div className="flex flex-col justify-center items-center p-6 sm:p-12 lg:p-16 relative bg-[#07090f]">
+        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-sans bg-[#0A0F1E]">
+            <div className="relative flex flex-col justify-center items-center overflow-hidden p-6 sm:p-12 lg:p-16 bg-[#0A0F1E]">
+                <div className="absolute left-10 top-10 h-40 w-40 rounded-full bg-[#0066FF]/10 blur-[90px] pointer-events-none" />
+                <div className="absolute bottom-16 left-16 h-32 w-32 rounded-full bg-[#f59e0b]/10 blur-[80px] pointer-events-none" />
+
                 <div className="absolute top-8 left-8 flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg bg-[#0066FF]/20 border border-[#0066FF]/20 flex items-center justify-center font-bold text-[#0066FF]">
                         S
@@ -109,23 +111,30 @@ export function LoginPage() {
                     <span className="text-xl font-bold tracking-tight"><span className="text-[#0066FF]">Study</span><span className="text-[#EAF4FF]">.ai</span></span>
                 </div>
 
-                <div className="w-full max-w-[420px] space-y-8 mt-12">
-                    {/* Header */}
-                    <div className="space-y-3 text-center lg:text-left px-0">
-                        <h1 className="text-4xl font-bold tracking-tight text-[#e2e8f0]">Welcome Back</h1>
-                        <p className="text-[#e2e8f0]/60 text-[15px]">Log in to access your Premium Study Dashboard.</p>
+                <div className="relative z-10 w-full max-w-[470px] rounded-[2rem] border border-white/8 bg-[#111827]/88 p-8 shadow-[0_32px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl">
+                    <div className="mb-8 flex items-center gap-3">
+                        <div className="rounded-full border border-[#f59e0b]/20 bg-[#f59e0b]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#fbbf24]">
+                            Member access
+                        </div>
+                        <div className="rounded-full border border-[#10b981]/20 bg-[#10b981]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#34d399]">
+                            Secure login
+                        </div>
                     </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-3 text-left">
+                        <h1 className="text-4xl font-black tracking-tight text-[#e2e8f0]">Welcome Back</h1>
+                        <p className="text-[#e2e8f0]/58 text-[15px] leading-7">Log in to continue your study sessions, review weak spots, and pick up where you stopped.</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="mt-8 space-y-4">
                         <div className="space-y-4">
                             <div className="space-y-2 text-left">
-                                <Label htmlFor="email" className="font-semibold text-[#e2e8f0]/80">Email Address</Label>
+                                <Label htmlFor="email" className="font-semibold text-[#e2e8f0]/78">Email Address</Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     placeholder="you@example.com"
-                                    className="h-12 bg-[#1a1d2e] border-[#252840] text-[#e2e8f0] placeholder:text-[#e2e8f0]/40 focus:border-[#0066FF] focus:ring-[#0066FF]/20 transition-all font-medium rounded-xl px-4"
+                                    className="h-13 bg-[#171d2b] border-[#2a3349] text-[#e2e8f0] placeholder:text-[#e2e8f0]/35 focus:border-[#0066FF] focus:ring-[#0066FF]/20 transition-all font-medium rounded-xl px-4"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -133,13 +142,13 @@ export function LoginPage() {
                             </div>
 
                             <div className="space-y-2 text-left">
-                                <Label htmlFor="password" className="font-semibold text-[#e2e8f0]/80">Password</Label>
+                                <Label htmlFor="password" className="font-semibold text-[#e2e8f0]/78">Password</Label>
                                 <div className="relative">
                                     <Input
                                         id="password"
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••"
-                                        className="h-12 bg-[#1a1d2e] border-[#252840] text-[#e2e8f0] placeholder:text-[#e2e8f0]/40 focus:border-[#0066FF] focus:ring-[#0066FF]/20 transition-all font-medium rounded-xl pr-10 px-4 tracking-widest placeholder:tracking-normal"
+                                        className="h-13 bg-[#171d2b] border-[#2a3349] text-[#e2e8f0] placeholder:text-[#e2e8f0]/35 focus:border-[#0066FF] focus:ring-[#0066FF]/20 transition-all font-medium rounded-xl pr-10 px-4 tracking-widest placeholder:tracking-normal"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
@@ -173,7 +182,7 @@ export function LoginPage() {
                             </Link>
                         </div>
 
-                        <Button className="w-full h-12 text-[15px] font-medium rounded-xl bg-gradient-to-r from-[#0066FF] to-[#0052CC] hover:opacity-90 text-white transition-all shadow-[0_0_20px_rgba(79,110,247,0.3)] border-none" type="submit" disabled={isLoading}>
+                        <Button className="w-full h-12 text-[15px] font-medium rounded-xl bg-gradient-to-r from-[#0066FF] to-[#0052CC] hover:opacity-90 text-white transition-all shadow-[0_0_20px_rgba(79,110,247,0.28)] border-none" type="submit" disabled={isLoading}>
                             {isLoading ? (
                                 <span className="animate-pulse">Logging in...</span>
                             ) : (
@@ -184,7 +193,6 @@ export function LoginPage() {
                         </Button>
                     </form>
 
-                    {/* Divider */}
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t border-[#252840]" />
@@ -194,15 +202,14 @@ export function LoginPage() {
                         </div>
                     </div>
 
-                    {/* Social Login */}
                     <div className="grid grid-cols-2 gap-4">
-                        <Button variant="outline" className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#1a1d2e] border-[#252840] hover:bg-[#252840] transition-colors" onClick={() => handleGoogleLogin()}>
+                        <Button variant="outline" className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#171d2b] border-[#2a3349] hover:bg-[#20283b] transition-colors" onClick={() => handleGoogleLogin()}>
                             <svg className="mr-2 h-5 w-5" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
                                 <path fill="#4285F4" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
                             </svg>
                             Google
                         </Button>
-                        <Button variant="outline" className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#1a1d2e] border-[#252840] hover:bg-[#252840] transition-colors" onClick={handleGithubLogin}>
+                        <Button variant="outline" className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#171d2b] border-[#2a3349] hover:bg-[#20283b] transition-colors" onClick={handleGithubLogin}>
                             <IconGithub />
                             <span className="ml-2">GitHub</span>
                         </Button>
@@ -216,18 +223,16 @@ export function LoginPage() {
                     </div>
                 </div>
 
-                <div className="absolute bottom-6 left-0 w-full text-center text-[13px] text-[#e2e8f0]/40">
+                <div className="absolute bottom-6 left-0 w-full text-center text-[13px] text-[#e2e8f0]/34">
                     Copyright &copy; {new Date().getFullYear()} Study.ai. All rights reserved
                 </div>
             </div>
 
-            {/* Right Side - Visual Dashboard Mockup */}
-            <div className="hidden lg:flex flex-col relative overflow-hidden items-center justify-center p-8 border-l border-[#252840] bg-[#0d0f1a]">
-                
-                {/* Subtle Radial Glow */}
-                <div className="absolute top-[30%] left-[10%] w-[350px] h-[350px] bg-[#0066FF]/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="hidden lg:flex flex-col relative overflow-hidden items-center justify-center p-10 border-l border-[#252840] bg-[#0E1424]">
+                <div className="absolute top-[24%] left-[18%] h-[280px] w-[280px] rounded-full bg-[#0066FF]/10 blur-[110px] pointer-events-none" />
+                <div className="absolute bottom-[14%] right-[18%] h-[240px] w-[240px] rounded-full bg-[#10b981]/8 blur-[110px] pointer-events-none" />
+                <div className="absolute top-[18%] right-[16%] h-[180px] w-[180px] rounded-full bg-[#f59e0b]/8 blur-[90px] pointer-events-none" />
 
-                {/* Content Container */}
                 <div className="relative z-10 w-full flex flex-col items-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -235,8 +240,9 @@ export function LoginPage() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="mb-10 text-center"
                     >
-                        <h2 className="text-[36px] font-bold mb-3 tracking-tight text-[#e2e8f0]">Start Your<br/>Learning Journey</h2>
-                        <p className="text-[#e2e8f0]/70 text-[17px] mt-4 font-normal tracking-wide">Visualize your progress with advanced analytics.</p>
+                        <h2 className="text-[36px] font-black mb-3 tracking-tight text-[#e2e8f0]">Build Smarter
+                            <br />Study Momentum</h2>
+                        <p className="text-[#e2e8f0]/64 text-[17px] mt-4 font-normal tracking-wide">Track your pace, review weak topics, and keep your revision system moving.</p>
                     </motion.div>
 
                     {/* Dashboard Card */}
@@ -245,7 +251,7 @@ export function LoginPage() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
-                            className="bg-[#141728] rounded-[24px] border border-[#252840] shadow-2xl p-6 relative pb-28 min-h-[290px]"
+                            className="bg-[#141B2B] rounded-[24px] border border-[#28324a] shadow-2xl p-6 relative pb-28 min-h-[290px]"
                         >
                             <h3 className="text-[14px] font-bold text-[#e2e8f0] tracking-wide mb-8">Weekly Activity</h3>
                             
@@ -268,7 +274,7 @@ export function LoginPage() {
                                 
                                 {/* 1. 100 Hours */}
                                 <div className="flex flex-col items-center justify-center p-1 w-1/4 group cursor-pointer">
-                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#252840] shadow-md flex items-center justify-center mb-2 group-hover:border-[#0066FF] transition-colors">
+                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#2a3349] shadow-md flex items-center justify-center mb-2 group-hover:border-[#0066FF] transition-colors">
                                         <IconClock />
                                     </div>
                                     <span className="text-[10px] font-semibold text-[#e2e8f0]/80">100 Hours</span>
@@ -276,7 +282,7 @@ export function LoginPage() {
 
                                 {/* 2. Top Learner */}
                                 <div className="flex flex-col items-center justify-center p-1 w-1/4 group cursor-pointer">
-                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#252840] shadow-md flex items-center justify-center mb-2 group-hover:border-[#4f6ef7] transition-colors">
+                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#2a3349] shadow-md flex items-center justify-center mb-2 group-hover:border-[#f59e0b] transition-colors">
                                         <IconTrophy />
                                     </div>
                                     <span className="text-[10px] font-semibold text-[#e2e8f0]/80">Top Learner</span>
@@ -284,7 +290,7 @@ export function LoginPage() {
 
                                 {/* 3. Quiz Master */}
                                 <div className="flex flex-col items-center justify-center p-1 w-1/4 group cursor-pointer">
-                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#252840] shadow-md flex items-center justify-center mb-2 group-hover:border-[#4f6ef7] transition-colors">
+                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#2a3349] shadow-md flex items-center justify-center mb-2 group-hover:border-[#10b981] transition-colors">
                                         <IconFileText />
                                     </div>
                                     <span className="text-[10px] font-semibold text-[#e2e8f0]/80">Quiz Master</span>
@@ -292,7 +298,7 @@ export function LoginPage() {
 
                                 {/* 4. Streak 30 */}
                                 <div className="flex flex-col items-center justify-center p-1 w-1/4 group cursor-pointer">
-                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#252840] shadow-md flex items-center justify-center mb-2 group-hover:border-[#4f6ef7] transition-colors">
+                                    <div className="w-10 h-10 rounded-full bg-[#141728] border border-[#2a3349] shadow-md flex items-center justify-center mb-2 group-hover:border-[#fb7185] transition-colors">
                                         <IconFlame />
                                     </div>
                                     <span className="text-[10px] font-semibold text-[#e2e8f0]/80">Streak 30</span>

@@ -54,6 +54,7 @@
   body {
     @apply bg-[#07090f] text-[#e2e8f0];
     font-family: 'Inter', sans-serif;
+    overflow-y: scroll;
   }
 }
 
