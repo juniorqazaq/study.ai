@@ -1,104 +1,129 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
-const FAQS = [
-  {
-    q: "Is Study.ai free to use?",
-    a: "We offer a generous free tier that includes basic flashcard generation and standard quizzes. For power users needing unlimited AI generations, mind maps, and priority processing, we offer an affordable Premium tier."
-  },
-  {
-    q: "What file formats does it support?",
-    a: "You can upload PDF, DOCX, TXT, or simply copy and paste direct text. The AI extracts the core concepts automatically, ignoring formatting noise."
-  },
-  {
-    q: "How does the AI generate flashcards?",
-    a: "We utilize Google's advanced Gemini AI. It analyzes your provided text contextually, identifies key learning objectives, and structures them into concise point-and-answer pairs optimized for spaced repetition."
-  },
-  {
-    q: "Can I use it on mobile?",
-    a: "Yes! Study.ai is fully responsive and functions entirely as a Progressive Web App directly in your mobile browser with near-native performance."
-  },
-  {
-    q: "Which universities is it available at?",
-    a: "Currently anyone can register from any institution globally. We are officially partnered with 6 top universities in Kazakhstan to provide specialized academic curriculums pre-loaded."
-  },
-  {
-    q: "How is my data stored and protected?",
-    a: "All your uploaded documents and generated study materials are encrypted at rest. We never share your personal study data with third-party advertisers."
-  },
-  {
-    q: "What makes Study.ai different from Anki or Quizlet?",
-    a: "While Anki requires tedious manual card creation, Study.ai generates everything for you in 10 seconds. Moreover, we provide multiple synchronized learning modalities (Mind Maps, Fill-in-blanks) from a single source document."
-  }
+const IcoSmile = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 10h.01"/><path d="M15 10h.01"/></svg>;
+const IcoCards = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="4" width="14" height="6" rx="1.5"/><rect x="5" y="14" width="14" height="6" rx="1.5"/></svg>;
+const IcoInvoice = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3h8l3 3v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M15 3v4h4"/><path d="M9 13h6"/><path d="M9 17h4"/></svg>;
+const IcoUserPlus = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3.5"/><path d="M19 8v6"/><path d="M16 11h6"/></svg>;
+const IcoMoney = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M7 9h.01"/><path d="M17 15h.01"/></svg>;
+const IcoMail = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>;
+const IcoMessage = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-7a8 8 0 1 1 18-4Z"/></svg>;
+const IcoPlay = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3V9Z"/></svg>;
+const IcoChevron = ({ open }: { open: boolean }) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>;
+
+type Category = 'General' | 'Pricing' | 'Dashboard' | 'API';
+
+const FAQS: Array<{ category: Category; q: string; a: string; Icon: () => JSX.Element }> = [
+  { category: 'General', q: "Is there a free trial available?", a: "Yes. You can try Study.ai for free, test the core modes, and decide later if you want deeper workflows and premium AI generation.", Icon: IcoSmile },
+  { category: 'Pricing', q: "Can I change my plan later?", a: "Yes. You can upgrade when you need more capacity or switch back if your usage changes during the semester.", Icon: IcoCards },
+  { category: 'Pricing', q: "What is your cancellation policy?", a: "You can cancel before the next billing cycle. Your existing access remains active until the current paid period ends.", Icon: IcoInvoice },
+  { category: 'Dashboard', q: "Can other info be added to an invoice?", a: "Yes. If you need institution details or an extra billing reference, support can add them for you.", Icon: IcoUserPlus },
+  { category: 'Pricing', q: "How does billing work?", a: "Billing is handled per subscription period. You choose the plan, renew on schedule, and manage the details from your account area.", Icon: IcoMoney },
+  { category: 'Dashboard', q: "How do I change my account email?", a: "You can update your account email from the dashboard settings area after verification.", Icon: IcoMail },
+  { category: 'API', q: "How does support work?", a: "Support is available for account, billing, and product issues. For platform questions, you can contact the team directly.", Icon: IcoMessage },
+  { category: 'General', q: "Do you provide tutorials?", a: "Yes. We provide onboarding guidance, usage flows, and examples so you can start using flashcards, quizzes, notes, and maps quickly.", Icon: IcoPlay }
 ];
 
+const CATEGORIES: Category[] = ['General', 'Pricing', 'Dashboard', 'API'];
+
 export function FaqSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState<Category>('General');
+  const [activeQuestion, setActiveQuestion] = useState(0);
+
+  const filteredFaqs = useMemo(() => FAQS.filter((item) => item.category === activeCategory), [activeCategory]);
 
   return (
-    <div className="w-full bg-[#0A0F1E] py-24 relative overflow-hidden font-sans border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            className="mb-16"
+    <section className="relative w-full overflow-hidden border-t border-white/5 bg-[#0A0F1E] py-24 font-sans">
+      <div
+        className="absolute inset-0 opacity-[0.06] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
+          backgroundSize: '56px 56px',
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          className="mx-auto max-w-4xl text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Frequently Asked Questions</h2>
-          <p className="text-lg text-gray-400 max-w-2xl">Everything you need to know about Study.ai and how it works.</p>
+          <h2 className="text-4xl font-black leading-tight text-white md:text-6xl">
+            Frequently asked questions
+          </h2>
+          <p className="mx-auto mt-5 max-w-4xl text-lg leading-8 text-slate-300">
+            These are the most common questions about Study.ai. Can't find what you're looking for? <span className="text-[#8fc2ff] underline underline-offset-4">Chat to our friendly team.</span>
+          </p>
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
-          
-          {/* Left Column: Questions List */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-3">
-            {FAQS.map((faq, idx) => {
-              const isActive = activeIndex === idx;
-              return (
+        <div className="mt-12 flex flex-wrap justify-center gap-3 md:gap-4">
+          {CATEGORIES.map((category) => {
+            const isActive = category === activeCategory;
+            return (
+              <button
+                key={category}
+                onClick={() => {
+                  setActiveCategory(category);
+                  setActiveQuestion(0);
+                }}
+                className={`rounded-full border px-5 py-3 text-base font-bold transition-all md:px-7 md:text-lg ${
+                  isActive
+                    ? 'border-white bg-white text-[#0A0F1E] shadow-[0_10px_30px_rgba(255,255,255,0.1)]'
+                    : 'border-white/20 bg-transparent text-white hover:border-white/40 hover:bg-white/5'
+                }`}
+              >
+                {category}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mx-auto mt-14 max-w-5xl space-y-4">
+          {filteredFaqs.map((faq, idx) => {
+            const isOpen = idx === activeQuestion;
+            return (
+              <div key={faq.q} className="rounded-[1.75rem] border border-white/8 bg-[#0F1523]/92 backdrop-blur-xl">
                 <button
-                  key={idx}
-                  onClick={() => setActiveIndex(idx)}
-                  className={`text-left w-full px-6 py-4 rounded-2xl transition-all duration-300 font-medium ${
-                    isActive 
-                      ? 'bg-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.3)] scale-105 z-10' 
-                      : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white backdrop-blur-md border border-white/5 scale-100'
-                  }`}
+                  onClick={() => setActiveQuestion(isOpen ? -1 : idx)}
+                  className="flex w-full items-start gap-4 px-5 py-5 text-left md:px-6 md:py-6"
                 >
-                  {faq.q}
+                  <div className="mt-0.5 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-300">
+                    <faq.Icon />
+                  </div>
+
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="text-xl font-bold leading-8 text-white md:text-[1.9rem] md:leading-10">
+                      {faq.q}
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.22, ease: 'easeOut' }}
+                          className="overflow-hidden"
+                        >
+                          <p className="pt-4 pr-4 text-lg leading-9 text-slate-300">
+                            {faq.a}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="mt-1 shrink-0 text-slate-400">
+                    <IcoChevron open={isOpen} />
+                  </div>
                 </button>
-              );
-            })}
-          </div>
-
-          {/* Right Column: Active Answer Panel */}
-          <div className="w-full lg:w-2/3 flex">
-            <div className="w-full min-h-[300px] bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-8 md:p-12 relative overflow-hidden flex flex-col justify-center">
-                {/* Decorative glow */}
-                <div className="absolute -top-32 -right-32 w-64 h-64 bg-indigo-500/20 blur-[100px] rounded-full pointer-events-none" />
-                
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activeIndex}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.3, ease: 'easeOut' }}
-                        className="relative z-10"
-                    >
-                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-6 leading-tight">
-                            {FAQS[activeIndex].q}
-                        </h3>
-                        <p className="text-gray-300 text-lg leading-relaxed">
-                            {FAQS[activeIndex].a}
-                        </p>
-                    </motion.div>
-                </AnimatePresence>
-            </div>
-          </div>
-
+              </div>
+            );
+          })}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
