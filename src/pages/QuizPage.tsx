@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronRight, CheckCircle, XCircle } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { QuizQuestion } from '../types';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { lessonsData } from '../shared/data/lessonData';
 
 const mockQuestions: QuizQuestion[] = [

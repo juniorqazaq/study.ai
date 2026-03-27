@@ -21,10 +21,10 @@ export function Layout({ children }: LayoutProps) {
   const showSidebar = !isLandingPage && !isAuthPage && !isSidebarHidden;
 
   return (
-    <div className="min-h-screen relative text-white bg-slate-950 font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen relative text-[#e2e8f0] bg-[#07090f] font-sans selection:bg-blue-500/30">
       <InteractiveBackground />
 
-      <div className={`relative z-10 min-h-screen flex flex-col transition-all duration-300 ${showSidebar ? (isCollapsed ? 'pl-0 lg:pl-[120px]' : 'pl-0 lg:pl-[304px]') : ''
+      <div className={`relative z-10 min-h-screen flex flex-col transition-all duration-300 ${showSidebar ? (isCollapsed ? 'pl-0 lg:pl-[72px]' : 'pl-0 lg:pl-60') : ''
         }`}>
         <main className="flex-1 w-full max-w-[1920px] mx-auto overflow-x-hidden">
           {children}

@@ -12,7 +12,7 @@
   <path d="M10 32L11 36L15 37L11 38L10 42L9 38L5 37L9 36L10 32Z" fill="white"/>
   <path d="M40 8L41 11L44 12L41 13L40 16L39 13L36 12L39 11L40 8Z" fill="white"/>
 
-  <!-- Text: Study (Dark Slate) .ai (Blue) -->
+  <!-- Text: Study (Azure Blue) .ai (Light) -->
   <!-- Using sans-serif fallback if Inter is not loaded -->
-  <text x="62" y="38" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="800" font-size="32" fill="#0F172A" letter-spacing="-1">Study<tspan fill="#0066FF">.ai</tspan></text>
+  <text x="62" y="38" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="800" font-size="32" fill="#0066FF" letter-spacing="-1">Study<tspan fill="#EAF4FF">.ai</tspan></text>
 </svg>

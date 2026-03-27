@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, GitBranch, Target, Layers } from "lucide-react";
+import { Sparkles, GitBranch } from "lucide-react";
 
 interface MindMapNode {
     id: string;

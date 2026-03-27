@@ -52,9 +52,18 @@
   }
 
   body {
-    @apply bg-[#0B0F1A] text-foreground;
+    @apply bg-[#07090f] text-[#e2e8f0];
     font-family: 'Inter', sans-serif;
   }
+}
+
+/* ─── Strict UI Rules ─── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #1a1d2e inset !important;
+    -webkit-text-fill-color: #e2e8f0 !important;
 }
 
 /* ─── React Flow Dark Mode ─── */
@@ -98,14 +107,14 @@
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   }
 
-  /* Gradient button */
+  /* Gradient button — Azure Blue */
   .btn-gradient {
-    background: linear-gradient(135deg, #3B82F6, #6366F1);
-    box-shadow: 0 0 24px rgba(99, 102, 241, 0.4);
+    background: linear-gradient(135deg, #0066FF, #0052CC);
+    box-shadow: 0 0 24px rgba(0, 102, 255, 0.4);
     transition: box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
   }
   .btn-gradient:hover {
-    box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+    box-shadow: 0 0 40px rgba(0, 102, 255, 0.6);
     opacity: 0.92;
     transform: translateY(-1px);
   }

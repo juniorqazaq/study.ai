@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BookOpen, HelpCircle, CreditCard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { HeaderLogo } from './HeaderLogo';
 
+// Inline SVGs for nav icons — no Lucide dependency
+const IcoHowItWorks = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
+const IcoResources = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>;
+const IcoPricing = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>;
+const IcoMenu = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+const IcoClose = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+
 const navItems = [
-    { name: 'How It Works', href: '/how-it-works', icon: HelpCircle },
-    { name: 'Resources', href: '/resources', icon: BookOpen },
-    { name: 'Pricing', href: '/pricing', icon: CreditCard },
+    { name: 'How It Works', href: '/how-it-works', Icon: IcoHowItWorks },
+    { name: 'Resources', href: '/resources', Icon: IcoResources },
+    { name: 'Pricing', href: '/pricing', Icon: IcoPricing },
 ];
 
 export function Header() {
@@ -30,79 +36,76 @@ export function Header() {
                 className={cn(
                     "max-w-7xl mx-auto rounded-2xl transition-all duration-300 border",
                     scrolled
-                        ? "bg-[#0A0F1E]/95 backdrop-blur-2xl shadow-2xl shadow-black/40 border-white/10 py-2"
-                        : "bg-[#0A0F1E]/80 backdrop-blur-xl border-white/8 py-3"
+                        ? "bg-[#07090f]/95 backdrop-blur-2xl shadow-2xl shadow-black/40 border-[#1e2235] py-2"
+                        : "bg-[#07090f]/80 backdrop-blur-xl border-[#1e2235]/60 py-3"
                 )}
             >
                 <div className="px-6 flex justify-between items-center">
-                    {/* Logo Section */}
-                    <Link to="/" className="flex items-center gap-3 group relative">
+                    {/* Logo */}
+                    <Link to="/" className="flex items-center gap-3 group relative" onClick={() => window.scrollTo(0,0)}>
                         <HeaderLogo />
                     </Link>
 
-                    {/* Desktop Navigation - Centered */}
-                    {navItems.length > 0 && (
-                        <div className="hidden lg:flex items-center justify-center flex-1">
-                            <div className="flex items-center space-x-1 bg-white/5 p-1.5 rounded-full border border-white/10 backdrop-blur-sm">
-                                {navItems.map((item) => {
-                                    const isActive = location.pathname === item.href;
-                                    return (
-                                        <Link
-                                            key={item.name}
-                                            to={item.href}
-                                            className={cn(
-                                                "relative px-4 py-2 text-sm font-bold transition-all duration-300 rounded-full uppercase tracking-wider",
-                                                isActive
-                                                    ? "text-white"
-                                                    : "text-slate-400 hover:text-white"
-                                            )}
-                                        >
-                                            {isActive && (
-                                                <motion.div
-                                                    layoutId="navbar-active"
-                                                    className="absolute inset-0 bg-white/10 shadow-sm rounded-full"
-                                                    transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-                                                />
-                                            )}
-                                            <span className="relative z-10">{item.name}</span>
-                                        </Link>
-                                    );
-                                })}
-                            </div>
+                    {/* Desktop Nav */}
+                    <div className="hidden lg:flex items-center justify-center flex-1">
+                        <div className="flex items-center space-x-1 bg-white/5 p-1.5 rounded-full border border-[#1e2235] backdrop-blur-sm">
+                            {navItems.map((item) => {
+                                const isActive = location.pathname === item.href;
+                                return (
+                                    <Link
+                                        key={item.name}
+                                        to={item.href}
+                                        onClick={() => window.scrollTo(0,0)}
+                                        className={cn(
+                                            "relative px-4 py-2 text-sm font-bold transition-all duration-300 rounded-full uppercase tracking-wider",
+                                            isActive ? "text-[#e2e8f0]" : "text-[#e2e8f0]/50 hover:text-[#e2e8f0]"
+                                        )}
+                                    >
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="navbar-active"
+                                                className="absolute inset-0 bg-white/10 shadow-sm rounded-full"
+                                                transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+                                            />
+                                        )}
+                                        <span className="relative z-10">{item.name}</span>
+                                    </Link>
+                                );
+                            })}
                         </div>
-                    )}
-                    {navItems.length === 0 && <div className="flex-1" />}
+                    </div>
 
-                    {/* Desktop CTA Section */}
+                    {/* Desktop CTAs */}
                     <div className="hidden md:flex items-center space-x-2">
                         <Link
                             to="/login"
-                            className="text-sm font-black uppercase tracking-widest text-slate-400 hover:text-white px-4 py-2 transition-colors"
+                            onClick={() => window.scrollTo(0,0)}
+                            className="text-sm font-bold uppercase tracking-widest text-[#e2e8f0]/50 hover:text-[#e2e8f0] px-4 py-2 transition-colors"
                         >
                             Log in
                         </Link>
                         <Link
                             to="/register"
-                            className="relative group bg-white px-6 py-2.5 rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
+                            onClick={() => window.scrollTo(0,0)}
+                            className="bg-[#0066FF] hover:bg-[#0052CC] px-6 py-2.5 rounded-full transition-all duration-200 active:scale-95 shadow-[0_0_16px_rgba(0,102,255,0.3)]"
                         >
-                            <span className="relative z-10 text-black text-sm font-bold uppercase tracking-widest">Register</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <span className="text-white text-sm font-bold uppercase tracking-widest">Register</span>
                         </Link>
                     </div>
 
-                    {/* Mobile Menu Trigger */}
+                    {/* Mobile Menu Btn */}
                     <div className="lg:hidden flex items-center">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="p-2 rounded-xl bg-white/5 text-slate-400 hover:text-white transition-colors"
+                            className="p-2 rounded-xl bg-white/5 text-[#e2e8f0]/60 hover:text-[#e2e8f0] transition-colors"
                         >
-                            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                            {isOpen ? <IcoClose /> : <IcoMenu />}
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Mobile Menu Overlay */}
+            {/* Mobile Menu */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -110,34 +113,34 @@ export function Header() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="lg:hidden absolute top-24 left-4 right-4 bg-[#131B2F] rounded-3xl shadow-x border border-white/10 p-4 z-40 overflow-hidden"
+                        className="lg:hidden absolute top-24 left-4 right-4 bg-[#0d0f1a] rounded-3xl shadow-xl border border-[#1e2235] p-4 z-40"
                     >
                         <div className="flex flex-col space-y-2">
-                            {navItems.length > 0 && navItems.map((item) => (
+                            {navItems.map((item) => (
                                 <Link
                                     key={item.name}
                                     to={item.href}
-                                    className="flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-colors group"
-                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-colors group text-[#e2e8f0]/70 hover:text-[#e2e8f0]"
+                                    onClick={() => { setIsOpen(false); window.scrollTo(0,0); }}
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                                        <item.icon className="w-5 h-5" />
+                                    <div className="w-10 h-10 rounded-xl bg-[#1a1d2e] flex items-center justify-center group-hover:bg-[#0066FF]/10 group-hover:text-[#0066FF] transition-colors">
+                                        <item.Icon />
                                     </div>
-                                    <span className="font-bold text-white">{item.name}</span>
+                                    <span className="font-bold">{item.name}</span>
                                 </Link>
                             ))}
-                            <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/10">
+                            <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-[#1e2235]">
                                 <Link
                                     to="/login"
-                                    className="flex items-center justify-center py-4 rounded-2xl font-bold text-slate-400 hover:bg-white/5 transition-colors"
-                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-center py-4 rounded-2xl font-bold text-[#e2e8f0]/50 hover:bg-white/5 transition-colors"
+                                    onClick={() => { setIsOpen(false); window.scrollTo(0,0); }}
                                 >
                                     Log in
                                 </Link>
                                 <Link
                                     to="/register"
-                                    className="flex items-center justify-center py-4 rounded-2xl font-bold bg-primary text-white shadow-lg shadow-blue-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest"
-                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-center py-4 rounded-2xl font-bold bg-[#0066FF] text-white shadow-lg active:scale-95 transition-all text-sm uppercase tracking-widest"
+                                    onClick={() => { setIsOpen(false); window.scrollTo(0,0); }}
                                 >
                                     Register
                                 </Link>
@@ -149,4 +152,3 @@ export function Header() {
         </nav>
     );
 }
-

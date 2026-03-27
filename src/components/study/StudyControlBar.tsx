@@ -1,4 +1,6 @@
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+const IcoChevronLeft = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>;
+const IcoChevronRight = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
+const IcoRotate = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.26"/></svg>;
 
 interface StudyControlBarProps {
     current: number;
@@ -28,7 +30,7 @@ export function StudyControlBar({ current, total, onPrevious, onNext, onReset, c
                     disabled={current === 1}
                     className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <IcoChevronLeft />
                 </button>
 
                 <div className="font-mono text-lg font-medium text-white min-w-[3ch] text-center">
@@ -40,7 +42,7 @@ export function StudyControlBar({ current, total, onPrevious, onNext, onReset, c
                     disabled={current === total}
                     className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                    <ChevronRight className="w-6 h-6" />
+                    <IcoChevronRight />
                 </button>
 
                 {onReset && (
@@ -49,7 +51,7 @@ export function StudyControlBar({ current, total, onPrevious, onNext, onReset, c
                         className="ml-4 p-3 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
                         title="Reset"
                     >
-                        <RotateCcw className="w-5 h-5" />
+                        <IcoRotate />
                     </button>
                 )}
             </div>

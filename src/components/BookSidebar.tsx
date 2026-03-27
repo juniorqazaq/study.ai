@@ -1,4 +1,7 @@
-import { Brain, CheckCircle, Circle, ChevronLeft } from 'lucide-react';
+const IcoBrain = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>;
+const IcoCheckCircle = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+const IcoCircle = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b5563" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/></svg>;
+const IcoChevronLeft = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>;
 import { Link } from 'react-router-dom';
 
 interface Chapter {
@@ -21,7 +24,7 @@ export function BookSidebar({ bookId, chapters }: BookSidebarProps) {
       {/* Header */}
       <Link to="/dashboard" className="flex items-center gap-2 p-6 mb-2 border-b border-white/10">
         <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
-          <Brain className="w-5 h-5" />
+          <IcoBrain />
         </div>
         <span className="text-lg">AI StudyBook</span>
       </Link>
@@ -32,7 +35,7 @@ export function BookSidebar({ bookId, chapters }: BookSidebarProps) {
           to="/library"
           className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <IcoChevronLeft />
           Back to Library
         </Link>
       </div>
@@ -54,9 +57,9 @@ export function BookSidebar({ bookId, chapters }: BookSidebarProps) {
               className="flex items-start gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors group"
             >
               {chapter.completed ? (
-                <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                <IcoCheckCircle />
               ) : (
-                <Circle className="w-4 h-4 text-gray-600 flex-shrink-0 mt-0.5" />
+                <IcoCircle />
               )}
               <div className="flex-1 min-w-0">
                 <div className="text-sm truncate group-hover:text-white transition-colors">
