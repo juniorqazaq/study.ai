@@ -4,82 +4,45 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark mode as default */
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217 33% 15%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 217 33% 13%;
+    --muted-foreground: 215 20% 60%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 217 33% 15%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --border: 217 33% 14%;
+    --input: 217 33% 14%;
+    --ring: 213 27% 84%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 222 47% 7%;
+    --sidebar-foreground: 240 5% 96%;
+    --sidebar-primary: 224 76% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 240 4% 16%;
+    --sidebar-accent-foreground: 240 5% 96%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -89,205 +52,183 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#0B0F1A] text-foreground;
+    font-family: 'Inter', sans-serif;
   }
 }
 
-.glass-nav {
-  @apply bg-background/60 backdrop-blur-xl border-b border-white/10;
-}
-
-/* React Flow Dark Mode Overrides */
+/* ─── React Flow Dark Mode ─── */
 .react-flow__controls {
   background-color: #111 !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 8px !important;
   overflow: hidden !important;
 }
-
 .react-flow__controls-button {
   background-color: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   color: #fff !important;
   fill: #fff !important;
 }
-
 .react-flow__controls-button:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
-
 .react-flow__controls-button:last-child {
   border-bottom: none !important;
 }
-
 .react-flow__controls-button svg {
   fill: #fff !important;
 }
-
 .react-flow__attribution {
   display: none !important;
 }
 
+/* ─── Utilities ─── */
 @layer utilities {
-  .animate-delay-2000 {
-    animation-delay: 2s;
-  }
-
-  .animate-delay-4000 {
-    animation-delay: 4s;
-  }
-
-  .perspective-1000 {
-    perspective: 1000px;
-  }
-
-  .transform-style-3d {
-    transform-style: preserve-3d;
-  }
-
-  .backface-hidden {
-    backface-visibility: hidden;
-  }
-
-  .rotate-y-180 {
-    transform: rotateY(180deg);
-  }
-
+  .animate-delay-2000 { animation-delay: 2s; }
+  .animate-delay-4000 { animation-delay: 4s; }
+  .perspective-1000 { perspective: 1000px; }
+  .transform-style-3d { transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; }
+  .rotate-y-180 { transform: rotateY(180deg); }
   .mask-radial-faded {
     mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
   }
-
   .mask-edge-fade {
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   }
+
+  /* Gradient button */
+  .btn-gradient {
+    background: linear-gradient(135deg, #3B82F6, #6366F1);
+    box-shadow: 0 0 24px rgba(99, 102, 241, 0.4);
+    transition: box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  }
+  .btn-gradient:hover {
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+  .btn-gradient:active { transform: scale(0.97); }
+
+  /* Outline secondary button */
+  .btn-outline-dark {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: transparent;
+    color: white;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-outline-dark:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 20px;
+  }
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+  }
+
+  /* Glow accents */
+  .glow-blue {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+  }
+  .glow-indigo {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+  }
+
+  /* Section base */
+  .section-dark {
+    background: linear-gradient(180deg, #0B0F1A 0%, #0F172A 100%);
+  }
 }
 
+/* ─── Keyframes ─── */
 @keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
+  0%   { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(30px, -50px) scale(1.1); }
+  66%  { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
 }
-
 @keyframes mesh {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.animate-blob {
-  animation: blob 7s infinite alternate ease-in-out;
-}
+.animate-blob  { animation: blob 7s infinite alternate ease-in-out; }
+.animate-mesh  { background-size: 200% 200%; animation: mesh 15s infinite ease-in-out; }
 
-.animate-mesh {
-  background-size: 200% 200%;
-  animation: mesh 15s infinite ease-in-out;
-}
-
+/* Liquid blobs (used by LiquidBackground) */
 .liquid-mesh-primary {
-  background-image: radial-gradient(at 0% 0%, hsla(221, 83%, 53%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(221, 83%, 53%, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(221, 83%, 53%, 0.15) 0px, transparent 50%);
+  background-image:
+    radial-gradient(at 0%   0%,  hsla(221, 83%, 53%, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50%  0%,  hsla(221, 83%, 53%, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%,  hsla(221, 83%, 53%, 0.12) 0px, transparent 50%);
 }
 
 .liquid-glass {
   @apply bg-white/5 backdrop-blur-2xl border border-white/10;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
-
-.liquid-glass-light {
-  @apply bg-white/70 backdrop-blur-md border border-slate-200;
-  box-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.1);
-}
-
 .liquid-glass-dark {
   @apply bg-black/40 backdrop-blur-3xl border border-white/5;
 }
 
-.liquid-glow {
-  position: relative;
-}
-
+.liquid-glow { position: relative; }
 .liquid-glow::after {
   content: '';
   position: absolute;
   inset: -1px;
-  background: linear-gradient(45deg, transparent, rgba(37, 99, 235, 0.3), transparent);
+  background: linear-gradient(45deg, transparent, rgba(99, 102, 241, 0.3), transparent);
   border-radius: inherit;
   z-index: -1;
   filter: blur(8px);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+.liquid-glow:hover::after { opacity: 1; }
 
-.liquid-glow:hover::after {
-  opacity: 1;
-}
+.squircle-lg  { border-radius: 2rem; }
+.squircle-xl  { border-radius: 3rem; }
 
-.squircle-lg {
-  border-radius: 2rem;
-}
-
-.squircle-xl {
-  border-radius: 3rem;
-}
-
-.liquid-bg-container {
-  position: relative;
-  overflow: hidden;
-}
+.liquid-bg-container { position: relative; overflow: hidden; }
 
 .liquid-blob {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
   z-index: 0;
-  opacity: 0.15;
+  opacity: 0.12;
   pointer-events: none;
 }
-
 .liquid-blob-1 {
-  width: 500px;
-  height: 500px;
-  background: #2563eb;
-  top: -100px;
-  left: -100px;
+  width: 500px; height: 500px;
+  background: #3b5cf6;
+  top: -100px; left: -100px;
   animation: blob 20s infinite alternate ease-in-out;
 }
-
 .liquid-blob-2 {
-  width: 400px;
-  height: 400px;
-  background: #8b5cf6;
-  bottom: -50px;
-  right: -50px;
+  width: 400px; height: 400px;
+  background: #6366f1;
+  bottom: -50px; right: -50px;
   animation: blob 15s infinite alternate-reverse ease-in-out;
 }
-
 .liquid-blob-3 {
-  width: 300px;
-  height: 300px;
+  width: 300px; height: 300px;
   background: #3b82f6;
-  top: 40%;
-  left: 30%;
+  top: 40%; left: 30%;
   animation: blob 10s infinite alternate ease-in-out;
+}
+
+.glass-nav {
+  @apply bg-[#0B0F1A]/80 backdrop-blur-xl border-b border-white/5;
 }
