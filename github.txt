@@ -1,2 +1,0 @@
-URL=git@github.com:juniorqazaq/study.ai.git
-TOKEN=[REDACTED]
