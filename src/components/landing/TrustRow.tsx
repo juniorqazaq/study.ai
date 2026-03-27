@@ -16,7 +16,7 @@ export function TrustRow() {
     ];
 
     return (
-        <section className="py-16 bg-white border-y border-slate-100 overflow-hidden">
+        <section className="py-16 bg-[#0A0F1E] border-y border-white/5 overflow-hidden relative z-10">
             <div className="container mx-auto px-4 text-center mb-10">
                 <p className="text-xl font-black text-slate-400 font-heading uppercase tracking-[0.2em] italic">
                     Trusted by students at
@@ -35,7 +35,7 @@ export function TrustRow() {
                                 <img
                                     src={uni.logo}
                                     alt={`${uni.name} Logo`}
-                                    className="h-full w-auto object-contain max-w-[180px]"
+                                    className="h-full w-auto object-contain max-w-[180px] grayscale opacity-60 mix-blend-lighten"
                                 />
                             </div>
                         ))}
@@ -50,7 +50,7 @@ export function TrustRow() {
                                 <img
                                     src={uni.logo}
                                     alt={`${uni.name} Logo`}
-                                    className="h-full w-auto object-contain max-w-[180px]"
+                                    className="h-full w-auto object-contain max-w-[180px] grayscale opacity-60 mix-blend-lighten"
                                 />
                             </div>
                         ))}
@@ -65,7 +65,7 @@ export function TrustRow() {
                                 <img
                                     src={uni.logo}
                                     alt={`${uni.name} Logo`}
-                                    className="h-full w-auto object-contain max-w-[180px]"
+                                    className="h-full w-auto object-contain max-w-[180px] grayscale opacity-60 mix-blend-lighten"
                                 />
                             </div>
                         ))}
@@ -80,7 +80,7 @@ export function TrustRow() {
                                 <img
                                     src={uni.logo}
                                     alt={`${uni.name} Logo`}
-                                    className="h-full w-auto object-contain max-w-[180px]"
+                                    className="h-full w-auto object-contain max-w-[180px] grayscale opacity-60 mix-blend-lighten"
                                 />
                             </div>
                         ))}
