@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { ArrowRight, Sparkles, Zap, Play } from 'lucide-react';
 import { generateFlashcard, FlashcardData } from '@/services/gemini';
 import { Link } from 'react-router-dom';
 import { LiquidBackground } from '../layout/LiquidBackground';
+
+// Inline SVG Icons — no Lucide dependency
+const IcoArrowRight = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
+const IcoSparkles = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z"/></svg>;
+const IcoPlay = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>;
+const IcoZap = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+const IcoSparklesBig = () => <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z"/></svg>;
 
 export function Hero() {
     const [demoTopic, setDemoTopic] = useState('');
@@ -31,20 +37,17 @@ export function Hero() {
     return (
         <LiquidBackground className="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0A0F1E] text-white relative">
             
-            {/* New Decorative Background Elements */}
+            {/* Decorative Background */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                {/* Math Formulas */}
                 <div className="absolute top-[18%] left-[55%] text-slate-300 opacity-70 text-5xl font-serif italic -rotate-12 blur-[1.5px] whitespace-nowrap">E=mc²</div>
                 <div className="absolute top-[48%] right-[2%] text-slate-300 opacity-60 text-4xl font-serif italic rotate-12 blur-[1px] whitespace-nowrap">a² + b² = c²</div>
                 <div className="absolute bottom-[28%] left-[45%] text-slate-300 opacity-50 text-3xl font-serif italic -rotate-6 blur-[2px] whitespace-nowrap">∫ f(x)dx</div>
                 
-                {/* 3D Stylized Objects (using emojis with blur/opacity) */}
-                <div className="absolute top-[20%] right-[42%] text-[80px] opacity-80 blur-[2.5px] -rotate-[30deg]" style={{ animationDelay: '0s' }}>🖊️</div>
+                <div className="absolute top-[20%] right-[42%] text-[80px] opacity-80 blur-[2.5px] -rotate-[30deg]">🖊️</div>
                 <div className="absolute bottom-[5%] right-[8%] text-[100px] opacity-70 blur-[3.5px] rotate-[40deg]">🖊️</div>
                 <div className="absolute top-[15%] right-[2%] text-[140px] opacity-90 blur-[1.5px] rotate-[15deg]">📖</div>
                 <div className="absolute bottom-[10%] left-[40%] text-[130px] opacity-80 blur-[3px] -rotate-[20deg]">📖</div>
 
-                {/* Geometry Sketches (SVGs) */}
                 <svg className="absolute top-[42%] right-[38%] w-[200px] h-[200px] text-slate-400 opacity-40 stroke-current blur-[1px]" viewBox="0 0 100 100" fill="none" strokeWidth="1">
                     <polygon points="10,90 90,90 50,10" />
                     <line x1="50" y1="10" x2="50" y2="90" strokeDasharray="4" />
@@ -72,43 +75,43 @@ export function Hero() {
 
                     {/* Text Content */}
                     <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 relative z-10">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 font-bold text-xs mb-8 border border-blue-500/20 shadow-sm uppercase tracking-widest">
-                            <Sparkles className="w-4 h-4" />
-                            <span>Alpha Testing: Q1 2026</span>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0066FF]/10 text-[#0066FF] font-bold text-xs mb-8 border border-[#0066FF]/20 shadow-sm uppercase tracking-widest">
+                            <IcoSparkles />
+                            <span>Adaptive Study Engine</span>
                         </div>
 
                         <h1 className="text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] font-bold text-white tracking-tight mb-8 leading-none font-sans text-balance">
-                            The future of<br/>learning is <span className="font-serif italic font-normal text-white whitespace-nowrap">Liquid</span>
+                            Turn messy notes<br/>into <span className="font-serif italic font-normal text-white whitespace-nowrap">sharp recall</span>
                         </h1>
 
                         <p className="text-[13px] sm:text-[14px] lg:text-[15px] text-slate-300 mb-10 leading-relaxed font-semibold uppercase tracking-[0.15em] max-w-[95%] mx-auto lg:mx-0">
-                            WE ARE BUILDING AN AI THAT ADAPTS TO YOUR BRAIN'S UNIQUE RHYTHMS. NO MORE ROTE MEMORIZATION. JUST PURE, EFFORTLESS MASTERY.
+                            STUDY.AI REBUILDS YOUR MATERIAL INTO FLASHCARDS, QUIZZES, TIMELINES, AND MEMORY LOOPS THAT MATCH HOW YOU ACTUALLY LEARN.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-                            <Link to="/register" className="btn-gradient text-white px-10 py-5 squircle-xl font-black text-sm transition-all flex items-center justify-center gap-2 uppercase tracking-widest active:scale-95">
+                            <Link to="/register" onClick={() => window.scrollTo(0,0)} className="btn-gradient text-white px-10 py-5 squircle-xl font-black text-sm transition-all flex items-center justify-center gap-2 uppercase tracking-widest active:scale-95">
                                 Get Started Free
-                                <ArrowRight className="w-5 h-5" />
+                                <IcoArrowRight />
                             </Link>
                             <button className="btn-outline-dark px-8 py-5 squircle-xl font-black text-sm flex items-center justify-center gap-2 uppercase tracking-widest active:scale-95">
-                                <Play className="w-5 h-5 fill-current" />
+                                <IcoPlay />
                                 See demo
                             </button>
                         </div>
                     </div>
 
-                    {/* Interactive Demo UI - Redesigned to match screenshot */}
+                    {/* Interactive Demo UI */}
                     <div className="relative w-full max-w-lg mx-auto lg:max-w-full">
-                        <div className="relative bg-[#131B2F]/80 backdrop-blur-xl squircle-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 p-2 animate-float">
+                        <div className="relative bg-[#0d0f1a]/80 backdrop-blur-xl squircle-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-[#1e2235] p-2 animate-float">
                             {/* Browser Header */}
-                            <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between mb-2">
+                            <div className="px-6 py-4 border-b border-[#1e2235] flex items-center justify-between mb-2">
                                 <div className="flex gap-2">
                                     <div className="w-3 h-3 rounded-full bg-[#FF5F57] shadow-sm"></div>
                                     <div className="w-3 h-3 rounded-full bg-[#FEBC2E] shadow-sm"></div>
                                     <div className="w-3 h-3 rounded-full bg-[#28C840] shadow-sm"></div>
                                 </div>
                                 <div className="text-xs font-medium text-slate-400 select-none">Study.ai - Flashcard Generator</div>
-                                <div className="w-10"></div> {/* Spacer for centering */}
+                                <div className="w-10"></div>
                             </div>
 
                             {/* Card Body */}
@@ -124,17 +127,17 @@ export function Hero() {
                                             value={demoTopic}
                                             onChange={(e) => setDemoTopic(e.target.value)}
                                             placeholder="e.g., Mitosis, World War II, Calculus..."
-                                            className="flex-1 px-5 py-4 squircle-xl bg-[#131B2F] border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-all font-bold shadow-sm"
+                                            className="flex-1 px-5 py-4 squircle-xl bg-[#1a1d2e] border border-[#1e2235] text-white placeholder:text-slate-500 focus:outline-none focus:border-[#0066FF] transition-all font-bold shadow-sm"
                                         />
                                         <button
                                             type="submit"
                                             disabled={isLoading || !demoTopic}
-                                            className="bg-white text-black hover:bg-blue-500 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed p-4 squircle-xl transition-all shadow-2xl aspect-square flex items-center justify-center group/btn"
+                                            className="bg-[#0066FF] hover:bg-[#0052CC] disabled:opacity-20 disabled:cursor-not-allowed p-4 squircle-xl transition-all shadow-2xl aspect-square flex items-center justify-center"
                                         >
                                             {isLoading ? (
-                                                <div className="w-6 h-6 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+                                                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                                             ) : (
-                                                <Zap className="w-6 h-6 fill-current group-hover/btn:drop-shadow-[0_20px_50px_rgba(255,255,255,0.8)]" />
+                                                <IcoZap />
                                             )}
                                         </button>
                                     </form>
@@ -143,9 +146,9 @@ export function Hero() {
                                 {/* Result Area */}
                                 <div className="flex-1 perspective-1000 relative group">
                                     {!flashcard && !isLoading && (
-                                        <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-white/10 rounded-3xl bg-white/5">
-                                            <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-4 text-blue-400 animate-pulse-slow">
-                                                <Sparkles className="w-8 h-8" />
+                                        <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-[#1e2235] rounded-3xl bg-white/5">
+                                            <div className="w-16 h-16 bg-[#0066FF]/10 rounded-2xl flex items-center justify-center mb-4 text-[#0066FF] animate-pulse-slow">
+                                                <IcoSparklesBig />
                                             </div>
                                             <p className="text-slate-400 font-medium max-w-[200px]">
                                                 Enter a topic above to generate an instant flashcard with Gemini AI.
@@ -154,11 +157,11 @@ export function Hero() {
                                     )}
 
                                     {isLoading && (
-                                        <div className="h-full flex flex-col items-center justify-center gap-4 bg-[#131B2F] rounded-3xl border border-white/10 shadow-xl">
+                                        <div className="h-full flex flex-col items-center justify-center gap-4 bg-[#1a1d2e] rounded-3xl border border-[#1e2235] shadow-xl">
                                             <div className="relative">
-                                                <div className="w-16 h-16 border-4 border-blue-500/10 border-t-[#0066FF] rounded-full animate-spin"></div>
+                                                <div className="w-16 h-16 border-4 border-[#0066FF]/10 border-t-[#0066FF] rounded-full animate-spin"></div>
                                                 <div className="absolute inset-0 flex items-center justify-center">
-                                                    <Sparkles className="w-6 h-6 text-[#0066FF] animate-pulse" />
+                                                    <IcoSparkles />
                                                 </div>
                                             </div>
                                             <p className="text-slate-400 font-medium animate-pulse">Generating study materials...</p>
@@ -171,23 +174,23 @@ export function Hero() {
                                             onClick={() => setIsFlipped(!isFlipped)}
                                             style={{ transformStyle: 'preserve-3d', transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
                                         >
-                                            {/* Front Card */}
+                                            {/* Front */}
                                             <div
-                                                className="absolute inset-0 bg-[#131B2F] border border-white/10 squircle-xl shadow-xl p-8 flex flex-col items-center justify-center text-center backface-hidden hover:bg-[#1A233A] transition-all duration-500"
+                                                className="absolute inset-0 bg-[#1a1d2e] border border-[#1e2235] squircle-xl shadow-xl p-8 flex flex-col items-center justify-center text-center backface-hidden hover:bg-[#1e2235] transition-all duration-500"
                                                 style={{ backfaceVisibility: 'hidden' }}
                                             >
-                                                <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mb-4 border border-blue-500/20">
-                                                    <span className="font-black text-blue-400 text-xl">Q</span>
+                                                <div className="w-12 h-12 bg-[#0066FF]/10 rounded-full flex items-center justify-center mb-4 border border-[#0066FF]/20">
+                                                    <span className="font-black text-[#0066FF] text-xl">Q</span>
                                                 </div>
                                                 <h3 className="text-xl md:text-3xl font-black text-white leading-tight tracking-tighter uppercase">{flashcard.question}</h3>
                                                 <div className="absolute bottom-6 flex items-center gap-2 text-[10px] font-black text-slate-400 bg-white/5 border border-white/10 px-4 py-2 squircle-xl uppercase tracking-widest">
-                                                    Click to flip <ArrowRight className="w-4 h-4" />
+                                                    Click to flip <IcoArrowRight />
                                                 </div>
                                             </div>
 
-                                            {/* Back Card */}
+                                            {/* Back */}
                                             <div
-                                                className="absolute inset-0 bg-blue-600 border border-white/20 squircle-xl shadow-2xl p-8 flex flex-col items-center justify-center text-center backface-hidden"
+                                                className="absolute inset-0 bg-[#0066FF] border border-white/20 squircle-xl shadow-2xl p-8 flex flex-col items-center justify-center text-center backface-hidden"
                                                 style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                                             >
                                                 <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-4 border border-white/20">
@@ -195,7 +198,7 @@ export function Hero() {
                                                 </div>
                                                 <h3 className="text-lg md:text-xl font-bold text-white leading-relaxed tracking-tight">{flashcard.answer}</h3>
                                                 <div className="absolute bottom-6 flex items-center gap-2 text-[10px] font-black text-white/60 bg-white/10 px-4 py-2 squircle-xl uppercase tracking-widest">
-                                                    Click to flip <ArrowRight className="w-4 h-4" />
+                                                    Click to flip <IcoArrowRight />
                                                 </div>
                                             </div>
                                         </div>
@@ -204,7 +207,6 @@ export function Hero() {
                             </div>
                         </div>
 
-                        {/* 3D Decorative Elements */}
                         <div className="absolute -right-12 bottom-12 w-32 h-32 bg-[#FFD700] rounded-[2rem] -rotate-12 opacity-20 -z-10 blur-xl animate-float" style={{ animationDelay: '1.5s' }}></div>
                         <div className="absolute -left-12 -top-12 w-40 h-40 bg-[#0066FF] rounded-full opacity-10 -z-10 blur-2xl animate-float" style={{ animationDelay: '0.8s' }}></div>
                     </div>
@@ -213,4 +215,4 @@ export function Hero() {
             </div>
         </LiquidBackground>
     );
-};
+}

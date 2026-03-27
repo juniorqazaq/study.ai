@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Zap, Brain, ChevronRight, Sparkles } from 'lucide-react';
+const IcoFileText = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>;
+const IcoZap = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+const IcoBrain = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>;
+const IcoChevronRight = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
+const IcoSparkles = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z"/></svg>;
 import { Card } from '@/components/ui/card';
 
 const DEMO_DATA = {
     biology: {
         title: "Biology: Photosynthesis",
-        icon: <Zap className="w-4 h-4 text-green-500" />,
+        icon: <IcoZap />,
         color: "text-green-500",
         bgColor: "bg-green-500/10",
         borderColor: "border-green-500/20",
@@ -19,7 +23,7 @@ const DEMO_DATA = {
     },
     history: {
         title: "History: The Cold War",
-        icon: <FileText className="w-4 h-4 text-orange-500" />,
+        icon: <IcoFileText />,
         color: "text-orange-500",
         bgColor: "bg-orange-500/10",
         borderColor: "border-orange-500/20",
@@ -32,7 +36,7 @@ const DEMO_DATA = {
     },
     literature: {
         title: "Literature: Shakespeare",
-        icon: <Brain className="w-4 h-4 text-purple-500" />,
+        icon: <IcoBrain />,
         color: "text-purple-500",
         bgColor: "bg-purple-500/10",
         borderColor: "border-purple-500/20",
@@ -81,11 +85,11 @@ export function InteractiveDemo() {
 
             <div className="container mx-auto px-4 md:px-6">
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
-                        <Sparkles size={14} />
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0066FF]/10 text-[#0066FF] text-xs font-medium mb-4 border border-[#0066FF]/20">
+                        <IcoSparkles />
                         <span>Experience the Magic</span>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-bold font-heading mb-4 text-foreground">
+                    <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#e2e8f0]">
                         See it in <span className="text-primary">Action</span>
                     </h2>
                     <p className="text-muted-foreground max-w-xl mx-auto text-lg">
@@ -135,7 +139,7 @@ export function InteractiveDemo() {
                             <div className="relative">
                                 <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse" />
                                 <div className="relative bg-background border border-border p-3 rounded-full text-primary">
-                                    <ChevronRight size={24} />
+                                    <IcoChevronRight />
                                 </div>
                             </div>
                         </div>
