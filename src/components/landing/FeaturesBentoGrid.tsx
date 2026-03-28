@@ -5,8 +5,8 @@ import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 // Accent palette: azure, red, green, yellow
 const IcoBrain = () => <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00A6FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>;
 const IcoCheck = () => <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF5A5F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
-const IcoNetwork = () => <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#00C26F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="6" x2="9" y2="11"/><line x1="18" y1="6" x2="15" y2="11"/><line x1="6" y1="18" x2="9" y2="13"/><line x1="18" y1="18" x2="15" y2="13"/></svg>;
-const IcoNetworkBig = () => <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="6" x2="9" y2="11"/><line x1="18" y1="6" x2="15" y2="11"/><line x1="6" y1="18" x2="9" y2="13"/><line x1="18" y1="18" x2="15" y2="13"/></svg>;
+const IcoMindMap = () => <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#00d084" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="6" r="2.2" /><circle cx="18" cy="6" r="2.2" /><circle cx="12" cy="12" r="2.2" /><circle cx="6" cy="18" r="2.2" /><circle cx="18" cy="18" r="2.2" /><path d="M8 7.4 10.4 10" /><path d="M16 7.4 13.6 10" /><path d="M8 16.6 10.4 14" /><path d="M16 16.6 13.6 14" /></svg>;
+const IcoMindMapBig = () => <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.15" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="6" r="2.2" /><circle cx="18" cy="6" r="2.2" /><circle cx="12" cy="12" r="2.6" /><circle cx="6" cy="18" r="2.2" /><circle cx="18" cy="18" r="2.2" /><path d="M8 7.4 10.2 10" /><path d="M16 7.4 13.8 10" /><path d="M8 16.6 10.2 14" /><path d="M16 16.6 13.8 14" /></svg>;
 const IcoNotes = () => <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/></svg>;
 const IcoLayers = () => <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FFCC33" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
 
@@ -30,7 +30,7 @@ export function FeaturesBentoGrid() {
   }, []);
 
   return (
-    <div className="w-full bg-[#0A0F1E] py-24 relative overflow-hidden font-sans">
+    <div className="relative w-full overflow-hidden bg-transparent py-24 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <motion.div 
@@ -39,8 +39,8 @@ export function FeaturesBentoGrid() {
             viewport={{ once: true, amount: 0.2 }}
             className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-[#e2e8f0] mb-4">Master Anything Instantly</h2>
-          <p className="text-lg text-[#e2e8f0]/50 max-w-2xl mx-auto">Our AI tools do the heavy lifting so you can focus on learning.</p>
+          <h2 className="mb-4 text-2xl font-bold text-[#e2e8f0] md:text-3xl">Master Anything Instantly</h2>
+          <p className="mx-auto max-w-2xl text-base text-[#e2e8f0]/50 md:text-lg">Our AI tools do the heavy lifting so you can focus on learning.</p>
         </motion.div>
 
         {/* Bento Grid */}
@@ -51,13 +51,13 @@ export function FeaturesBentoGrid() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            className={`md:col-span-2 md:row-span-2 ${cardBase} flex flex-col hover:border-[#00A6FF]/35 hover:shadow-[0_0_38px_rgba(0,166,255,0.14)]`}
+            className={`md:col-span-2 md:row-span-2 ${cardBase} flex flex-col hover:border-white/12`}
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#00A6FF]/10 rounded-full blur-[80px] -mr-10 -mt-10" />
+            <div className="absolute -mr-10 -mt-10 right-0 top-0 h-64 w-64 rounded-full bg-[#1b2748]/60 blur-[90px]" />
             <div className="relative z-10 flex-1 flex flex-col justify-end">
-                <IcoBrain />
-                <h3 className="text-3xl font-bold text-[#e2e8f0] mt-6 mb-3">Adaptive Flashcards</h3>
-                <p className="text-[#e2e8f0]/50 text-lg w-full md:w-3/4">AI generates and flips cards based on what you don't know, completely optimizing your spaced repetition schedule.</p>
+                <IcoLayers />
+                <h3 className="mt-6 mb-3 text-2xl font-bold text-[#e2e8f0]">Adaptive Flashcards</h3>
+                <p className="w-full text-base text-[#e2e8f0]/50 md:w-3/4 md:text-lg">AI generates and flips cards based on what you don't know, completely optimizing your spaced repetition schedule.</p>
             </div>
             
             {/* Animated Mini Flashcard */}
@@ -70,7 +70,7 @@ export function FeaturesBentoGrid() {
                         <span className="text-[#00A6FF] font-bold mb-2">Q</span>
                         <div className="text-white font-bold text-lg leading-tight">What is Neural Plasticity?</div>
                     </div>
-                    <div className="absolute inset-0 bg-[linear-gradient(145deg,#00A6FF,#1D4ED8)] border border-[#1D4ED8] rounded-2xl p-4 flex flex-col justify-center items-center text-center shadow-lg backface-hidden" style={{ backfaceVisibility: 'hidden', transform: 'rotateX(180deg)' }}>
+                    <div className="absolute inset-0 rounded-2xl border border-[#32446f] bg-[linear-gradient(145deg,#223a72,#192746)] p-4 text-center shadow-lg backface-hidden flex flex-col justify-center items-center" style={{ backfaceVisibility: 'hidden', transform: 'rotateX(180deg)' }}>
                         <span className="text-white/80 font-bold mb-2">A</span>
                         <div className="text-white font-medium text-sm leading-tight">The brain's ability to reorganize itself by forming new neural connections.</div>
                     </div>
@@ -84,7 +84,7 @@ export function FeaturesBentoGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: 0.2 }}
-            className={`${cardBase} flex flex-col justify-between hover:border-[#FF5A5F]/35 hover:shadow-[0_0_38px_rgba(255,90,95,0.14)]`}
+            className={`${cardBase} flex flex-col justify-between hover:border-white/12`}
           >
             <div>
                 <IcoCheck />
@@ -104,13 +104,13 @@ export function FeaturesBentoGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: 0.3 }}
-            className={`${cardBase} flex flex-col justify-between hover:border-[#00C26F]/35 hover:shadow-[0_0_38px_rgba(0,194,111,0.14)]`}
+            className={`${cardBase} flex flex-col justify-between hover:border-white/12`}
           >
-            <div className="absolute top-4 right-4 text-[#00C26F]/12 animate-pulse-slow">
-               <IcoNetworkBig />
+            <div className="absolute top-5 right-5 text-white/75">
+               <IcoMindMapBig />
             </div>
             <div className="relative z-10 flex-1">
-                <IcoNetwork />
+                <IcoMindMap />
                 <h3 className="text-xl font-bold text-[#e2e8f0] mt-4 mb-2">Mind Maps</h3>
                 <p className="text-sm text-[#e2e8f0]/50">Visual node-based knowledge graphs of your texts.</p>
             </div>
@@ -122,7 +122,7 @@ export function FeaturesBentoGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: 0.4 }}
-            className={`${cardBase} flex flex-col hover:border-[#FFCC33]/35 hover:shadow-[0_0_38px_rgba(255,204,51,0.14)]`}
+            className={`${cardBase} flex flex-col hover:border-white/12`}
           >
             <div className="relative z-10 pointer-events-none">
                 <h3 className="text-xl font-bold text-[#e2e8f0] mb-1">Progress Tracking</h3>
@@ -150,9 +150,9 @@ export function FeaturesBentoGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: 0.45 }}
-            className={`md:col-span-2 ${cardBase} flex flex-col justify-between hover:border-[#0066FF]/35 hover:shadow-[0_0_38px_rgba(0,102,255,0.14)]`}
+            className={`md:col-span-2 ${cardBase} flex flex-col justify-between hover:border-white/12`}
           >
-            <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-[#0066FF]/10 blur-[80px]" />
+            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-[#1a2340]/70 blur-[82px]" />
             <div className="relative z-10">
               <IcoNotes />
               <h3 className="text-2xl font-bold text-[#e2e8f0] mt-4 mb-2">Notes</h3>
@@ -180,10 +180,10 @@ export function FeaturesBentoGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: 0.5 }}
-            className={`md:col-span-3 ${cardBase} flex flex-col md:flex-row items-center justify-between hover:border-[#8B5CF6]/28 hover:shadow-[0_0_38px_rgba(139,92,246,0.1)]`}
+            className={`md:col-span-3 ${cardBase} flex flex-col items-center justify-between md:flex-row hover:border-white/12`}
           >
             <div className="md:w-1/3 mb-6 md:mb-0 relative z-10">
-                <IcoLayers />
+                <IcoBrain />
                 <h3 className="text-2xl font-bold text-[#e2e8f0] mt-4 mb-2 leading-tight">Works With Any Subject</h3>
                 <p className="text-[#e2e8f0]/50 text-sm">Perfect for Science, History, Law, Medicine, Programming, and everything in between.</p>
             </div>

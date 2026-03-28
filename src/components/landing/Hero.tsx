@@ -1,218 +1,65 @@
-import React, { useState } from 'react';
-import { generateFlashcard, FlashcardData } from '@/services/gemini';
 import { Link } from 'react-router-dom';
-import { LiquidBackground } from '../layout/LiquidBackground';
 
-// Inline SVG Icons — no Lucide dependency
-const IcoArrowRight = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
-const IcoSparkles = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z"/></svg>;
-const IcoPlay = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>;
-const IcoZap = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
-const IcoSparklesBig = () => <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z"/></svg>;
+const IcoArrowRight = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12" />
+    <polyline points="12 5 19 12 12 19" />
+  </svg>
+);
+
+const IcoSparkles = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z" />
+  </svg>
+);
+
+const IcoPlay = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <polygon points="6 4 19 12 6 20 6 4" />
+  </svg>
+);
 
 export function Hero() {
-    const [demoTopic, setDemoTopic] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [flashcard, setFlashcard] = useState<FlashcardData | null>(null);
-    const [isFlipped, setIsFlipped] = useState(false);
+  return (
+    <section className="relative overflow-hidden bg-transparent px-4 pb-24 pt-32 text-white sm:px-6 lg:px-8 lg:pb-28 lg:pt-40">
+      <div className="hero-grid-bg absolute inset-0 opacity-100" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(37,99,235,0.07)_0%,transparent_70%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,13,20,0.24),rgba(10,13,20,0.38)_35%,rgba(10,13,20,0.9))]" />
 
-    const handleGenerate = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!demoTopic.trim()) return;
+      <div className="relative z-10 mx-auto flex max-w-6xl justify-center">
+        <div className="max-w-4xl text-center">
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#22304d] bg-[#101725]/90 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8cb4ff]">
+            <IcoSparkles />
+            <span>Adaptive Study Engine</span>
+          </div>
 
-        setIsLoading(true);
-        setFlashcard(null);
-        setIsFlipped(false);
+          <h1 className="text-balance text-[2.75rem] font-bold leading-[0.95] tracking-[-0.05em] text-white sm:text-[3.6rem] lg:text-[4.4rem]">
+            Turn messy notes
+            <br />
+            into <span className="font-serif text-[0.98em] font-normal italic tracking-[-0.03em] text-[#f5f7fb]">sharp recall</span>
+          </h1>
 
-        try {
-            const result = await generateFlashcard(demoTopic);
-            setFlashcard(result);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+          <p className="mx-auto mt-7 max-w-3xl text-[12px] font-semibold uppercase leading-7 tracking-[0.18em] text-slate-300 sm:text-[13px] lg:text-[14px]">
+            Study.ai rebuilds your material into flashcards, quizzes, timelines, and memory loops that match how you actually learn.
+          </p>
 
-    return (
-        <LiquidBackground className="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0A0F1E] text-white relative">
-            
-            {/* Decorative Background */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                <div className="absolute top-[18%] left-[55%] text-slate-300 opacity-70 text-5xl font-serif italic -rotate-12 blur-[1.5px] whitespace-nowrap">E=mc²</div>
-                <div className="absolute top-[48%] right-[2%] text-slate-300 opacity-60 text-4xl font-serif italic rotate-12 blur-[1px] whitespace-nowrap">a² + b² = c²</div>
-                <div className="absolute bottom-[28%] left-[45%] text-slate-300 opacity-50 text-3xl font-serif italic -rotate-6 blur-[2px] whitespace-nowrap">∫ f(x)dx</div>
-                
-                <div className="absolute top-[20%] right-[42%] text-[80px] opacity-80 blur-[2.5px] -rotate-[30deg]">🖊️</div>
-                <div className="absolute bottom-[5%] right-[8%] text-[100px] opacity-70 blur-[3.5px] rotate-[40deg]">🖊️</div>
-                <div className="absolute top-[15%] right-[2%] text-[140px] opacity-90 blur-[1.5px] rotate-[15deg]">📖</div>
-                <div className="absolute bottom-[10%] left-[40%] text-[130px] opacity-80 blur-[3px] -rotate-[20deg]">📖</div>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              to="/register"
+              onClick={() => window.scrollTo(0, 0)}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#2563EB] px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#1f54cb] active:scale-95"
+            >
+              Get Started Free
+              <IcoArrowRight />
+            </Link>
 
-                <svg className="absolute top-[42%] right-[38%] w-[200px] h-[200px] text-slate-400 opacity-40 stroke-current blur-[1px]" viewBox="0 0 100 100" fill="none" strokeWidth="1">
-                    <polygon points="10,90 90,90 50,10" />
-                    <line x1="50" y1="10" x2="50" y2="90" strokeDasharray="4" />
-                    <rect x="50" y="80" width="10" height="10" />
-                </svg>
-                <svg className="absolute bottom-[8%] right-[22%] w-[160px] h-[160px] text-slate-400 opacity-50 stroke-current -rotate-12 blur-[1.5px]" viewBox="0 0 100 100" fill="none" strokeWidth="1">
-                    <ellipse cx="50" cy="80" rx="40" ry="15" />
-                    <line x1="10" y1="80" x2="50" y2="10" />
-                    <line x1="90" y1="80" x2="50" y2="10" />
-                </svg>
-            </div>
-
-            {/* Background Brand Text */}
-            <div className="absolute top-[10%] -right-[5%] pointer-events-none select-none z-0 text-white opacity-[0.02] hidden xl:block">
-                <h1
-                    className="text-[200px] xl:text-[300px] font-black leading-none tracking-tighter uppercase whitespace-nowrap"
-                    style={{ WebkitTextStroke: '1px currentColor', color: 'transparent' }}
-                >
-                    Study.ai
-                </h1>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-16 lg:gap-8 items-center">
-
-                    {/* Text Content */}
-                    <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 relative z-10">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0066FF]/10 text-[#0066FF] font-bold text-xs mb-8 border border-[#0066FF]/20 shadow-sm uppercase tracking-widest">
-                            <IcoSparkles />
-                            <span>Adaptive Study Engine</span>
-                        </div>
-
-                        <h1 className="text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] font-bold text-white tracking-tight mb-8 leading-none font-sans text-balance">
-                            Turn messy notes<br/>into <span className="font-serif italic font-normal text-white whitespace-nowrap">sharp recall</span>
-                        </h1>
-
-                        <p className="text-[13px] sm:text-[14px] lg:text-[15px] text-slate-300 mb-10 leading-relaxed font-semibold uppercase tracking-[0.15em] max-w-[95%] mx-auto lg:mx-0">
-                            STUDY.AI REBUILDS YOUR MATERIAL INTO FLASHCARDS, QUIZZES, TIMELINES, AND MEMORY LOOPS THAT MATCH HOW YOU ACTUALLY LEARN.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
-                            <Link to="/register" onClick={() => window.scrollTo(0,0)} className="btn-gradient text-white px-10 py-5 squircle-xl font-black text-sm transition-all flex items-center justify-center gap-2 uppercase tracking-widest active:scale-95">
-                                Get Started Free
-                                <IcoArrowRight />
-                            </Link>
-                            <button className="btn-outline-dark px-8 py-5 squircle-xl font-black text-sm flex items-center justify-center gap-2 uppercase tracking-widest active:scale-95">
-                                <IcoPlay />
-                                See demo
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Interactive Demo UI */}
-                    <div className="relative w-full max-w-lg mx-auto lg:max-w-full">
-                        <div className="relative bg-[#0d0f1a]/80 backdrop-blur-xl squircle-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-[#1e2235] p-2 animate-float">
-                            {/* Browser Header */}
-                            <div className="px-6 py-4 border-b border-[#1e2235] flex items-center justify-between mb-2">
-                                <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-[#FF5F57] shadow-sm"></div>
-                                    <div className="w-3 h-3 rounded-full bg-[#FEBC2E] shadow-sm"></div>
-                                    <div className="w-3 h-3 rounded-full bg-[#28C840] shadow-sm"></div>
-                                </div>
-                                <div className="text-xs font-medium text-slate-400 select-none">Study.ai - Flashcard Generator</div>
-                                <div className="w-10"></div>
-                            </div>
-
-                            {/* Card Body */}
-                            <div className="p-4 sm:p-6 bg-[#0A0F1E]/80 rounded-2xl min-h-[400px] flex flex-col">
-                                <div className="mb-6 space-y-3">
-                                    <label className="block text-sm font-semibold text-slate-300 ml-1">
-                                        Try it now: What do you want to study?
-                                    </label>
-
-                                    <form onSubmit={handleGenerate} className="flex gap-3">
-                                        <input
-                                            type="text"
-                                            value={demoTopic}
-                                            onChange={(e) => setDemoTopic(e.target.value)}
-                                            placeholder="e.g., Mitosis, World War II, Calculus..."
-                                            className="flex-1 px-5 py-4 squircle-xl bg-[#1a1d2e] border border-[#1e2235] text-white placeholder:text-slate-500 focus:outline-none focus:border-[#0066FF] transition-all font-bold shadow-sm"
-                                        />
-                                        <button
-                                            type="submit"
-                                            disabled={isLoading || !demoTopic}
-                                            className="bg-[#0066FF] hover:bg-[#0052CC] disabled:opacity-20 disabled:cursor-not-allowed p-4 squircle-xl transition-all shadow-2xl aspect-square flex items-center justify-center"
-                                        >
-                                            {isLoading ? (
-                                                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                            ) : (
-                                                <IcoZap />
-                                            )}
-                                        </button>
-                                    </form>
-                                </div>
-
-                                {/* Result Area */}
-                                <div className="flex-1 perspective-1000 relative group">
-                                    {!flashcard && !isLoading && (
-                                        <div className="h-full flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-[#1e2235] rounded-3xl bg-white/5">
-                                            <div className="w-16 h-16 bg-[#0066FF]/10 rounded-2xl flex items-center justify-center mb-4 text-[#0066FF] animate-pulse-slow">
-                                                <IcoSparklesBig />
-                                            </div>
-                                            <p className="text-slate-400 font-medium max-w-[200px]">
-                                                Enter a topic above to generate an instant flashcard with Gemini AI.
-                                            </p>
-                                        </div>
-                                    )}
-
-                                    {isLoading && (
-                                        <div className="h-full flex flex-col items-center justify-center gap-4 bg-[#1a1d2e] rounded-3xl border border-[#1e2235] shadow-xl">
-                                            <div className="relative">
-                                                <div className="w-16 h-16 border-4 border-[#0066FF]/10 border-t-[#0066FF] rounded-full animate-spin"></div>
-                                                <div className="absolute inset-0 flex items-center justify-center">
-                                                    <IcoSparkles />
-                                                </div>
-                                            </div>
-                                            <p className="text-slate-400 font-medium animate-pulse">Generating study materials...</p>
-                                        </div>
-                                    )}
-
-                                    {flashcard && (
-                                        <div
-                                            className={`relative w-full h-full min-h-[260px] cursor-pointer transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}
-                                            onClick={() => setIsFlipped(!isFlipped)}
-                                            style={{ transformStyle: 'preserve-3d', transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
-                                        >
-                                            {/* Front */}
-                                            <div
-                                                className="absolute inset-0 bg-[#1a1d2e] border border-[#1e2235] squircle-xl shadow-xl p-8 flex flex-col items-center justify-center text-center backface-hidden hover:bg-[#1e2235] transition-all duration-500"
-                                                style={{ backfaceVisibility: 'hidden' }}
-                                            >
-                                                <div className="w-12 h-12 bg-[#0066FF]/10 rounded-full flex items-center justify-center mb-4 border border-[#0066FF]/20">
-                                                    <span className="font-black text-[#0066FF] text-xl">Q</span>
-                                                </div>
-                                                <h3 className="text-xl md:text-3xl font-black text-white leading-tight tracking-tighter uppercase">{flashcard.question}</h3>
-                                                <div className="absolute bottom-6 flex items-center gap-2 text-[10px] font-black text-slate-400 bg-white/5 border border-white/10 px-4 py-2 squircle-xl uppercase tracking-widest">
-                                                    Click to flip <IcoArrowRight />
-                                                </div>
-                                            </div>
-
-                                            {/* Back */}
-                                            <div
-                                                className="absolute inset-0 bg-[#0066FF] border border-white/20 squircle-xl shadow-2xl p-8 flex flex-col items-center justify-center text-center backface-hidden"
-                                                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-                                            >
-                                                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-4 border border-white/20">
-                                                    <span className="font-bold text-white text-xl">A</span>
-                                                </div>
-                                                <h3 className="text-lg md:text-xl font-bold text-white leading-relaxed tracking-tight">{flashcard.answer}</h3>
-                                                <div className="absolute bottom-6 flex items-center gap-2 text-[10px] font-black text-white/60 bg-white/10 px-4 py-2 squircle-xl uppercase tracking-widest">
-                                                    Click to flip <IcoArrowRight />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="absolute -right-12 bottom-12 w-32 h-32 bg-[#FFD700] rounded-[2rem] -rotate-12 opacity-20 -z-10 blur-xl animate-float" style={{ animationDelay: '1.5s' }}></div>
-                        <div className="absolute -left-12 -top-12 w-40 h-40 bg-[#0066FF] rounded-full opacity-10 -z-10 blur-2xl animate-float" style={{ animationDelay: '0.8s' }}></div>
-                    </div>
-
-                </div>
-            </div>
-        </LiquidBackground>
-    );
+            <button className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-7 py-4 text-sm font-bold uppercase tracking-[0.18em] text-slate-100 transition-colors hover:border-white/20 hover:bg-white/[0.05] active:scale-95">
+              <IcoPlay />
+              See Demo
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

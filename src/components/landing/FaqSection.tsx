@@ -33,16 +33,7 @@ export function FaqSection() {
   const filteredFaqs = useMemo(() => FAQS.filter((item) => item.category === activeCategory), [activeCategory]);
 
   return (
-    <section className="relative w-full overflow-hidden border-t border-white/5 bg-[#0A0F1E] py-24 font-sans">
-      <div
-        className="absolute inset-0 opacity-[0.06] pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
-          backgroundSize: '56px 56px',
-        }}
-      />
-
+    <section className="relative w-full overflow-hidden border-t border-white/5 bg-transparent py-24 font-sans">
       <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
@@ -50,10 +41,10 @@ export function FaqSection() {
           viewport={{ once: true, amount: 0.2 }}
           className="mx-auto max-w-4xl text-center"
         >
-          <h2 className="text-4xl font-black leading-tight text-white md:text-6xl">
+          <h2 className="text-2xl font-black leading-tight text-white md:text-4xl">
             Frequently asked questions
           </h2>
-          <p className="mx-auto mt-5 max-w-4xl text-lg leading-8 text-slate-300">
+          <p className="mx-auto mt-5 max-w-4xl text-base leading-8 text-slate-300 md:text-lg">
             These are the most common questions about Study.ai. Can't find what you're looking for? <span className="text-[#8fc2ff] underline underline-offset-4">Chat to our friendly team.</span>
           </p>
         </motion.div>
@@ -68,10 +59,10 @@ export function FaqSection() {
                   setActiveCategory(category);
                   setActiveQuestion(0);
                 }}
-                className={`rounded-full border px-5 py-3 text-base font-bold transition-all md:px-7 md:text-lg ${
+                className={`rounded-full border px-5 py-3 text-sm font-bold transition-all md:px-7 md:text-base ${
                   isActive
-                    ? 'border-white bg-white text-[#0A0F1E] shadow-[0_10px_30px_rgba(255,255,255,0.1)]'
-                    : 'border-white/20 bg-transparent text-white hover:border-white/40 hover:bg-white/5'
+                    ? 'border-white/[0.07] bg-[#111520] text-white'
+                    : 'border-white/[0.07] bg-transparent text-white hover:border-white/15 hover:bg-[#111520]'
                 }`}
               >
                 {category}
@@ -84,17 +75,17 @@ export function FaqSection() {
           {filteredFaqs.map((faq, idx) => {
             const isOpen = idx === activeQuestion;
             return (
-              <div key={faq.q} className="rounded-[1.75rem] border border-white/8 bg-[#0F1523]/92 backdrop-blur-xl">
+              <div key={faq.q} className="rounded-[16px] border border-white/[0.07] bg-[#111520]">
                 <button
                   onClick={() => setActiveQuestion(isOpen ? -1 : idx)}
                   className="flex w-full items-start gap-4 px-5 py-5 text-left md:px-6 md:py-6"
                 >
-                  <div className="mt-0.5 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-300">
+                  <div className="mt-0.5 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/[0.07] bg-[#151a26] text-slate-300">
                     <faq.Icon />
                   </div>
 
                   <div className="min-w-0 flex-1 pr-2">
-                    <div className="text-xl font-bold leading-8 text-white md:text-[1.9rem] md:leading-10">
+                    <div className="text-lg font-bold leading-8 text-white md:text-[1.5rem] md:leading-9">
                       {faq.q}
                     </div>
 
@@ -107,7 +98,7 @@ export function FaqSection() {
                           transition={{ duration: 0.22, ease: 'easeOut' }}
                           className="overflow-hidden"
                         >
-                          <p className="pt-4 pr-4 text-lg leading-9 text-slate-300">
+                          <p className="pt-4 pr-4 text-base leading-8 text-slate-300">
                             {faq.a}
                           </p>
                         </motion.div>

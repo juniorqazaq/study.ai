@@ -16,9 +16,9 @@ export function TrustRow() {
     ];
 
     return (
-        <section className="py-16 bg-[#0A0F1E] border-y border-white/5 overflow-hidden relative z-10">
+        <section className="relative z-10 overflow-hidden border-y border-white/5 bg-transparent py-16">
             <div className="container mx-auto px-4 text-center mb-10">
-                <p className="text-xl font-black text-slate-400 font-heading uppercase tracking-[0.2em] italic">
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400 md:text-base">
                     Trusted by students at
                 </p>
             </div>

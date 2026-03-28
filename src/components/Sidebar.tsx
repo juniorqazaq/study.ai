@@ -22,8 +22,8 @@ export function Sidebar() {
 
   const getLinkClass = (isActive: boolean) =>
     `flex items-center ${isCollapsed ? 'justify-center h-11 w-11' : 'gap-3 px-4 py-3'} rounded-2xl border transition-colors ${isActive
-      ? 'border-[#2a2a2a] bg-[#1f1f1f] text-white'
-      : 'border-transparent text-[#8d8d8d] hover:border-[#242424] hover:bg-[#181818] hover:text-[#f4f4f5]'
+      ? 'border-white/[0.07] bg-[#111520] text-white'
+      : 'border-transparent text-[#8d8d8d] hover:border-white/[0.07] hover:bg-[#111520] hover:text-[#f4f4f5]'
     }`;
 
   const isStudyMode =
@@ -35,16 +35,16 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 bottom-0 z-40 hidden ${isCollapsed ? 'w-[72px]' : 'w-60'} flex-col border-r border-[#232323] bg-[#131313] lg:flex`}
+      className={`sidebar-grid-bg fixed left-0 top-0 bottom-0 z-40 hidden ${isCollapsed ? 'w-[72px]' : 'w-60'} flex-col border-r border-white/[0.07] lg:flex`}
     >
       <button
         onClick={toggleSidebar}
-        className="absolute -right-0 top-1/2 z-50 flex h-12 w-4 -translate-y-1/2 items-center justify-center rounded-l-md border border-r-0 border-[#232323] bg-[#171717] text-[#7c7c7c] transition-colors hover:bg-[#1c1c1c] hover:text-white"
+        className="absolute -right-0 top-1/2 z-50 flex h-12 w-4 -translate-y-1/2 items-center justify-center rounded-l-md border border-r-0 border-white/[0.07] bg-[#111520] text-[#7c7c7c] transition-colors hover:bg-[#151a26] hover:text-white"
       >
         {isCollapsed ? <IcoChevronRight /> : <IcoChevronLeft />}
       </button>
 
-      <div className={`border-b border-[#232323] ${isCollapsed ? 'p-4' : 'px-5 py-6'}`}>
+      <div className={`border-b border-white/[0.07] ${isCollapsed ? 'p-4' : 'px-5 py-6'}`}>
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
           {!isCollapsed && (
             <span className="text-[17px] font-semibold tracking-tight">
@@ -79,7 +79,7 @@ export function Sidebar() {
         </div>
 
         {isStudyMode && (
-          <div className="mt-6 border-t border-[#232323] pt-5">
+          <div className="mt-6 border-t border-white/[0.07] pt-5">
             {!isCollapsed && <p className="mb-3 px-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#5f5f5f]">Study Mode</p>}
             <div className="space-y-1.5">
               <NavLink to={location.pathname.replace(/\/(quiz|flashcards|mindmap|notes-mode|notes).*$/, '/quiz')} title="Quiz" className={({ isActive }) => getLinkClass(isActive || location.pathname.endsWith('/quiz'))}>
@@ -103,7 +103,7 @@ export function Sidebar() {
         )}
       </nav>
 
-      <div className={`${isCollapsed ? 'p-2' : 'p-3'} border-t border-[#232323] space-y-1.5`}>
+      <div className={`${isCollapsed ? 'p-2' : 'p-3'} space-y-1.5 border-t border-white/[0.07]`}>
         <NavLink to="/profile" title="Settings" className={({ isActive }) => getLinkClass(isActive)}>
           <IcoSettings />
           {!isCollapsed && <span className="text-[14px]">Settings</span>}
@@ -111,7 +111,7 @@ export function Sidebar() {
         <button
           onClick={() => navigate('/')}
           title="Log Out"
-          className={`flex w-full items-center ${isCollapsed ? 'justify-center h-11 w-11 mx-auto' : 'gap-3 px-4 py-3'} rounded-2xl border border-transparent text-[#8d8d8d] transition-colors hover:border-[#242424] hover:bg-[#181818] hover:text-white`}
+          className={`flex w-full items-center ${isCollapsed ? 'justify-center h-11 w-11 mx-auto' : 'gap-3 px-4 py-3'} rounded-2xl border border-transparent text-[#8d8d8d] transition-colors hover:border-white/[0.07] hover:bg-[#111520] hover:text-white`}
         >
           <IcoLogOut />
           {!isCollapsed && <span className="text-[14px]">Log Out</span>}

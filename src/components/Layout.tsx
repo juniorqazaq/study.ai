@@ -17,12 +17,15 @@ export function Layout({ children }: LayoutProps) {
   // const isBookPage = location.pathname.startsWith('/book/');
   const isLandingPage = location.pathname === '/';
   const isAuthPage = ['/login', '/register', '/pricing', '/email-verification-sent', '/features', '/resources', '/support'].includes(location.pathname);
+  const isBookPage = location.pathname.startsWith('/book/');
+  const isLibraryPage = location.pathname === '/library' || location.pathname === '/dashboard';
+  const usePlainDarkBackground = isBookPage || isLibraryPage;
 
   const showSidebar = !isLandingPage && !isAuthPage && !isSidebarHidden;
 
   return (
-    <div className="min-h-screen relative bg-[#101010] font-sans text-[#f4f4f5] selection:bg-white/10">
-      <InteractiveBackground />
+    <div className={`${usePlainDarkBackground ? 'bg-black' : 'dot-grid-bg'} relative min-h-screen font-sans text-[#f4f4f5] selection:bg-white/10`}>
+      {!usePlainDarkBackground && <InteractiveBackground />}
 
       <div className={`relative z-10 min-h-screen flex flex-col transition-all duration-300 ${showSidebar ? (isCollapsed ? 'pl-0 lg:pl-[72px]' : 'pl-0 lg:pl-60') : ''
         }`}>

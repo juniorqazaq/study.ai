@@ -8,10 +8,10 @@ export function HeaderLogo() {
             whileTap={{ scale: 0.95 }}
             className="flex items-center gap-3"
         >
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-blue-500/30">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
                 <Sparkles size={18} className="text-white" />
             </div>
-            <span className="text-2xl font-black tracking-tighter shrink-0">
+            <span className="shrink-0 text-[1.8rem] font-black tracking-tighter">
                 <span className="text-[#0066FF]">Study</span><span className="text-[#EAF4FF] italic lowercase">.ai</span>
             </span>
         </motion.div>

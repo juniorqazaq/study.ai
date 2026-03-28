@@ -36,8 +36,8 @@ export function Header() {
                 className={cn(
                     "max-w-7xl mx-auto rounded-2xl transition-all duration-300 border",
                     scrolled
-                        ? "bg-[#07090f]/95 backdrop-blur-2xl shadow-2xl shadow-black/40 border-[#1e2235] py-2"
-                        : "bg-[#07090f]/80 backdrop-blur-xl border-[#1e2235]/60 py-3"
+                        ? "bg-[rgba(13,17,23,0.85)] backdrop-blur-[20px] border-white/[0.08] py-2"
+                        : "bg-[rgba(13,17,23,0.85)] backdrop-blur-[20px] border-white/[0.08] py-3"
                 )}
             >
                 <div className="px-6 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
@@ -48,7 +48,7 @@ export function Header() {
 
                     {/* Desktop Nav */}
                     <div className="hidden lg:flex items-center justify-center">
-                        <div className="flex items-center space-x-1 bg-white/5 p-1.5 rounded-full border border-[#1e2235] backdrop-blur-sm">
+                        <div className="flex items-center space-x-1 rounded-full border border-white/[0.08] bg-[rgba(17,21,32,0.92)] p-1.5">
                             {navItems.map((item) => {
                                 const isActive = location.pathname === item.href;
                                 return (
@@ -62,7 +62,7 @@ export function Header() {
                                         )}
                                     >
                                         {isActive && (
-                                            <div className="absolute inset-0 bg-white/10 shadow-sm rounded-full" />
+                                            <div className="absolute inset-0 rounded-full bg-white/[0.06]" />
                                         )}
                                         <span className="relative z-10">{item.name}</span>
                                     </Link>
@@ -84,7 +84,7 @@ export function Header() {
                             <Link
                                 to="/register"
                                 onClick={() => window.scrollTo(0,0)}
-                                className="bg-[#0066FF] hover:bg-[#0052CC] px-6 py-2.5 rounded-full transition-all duration-200 active:scale-95 shadow-[0_0_16px_rgba(0,102,255,0.3)]"
+                                className="rounded-full bg-[#2563EB] px-6 py-2.5 transition-colors duration-200 hover:bg-[#1f54cb] active:scale-95"
                             >
                                 <span className="text-white text-sm font-bold uppercase tracking-widest">Register</span>
                             </Link>
@@ -111,7 +111,7 @@ export function Header() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="lg:hidden absolute top-24 left-4 right-4 bg-[#0d0f1a] rounded-3xl shadow-xl border border-[#1e2235] p-4 z-40"
+                        className="lg:hidden absolute top-24 left-4 right-4 z-40 rounded-3xl border border-white/[0.08] bg-[#111520] p-4"
                     >
                         <div className="flex flex-col space-y-2">
                             {[{ name: 'How It Works', href: '/', Icon: IcoHowItWorks }, ...navItems].map((item) => (
@@ -121,7 +121,7 @@ export function Header() {
                                     className="flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-colors group text-[#e2e8f0]/70 hover:text-[#e2e8f0]"
                                     onClick={() => { setIsOpen(false); window.scrollTo(0,0); }}
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-[#1a1d2e] flex items-center justify-center group-hover:bg-[#0066FF]/10 group-hover:text-[#0066FF] transition-colors">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1d2e] transition-colors group-hover:bg-white/5 group-hover:text-[#e2e8f0]">
                                         <item.Icon />
                                     </div>
                                     <span className="font-bold">{item.name}</span>
@@ -137,7 +137,7 @@ export function Header() {
                                 </Link>
                                 <Link
                                     to="/register"
-                                    className="flex items-center justify-center py-4 rounded-2xl font-bold bg-[#0066FF] text-white shadow-lg active:scale-95 transition-all text-sm uppercase tracking-widest"
+                                    className="flex items-center justify-center rounded-2xl bg-[#2563EB] py-4 text-sm font-bold uppercase tracking-widest text-white transition-colors active:scale-95 hover:bg-[#1f54cb]"
                                     onClick={() => { setIsOpen(false); window.scrollTo(0,0); }}
                                 >
                                     Register

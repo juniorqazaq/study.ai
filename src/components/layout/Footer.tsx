@@ -20,17 +20,7 @@ const NAV_ITEMS = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/5 bg-[#0A0F1E] font-sans text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,102,255,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.05),transparent_22%)]" />
-      <div className="absolute left-[6%] top-[18%] h-64 w-64 rounded-full border border-white/5 bg-white/[0.02]" />
-      <div className="absolute right-[8%] top-[10%] h-48 w-48 rounded-full bg-[#1A237E]/55 blur-[20px]" />
-      <div className="absolute right-[18%] bottom-[14%] h-36 w-36 rounded-full bg-[#0066FF]/10 blur-[24px]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-[-4%] z-0 overflow-hidden text-center">
-        <div className="select-none text-[18vw] font-black uppercase leading-none tracking-[0.08em] text-[#0066FF]/[0.07] md:text-[12vw]">
-          STUDY.AI
-        </div>
-      </div>
-
+    <footer className="dot-grid-bg relative overflow-hidden border-t border-white/5 font-sans text-white">
       <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-20">
         <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="flex flex-col justify-between gap-10">
@@ -61,7 +51,7 @@ export function Footer() {
                   href={social.href}
                   whileHover={{ scale: 1.08, y: -2 }}
                   whileTap={{ scale: 0.96 }}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/14 bg-white/5 text-white/78 transition-all duration-200 hover:border-[#0066FF]/40 hover:bg-[#0066FF]/12 hover:text-white"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.07] bg-[#111520] text-white/78 transition-all duration-200 hover:border-white/15 hover:bg-[#151a26] hover:text-white"
                   aria-label={social.label}
                 >
                   <social.icon size={16} />
@@ -70,7 +60,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="rounded-[2.5rem] border border-white/8 bg-[linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.015))] p-6 md:p-8 shadow-[0_24px_80px_rgba(0,0,0,0.18)]">
+          <div className="rounded-[2rem] border border-white/[0.07] bg-[#111520] p-6 md:p-8">
             <div className="grid gap-6 md:grid-cols-[120px_1fr]">
               <div className="text-[11px] font-black uppercase tracking-[0.3em] text-white/35">
                 Navigate
@@ -81,7 +71,7 @@ export function Footer() {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className="group flex items-center justify-between gap-4 rounded-[1.4rem] border border-white/8 bg-white/[0.03] px-5 py-4 transition-all duration-200 hover:border-[#0066FF]/30 hover:bg-[#0066FF]/10"
+                    className="group flex items-center justify-between gap-4 rounded-[1.4rem] border border-white/[0.07] bg-[#111520] px-5 py-4 transition-all duration-200 hover:border-white/15 hover:bg-[#151a26]"
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-[11px] font-black uppercase tracking-[0.24em] text-white/35">
@@ -110,7 +100,7 @@ export function Footer() {
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/55">
               <Link to="#" className="transition-colors hover:text-white">Privacy Policy</Link>
               <Link to="#" className="transition-colors hover:text-white">Terms &amp; Conditions</Link>
-              <div className="flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-white/65">
+              <div className="flex items-center gap-2 rounded-full border border-white/[0.07] bg-[#111520] px-4 py-2 text-white/65">
                 <Globe size={12} />
                 <span>English</span>
               </div>
