@@ -4,45 +4,44 @@
 
 @layer base {
   :root {
-    /* Dark mode as default */
-    --background: 222 47% 7%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 7%;
+    --foreground: 0 0% 96%;
 
-    --card: 222 47% 9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 222 47% 9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 19 61% 53%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 33% 15%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 217 33% 13%;
-    --muted-foreground: 215 20% 60%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 217 33% 15%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 96%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 14%;
-    --input: 217 33% 14%;
-    --ring: 213 27% 84%;
+    --border: 0 0% 17%;
+    --input: 0 0% 17%;
+    --ring: 19 61% 53%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 222 47% 7%;
-    --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 224 76% 48%;
+    --sidebar-background: 0 0% 9%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 19 61% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 4% 16%;
-    --sidebar-accent-foreground: 240 5% 96%;
-    --sidebar-border: 240 4% 16%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 0 0% 14%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 16%;
+    --sidebar-ring: 19 61% 53%;
   }
 }
 
@@ -52,9 +51,10 @@
   }
 
   body {
-    @apply bg-[#07090f] text-[#e2e8f0];
+    @apply bg-[#101010] text-[#f4f4f5];
     font-family: 'Inter', sans-serif;
     overflow-y: scroll;
+    background: #101010;
   }
 }
 
@@ -110,13 +110,12 @@ input:-webkit-autofill:active {
 
   /* Gradient button — Azure Blue */
   .btn-gradient {
-    background: linear-gradient(135deg, #0066FF, #0052CC);
-    box-shadow: 0 0 24px rgba(0, 102, 255, 0.4);
-    transition: box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    background: #0066FF;
+    color: white;
+    transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
   }
   .btn-gradient:hover {
-    box-shadow: 0 0 40px rgba(0, 102, 255, 0.6);
-    opacity: 0.92;
+    background: #be6036;
     transform: translateY(-1px);
   }
   .btn-gradient:active { transform: scale(0.97); }
@@ -135,16 +134,13 @@ input:-webkit-autofill:active {
 
   /* Glassmorphism card */
   .glass-card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: #171717;
+    border: 1px solid #262626;
     border-radius: 20px;
   }
   .glass-card:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+    background: #1b1b1b;
+    border-color: #303030;
   }
 
   /* Glow accents */
@@ -157,7 +153,35 @@ input:-webkit-autofill:active {
 
   /* Section base */
   .section-dark {
-    background: linear-gradient(180deg, #0B0F1A 0%, #0F172A 100%);
+    background: #111111;
+  }
+
+  .app-shell {
+    @apply min-h-screen bg-[#111111] text-[#f4f4f5];
+  }
+
+  .app-panel {
+    @apply rounded-[24px] border border-[#262626] bg-[#171717];
+  }
+
+  .app-panel-soft {
+    @apply rounded-[20px] border border-[#262626] bg-[#141414];
+  }
+
+  .app-input {
+    @apply rounded-[18px] border border-[#2a2a2a] bg-[#1a1a1a] px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-[#6b6b6b] focus:border-[#3a3a3a] focus:bg-[#1d1d1d];
+  }
+
+  .app-muted-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b6b6b];
+  }
+
+  .app-primary-button {
+    @apply rounded-[18px] border border-[#0066FF]/40 bg-[#0066FF] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#be6036];
+  }
+
+  .app-secondary-button {
+    @apply rounded-[18px] border border-[#2a2a2a] bg-[#1a1a1a] px-5 py-3 text-sm font-medium text-[#d4d4d8] transition-colors hover:bg-[#1f1f1f] hover:text-white;
   }
 }
 
@@ -186,11 +210,11 @@ input:-webkit-autofill:active {
 }
 
 .liquid-glass {
-  @apply bg-white/5 backdrop-blur-2xl border border-white/10;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  @apply border border-[#262626] bg-[#171717];
+  box-shadow: none;
 }
 .liquid-glass-dark {
-  @apply bg-black/40 backdrop-blur-3xl border border-white/5;
+  @apply border border-[#262626] bg-[#141414];
 }
 
 .liquid-glow { position: relative; }
@@ -198,10 +222,9 @@ input:-webkit-autofill:active {
   content: '';
   position: absolute;
   inset: -1px;
-  background: linear-gradient(45deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+  background: transparent;
   border-radius: inherit;
   z-index: -1;
-  filter: blur(8px);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -215,30 +238,30 @@ input:-webkit-autofill:active {
 .liquid-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(120px);
   z-index: 0;
-  opacity: 0.12;
+  opacity: 0.04;
   pointer-events: none;
 }
 .liquid-blob-1 {
   width: 500px; height: 500px;
-  background: #3b5cf6;
+  background: #2a2a2a;
   top: -100px; left: -100px;
   animation: blob 20s infinite alternate ease-in-out;
 }
 .liquid-blob-2 {
   width: 400px; height: 400px;
-  background: #6366f1;
+  background: #202020;
   bottom: -50px; right: -50px;
   animation: blob 15s infinite alternate-reverse ease-in-out;
 }
 .liquid-blob-3 {
   width: 300px; height: 300px;
-  background: #3b82f6;
+  background: #1c1c1c;
   top: 40%; left: 30%;
   animation: blob 10s infinite alternate ease-in-out;
 }
 
 .glass-nav {
-  @apply bg-[#0B0F1A]/80 backdrop-blur-xl border-b border-white/5;
+  @apply border-b border-[#262626] bg-[#121212];
 }

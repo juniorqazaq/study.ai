@@ -21,17 +21,17 @@ export function StudyHeader({ title, progress, onBack, className = '' }: StudyHe
     };
 
     return (
-        <div className={`sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between ${className}`}>
+        <div className={`sticky top-0 z-40 flex items-center justify-between border-b border-[#262626] bg-[#141414] px-6 py-4 ${className}`}>
             <div className="flex items-center gap-4">
                 <button
                     onClick={handleBack}
-                    className="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white"
+                    className="rounded-full p-2 text-[#8d8d8d] transition-colors hover:bg-[#1c1c1c] hover:text-white"
                 >
                     <IcoChevronLeft />
                 </button>
                 <div>
                     <h1 className="text-lg font-bold text-white leading-tight">{title}</h1>
-                    {progress && <p className="text-sm text-gray-400">{progress}</p>}
+                    {progress && <p className="text-sm text-[#7c7c7c]">{progress}</p>}
                 </div>
             </div>
 
@@ -39,7 +39,7 @@ export function StudyHeader({ title, progress, onBack, className = '' }: StudyHe
                 {/* Utility buttons can go here if needed, or close button */}
                 <button
                     onClick={() => navigate('/dashboard')}
-                    className="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white"
+                    className="rounded-full p-2 text-[#8d8d8d] transition-colors hover:bg-[#1c1c1c] hover:text-white"
                     title="Exit Study Mode"
                 >
                     <IcoX />

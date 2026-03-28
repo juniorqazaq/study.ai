@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Search, Grid, List, Clock, FileText, Download, Filter, ArrowUpDown } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { ArrowUpDown, Clock, Download, FileText, Filter, Grid, List, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 import { storageService } from '@/shared/services/storage.service';
 
 interface Book {
@@ -11,265 +12,234 @@ interface Book {
   size: string;
   uploadedAt: string;
   progress: number;
-  thumbnail: string;
+  tone: 'slate' | 'plum' | 'olive' | 'warm' | 'graphite';
 }
+
+const toneClasses = {
+  slate: 'from-[#1b2029] to-[#151515]',
+  plum: 'from-[#201a24] to-[#151515]',
+  olive: 'from-[#1b211c] to-[#151515]',
+  warm: 'from-[#231c17] to-[#151515]',
+  graphite: 'from-[#1c1c1c] to-[#151515]',
+};
 
 export function LibraryPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
-  const [sortBy, setSortBy] = useState('date');
-
+  const [sortBy, setSortBy] = useState<'date' | 'name' | 'progress'>('date');
   const [books, setBooks] = useState<Book[]>([]);
 
   useEffect(() => {
     const files = storageService.getFiles();
-    const booksFromStorage: Book[] = files.map((file, index) => ({
-      id: file.id,
-      title: file.name.replace(/\.[^/.]+$/, ''),
-      author: 'Unknown',
-      type: file.type,
-      size: file.size,
-      uploadedAt: file.uploadedAt,
-      progress: 0,
-      thumbnail: ['blue', 'purple', 'green', 'orange', 'cyan', 'pink'][index % 6] as any
-    }));
-    setBooks(booksFromStorage);
+
+    const tones: Book['tone'][] = ['slate', 'plum', 'olive', 'warm', 'graphite'];
+
+    setBooks(
+      files.map((file, index) => ({
+        id: file.id,
+        title: file.name.replace(/\.[^/.]+$/, ''),
+        author: 'Source: unknown',
+        type: file.type,
+        size: file.size,
+        uploadedAt: file.uploadedAt,
+        progress: file.status === 'success' ? 24 + (index % 5) * 14 : 0,
+        tone: tones[index % tones.length],
+      })),
+    );
   }, []);
 
-  const colorClasses = {
-    blue: 'from-blue-500/30 to-blue-600/5',
-    purple: 'from-purple-500/30 to-purple-600/5',
-    green: 'from-green-500/30 to-green-600/5',
-    orange: 'from-orange-500/30 to-orange-600/5',
-    cyan: 'from-cyan-500/30 to-cyan-600/5',
-    pink: 'from-pink-500/30 to-pink-600/5',
-  };
+  const filteredBooks = useMemo(() => {
+    const next = books.filter((book) => {
+      const matchesSearch =
+        book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesFilter = filterType === 'all' || book.type === filterType;
 
-  const filteredBooks = books.filter(book => {
-    const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = filterType === 'all' || book.type === filterType;
-    return matchesSearch && matchesFilter;
-  });
+      return matchesSearch && matchesFilter;
+    });
+
+    if (sortBy === 'name') {
+      next.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === 'progress') {
+      next.sort((a, b) => b.progress - a.progress);
+    }
+
+    return next;
+  }, [books, filterType, searchQuery, sortBy]);
 
   return (
-    <div className="min-h-screen bg-black text-white p-8 relative overflow-hidden">
-      {/* Liquid Background Blobs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="liquid-blob liquid-blob-1" style={{ opacity: 0.1 }} />
-        <div className="liquid-blob liquid-blob-3" style={{ opacity: 0.1 }} />
-      </div>
+    <div className="app-shell px-5 py-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8">
+          <p className="app-muted-label mb-3">Library</p>
+          <h1 className="text-4xl font-semibold tracking-tight text-white lg:text-5xl">My Library</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-[#8d8d8d] lg:text-base">
+            Personal knowledge archive with a calmer, darker reading surface and simpler navigation.
+          </p>
+        </div>
 
-      <div className="max-w-7xl mx-auto pt-4 relative z-10">
-        {/* Header */}
-        <div className="mb-12 flex items-end justify-between">
-          <div>
-            <h1 className="text-5xl font-black mb-3 tracking-tighter bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">
-              My Library
-            </h1>
-            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">
-              Personal Knowledge Archive
+        <div className="app-panel mb-8 p-3">
+          <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b6b6b]" />
+              <input
+                type="text"
+                placeholder="Search your library..."
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                className="app-input w-full pl-11"
+              />
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="relative">
+                <Filter className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b6b6b]" />
+                <select
+                  value={filterType}
+                  onChange={(event) => setFilterType(event.target.value)}
+                  className="app-input min-w-[170px] appearance-none pl-11"
+                >
+                  <option value="all">All media</option>
+                  <option value="pdf">PDF</option>
+                  <option value="epub">EPUB</option>
+                  <option value="docx">DOCX</option>
+                  <option value="pptx">PPTX</option>
+                  <option value="url">URL</option>
+                  <option value="github">GitHub</option>
+                  <option value="image">Image</option>
+                </select>
+              </div>
+
+              <div className="relative">
+                <ArrowUpDown className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b6b6b]" />
+                <select
+                  value={sortBy}
+                  onChange={(event) => setSortBy(event.target.value as 'date' | 'name' | 'progress')}
+                  className="app-input min-w-[170px] appearance-none pl-11"
+                >
+                  <option value="date">Recent first</option>
+                  <option value="name">Alphabetical</option>
+                  <option value="progress">Most read</option>
+                </select>
+              </div>
+
+              <div className="flex rounded-[18px] border border-[#2a2a2a] bg-[#1a1a1a] p-1">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`flex h-11 w-11 items-center justify-center rounded-[14px] transition-colors ${viewMode === 'grid' ? 'bg-[#232323] text-white' : 'text-[#7c7c7c] hover:text-white'}`}
+                >
+                  <Grid className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`flex h-11 w-11 items-center justify-center rounded-[14px] transition-colors ${viewMode === 'list' ? 'bg-[#232323] text-white' : 'text-[#7c7c7c] hover:text-white'}`}
+                >
+                  <List className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {filteredBooks.length === 0 ? (
+          <div className="app-panel p-16 text-center">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[24px] border border-[#2a2a2a] bg-[#1a1a1a]">
+              <FileText className="h-8 w-8 text-[#6b6b6b]" />
+            </div>
+            <h2 className="mt-6 text-2xl font-semibold text-white">No files found</h2>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-[#8d8d8d]">
+              {searchQuery
+                ? `Nothing matched "${searchQuery}". Try another search term or change the filter.`
+                : 'Upload a few resources and they will appear here in a quieter, more readable layout.'}
             </p>
           </div>
-          <div className="pb-2">
-            <div className="h-1 w-24 bg-blue-600 squircle-full shadow-[0_0_15px_rgba(37,99,235,0.5)]" />
-          </div>
-        </div>
-
-        {/* Toolbar */}
-        <div className="flex flex-col lg:flex-row gap-4 mb-12 liquid-glass squircle-xl p-4 shadow-xl border-white/5">
-          {/* Search */}
-          <div className="flex-1 relative group">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
-            <input
-              type="text"
-              placeholder="Search your stash..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/5 rounded-2xl pl-14 pr-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white placeholder-gray-600 font-bold"
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            {/* Filter */}
-            <div className="relative group min-w-[160px]">
-              <Filter className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-blue-400" />
-              <select
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all appearance-none text-white cursor-pointer font-bold text-sm uppercase tracking-widest"
-              >
-                <option value="all" className="bg-[#111]">All Media</option>
-                <option value="pdf" className="bg-[#111]">PDF Documents</option>
-                <option value="epub" className="bg-[#111]">eBooks</option>
-                <option value="docx" className="bg-[#111]">MS Word</option>
-                <option value="pptx" className="bg-[#111]">Slides</option>
-                <option value="url" className="bg-[#111]">Web Links</option>
-                <option value="github" className="bg-[#111]">Repositories</option>
-              </select>
-            </div>
-
-            {/* Sort */}
-            <div className="relative group min-w-[160px]">
-              <ArrowUpDown className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-blue-400" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all appearance-none text-white cursor-pointer font-bold text-sm uppercase tracking-widest"
-              >
-                <option value="date" className="bg-[#111]">Recent First</option>
-                <option value="name" className="bg-[#111]">Alphabetical</option>
-                <option value="progress" className="bg-[#111]">Most Read</option>
-              </select>
-            </div>
-
-            {/* View Mode */}
-            <div className="flex gap-2 bg-white/5 border border-white/5 rounded-2xl p-2 shadow-inner">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-3 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/40' : 'text-gray-500 hover:text-white'
-                  }`}
-              >
-                <Grid className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/40' : 'text-gray-500 hover:text-white'
-                  }`}
-              >
-                <List className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Books Grid */}
-        {viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        ) : viewMode === 'grid' ? (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {filteredBooks.map((book) => (
-              <Link
-                key={book.id}
-                to={`/book/${book.id}`}
-                className="liquid-glass border-white/10 rounded-[2.5rem] overflow-hidden hover:bg-white/5 hover:border-blue-500/30 transition-all group relative shadow-2xl hover:scale-[1.02] duration-500"
-              >
-                {/* Thumbnail */}
-                <div className={`h-64 bg-gradient-to-br ${colorClasses[book.thumbnail as keyof typeof colorClasses]} flex items-center justify-center relative border-b border-white/5 overflow-hidden`}>
-                  <FileText className="w-24 h-24 text-white/10 group-hover:text-white/40 group-hover:scale-110 transition-all duration-700" />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700" />
+              <Link key={book.id} to={`/book/${book.id}`} className="group">
+                <div className="app-panel overflow-hidden transition-colors hover:bg-[#1a1a1a]">
+                  <div className={`flex h-52 items-center justify-center border-b border-[#262626] bg-gradient-to-br ${toneClasses[book.tone]}`}>
+                    <FileText className="h-16 w-16 text-white/20" />
+                  </div>
 
-                  {book.progress === 100 && (
-                    <div className="absolute top-6 left-6 px-4 py-1.5 bg-green-500/20 text-green-400 border border-green-500/30 squircle-lg text-[10px] font-black uppercase tracking-widest backdrop-blur-md">
-                      Archive Mastered
+                  <div className="p-6">
+                    <div className="mb-5 flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h3 className="truncate text-2xl font-semibold tracking-tight text-white">{book.title}</h3>
+                        <p className="mt-2 text-xs uppercase tracking-[0.22em] text-[#6b6b6b]">{book.author}</p>
+                      </div>
+                      <span className="rounded-full border border-[#2a2a2a] bg-[#1b1b1b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b3b3b3]">
+                        {book.type}
+                      </span>
                     </div>
-                  )}
-                  <div className="absolute top-6 right-6 px-4 py-1.5 liquid-glass squircle-lg text-[10px] font-black uppercase tracking-widest border-white/10 text-gray-300 shadow-xl backdrop-blur-xl">
-                    {book.type}
+
+                    <div className="mb-5 rounded-[18px] border border-[#262626] bg-[#141414] px-4 py-4">
+                      <div className="mb-3 flex items-center justify-between text-[11px] uppercase tracking-[0.22em] text-[#6b6b6b]">
+                        <span>Mastery level</span>
+                        <span className="text-[#d7d7d7]">{book.progress}%</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-[#212121]">
+                        <div className="h-full rounded-full bg-[#0066FF]" style={{ width: `${book.progress}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-[#8d8d8d]">
+                      <span className="flex items-center gap-2">
+                        <Download className="h-3.5 w-3.5" />
+                        {book.size}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Clock className="h-3.5 w-3.5" />
+                        {book.uploadedAt}
+                      </span>
+                    </div>
                   </div>
                 </div>
-
-                {/* Content */}
-                <div className="p-8">
-                  <h3 className="text-2xl font-black mb-1 truncate text-white group-hover:text-blue-400 transition-colors tracking-tight">{book.title}</h3>
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">Source: {book.author}</p>
-
-                  {/* Progress */}
-                  <div className="mb-6 py-4 px-6 bg-white/5 rounded-[1.5rem] border border-white/5 group-hover:border-blue-500/10 transition-all duration-500 shadow-inner">
-                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[0.2em] mb-3">
-                      <span className="text-gray-500">Mastery Level</span>
-                      <span className="text-blue-400">{book.progress}%</span>
-                    </div>
-                    <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden shadow-inner">
-                      <div
-                        className="bg-blue-600 h-full transition-all duration-1000 cubic-bezier(0.34, 1.56, 0.64, 1)"
-                        style={{ width: `${book.progress}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Meta */}
-                  <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[0.2em] text-gray-600">
-                    <span className="flex items-center gap-2">
-                      <div className="p-1.5 bg-white/5 rounded-lg group-hover:text-blue-400"><Download className="w-3.5 h-3.5" /></div>
-                      {book.size}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <div className="p-1.5 bg-white/5 rounded-lg group-hover:text-purple-400"><Clock className="w-3.5 h-3.5 text-purple-600" /></div>
-                      {book.uploadedAt}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Hover Glow */}
-                <div className="absolute -inset-1 bg-gradient-to-tr from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
               </Link>
             ))}
           </div>
         ) : (
-          /* List View */
-          <div className="space-y-6">
+          <div className="space-y-4">
             {filteredBooks.map((book) => (
-              <Link
-                key={book.id}
-                to={`/book/${book.id}`}
-                className="liquid-glass border-white/10 rounded-3xl p-6 hover:bg-white/5 hover:border-blue-500/30 transition-all flex items-center gap-8 group shadow-xl hover:scale-[1.01] duration-500"
-              >
-                {/* Thumbnail */}
-                <div className={`w-20 h-28 rounded-2xl bg-gradient-to-br ${colorClasses[book.thumbnail as keyof typeof colorClasses]} flex items-center justify-center flex-shrink-0 relative overflow-hidden ring-1 ring-white/10`}>
-                  <div className="absolute inset-0 bg-black/20" />
-                  <FileText className="w-10 h-10 text-white/40 relative z-10" />
-                </div>
+              <Link key={book.id} to={`/book/${book.id}`} className="group block">
+                <div className="app-panel p-5 transition-colors hover:bg-[#1a1a1a]">
+                  <div className="flex flex-col gap-5 xl:flex-row xl:items-center">
+                    <div className={`flex h-20 w-16 items-center justify-center rounded-[18px] bg-gradient-to-br ${toneClasses[book.tone]}`}>
+                      <FileText className="h-8 w-8 text-white/20" />
+                    </div>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-4 mb-2">
-                    <h3 className="text-2xl font-black text-white group-hover:text-blue-400 transition-colors truncate tracking-tight">{book.title}</h3>
-                    <span className="px-3 py-1 liquid-glass border-white/10 squircle-lg text-[10px] font-black uppercase tracking-widest text-blue-400 backdrop-blur-md">
-                      {book.type}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-gray-500">
-                    <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500/30" />{book.author}</span>
-                    <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-purple-500/30" />{book.size}</span>
-                    <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500/30" />{book.uploadedAt}</span>
-                  </div>
-                </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h3 className="truncate text-2xl font-semibold tracking-tight text-white">{book.title}</h3>
+                        <span className="rounded-full border border-[#2a2a2a] bg-[#1b1b1b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b3b3b3]">
+                          {book.type}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-xs uppercase tracking-[0.22em] text-[#6b6b6b]">{book.author}</p>
+                    </div>
 
-                {/* Progress */}
-                <div className="w-64 flex-shrink-0 flex flex-col items-end gap-3 px-8 border-l border-white/5">
-                  <span className="text-blue-400 text-sm font-black tabular-nums tracking-widest">{book.progress}% MASTERED</span>
-                  <div className="w-full bg-white/5 rounded-full h-2.5 overflow-hidden shadow-inner ring-1 ring-white/5">
-                    <div
-                      className="bg-blue-600 h-full transition-all duration-1000 cubic-bezier(0.34, 1.56, 0.64, 1)"
-                      style={{ width: `${book.progress}%` }}
-                    />
+                    <div className="grid gap-3 sm:grid-cols-3 xl:w-[330px]">
+                      <MetaCell label="Mastery" value={`${book.progress}%`} />
+                      <MetaCell label="Size" value={book.size} />
+                      <MetaCell label="Added" value={book.uploadedAt} />
+                    </div>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
         )}
-
-        {/* Empty State */}
-        {filteredBooks.length === 0 && (
-          <div className="text-center py-32 liquid-glass border-white/5 rounded-[3rem] mt-12 relative overflow-hidden group">
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-blue-500/5 to-transparent" />
-            <div className="w-32 h-32 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10 group-hover:scale-110 transition-transform duration-700">
-              <FileText className="w-16 h-16 text-gray-600 group-hover:text-blue-500 transition-colors duration-700" />
-            </div>
-            <h3 className="text-3xl font-black mb-3 text-white tracking-tight">No Archive Found</h3>
-            <p className="text-gray-500 mb-12 max-w-sm mx-auto font-bold text-sm uppercase tracking-widest leading-relaxed opacity-60">
-              {searchQuery ? 'Your search query yielded no results. Try adjusting the scope of your inquiry.' : 'Your neural archives are currently empty. Initiate your learning journey today.'}
-            </p>
-            <Link
-              to="/upload"
-              className="inline-block px-12 py-4 bg-white text-black hover:bg-blue-500 hover:text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-2xl active:scale-95 duration-500"
-            >
-              Initiate Upload
-            </Link>
-          </div>
-        )}
       </div>
+    </div>
+  );
+}
+
+function MetaCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[16px] border border-[#262626] bg-[#141414] px-4 py-3">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-[#6b6b6b]">{label}</div>
+      <div className="mt-2 text-sm font-medium text-white">{value}</div>
     </div>
   );
 }

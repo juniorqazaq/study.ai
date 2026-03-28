@@ -16,7 +16,7 @@ export function LandingPage() {
             <main className="bg-[#0A0F1E] w-full overflow-hidden">
                 <Hero />
                 <TrustRow />
-                
+
                 <HowItWorksProcess />
                 <VideoDemo />
                 <FeaturesBentoGrid />

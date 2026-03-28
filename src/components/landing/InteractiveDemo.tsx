@@ -24,9 +24,9 @@ const DEMO_DATA = {
     history: {
         title: "History: The Cold War",
         icon: <IcoFileText />,
-        color: "text-orange-500",
-        bgColor: "bg-orange-500/10",
-        borderColor: "border-orange-500/20",
+        color: "text-blue-600",
+        bgColor: "bg-blue-600/10",
+        borderColor: "border-blue-600/20",
         text: "The Cold War was a period of geopolitical tension between the Soviet Union and the United States. It began after World War II and lasted until the dissolution of the USSR in 1991.",
         flashcards: [
             { q: "Who were the main rivals?", a: "USA & USSR" },

@@ -21,7 +21,7 @@ export function Layout({ children }: LayoutProps) {
   const showSidebar = !isLandingPage && !isAuthPage && !isSidebarHidden;
 
   return (
-    <div className="min-h-screen relative text-[#e2e8f0] bg-[#07090f] font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen relative bg-[#101010] font-sans text-[#f4f4f5] selection:bg-white/10">
       <InteractiveBackground />
 
       <div className={`relative z-10 min-h-screen flex flex-col transition-all duration-300 ${showSidebar ? (isCollapsed ? 'pl-0 lg:pl-[72px]' : 'pl-0 lg:pl-60') : ''

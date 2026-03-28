@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { StudyHeader } from '@/components/study/StudyHeader';
-import { ActivityCard } from '@/components/ui/ActivityCard';
-import { CheckCircle, XCircle, RefreshCw, Trophy } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, Edit2, Filter, Layout, MessageSquare, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useSidebar } from '../context/SidebarContext';
 
 interface BlankQuestion {
     id: number;
@@ -11,168 +10,210 @@ interface BlankQuestion {
     textAfter: string;
 }
 
-export function FillBlanksPage() {
-    const { bookId } = useParams();
-    const [answers, setAnswers] = useState<Record<number, string>>({});
-    const [showResults, setShowResults] = useState(false);
-    const [score, setScore] = useState(0);
+const mockQuestions: BlankQuestion[] = [
+    { id: 1, textBefore: "The overarching idea that all organisms are born with", blank: "unlearned", textAfter: "behavior refers to instincts and reflexes." },
+    { id: 2, textBefore: "Ivan Pavlov is famous for his work on", blank: "classical", textAfter: "conditioning." },
+    { id: 3, textBefore: "The variable that is manipulated in an experiment is called the", blank: "independent", textAfter: "variable." }
+];
 
-    const questions: BlankQuestion[] = [
-        { id: 1, textBefore: "Psychology is the scientific study of", blank: "behavior", textAfter: "and mental processes." },
-        { id: 2, textBefore: "The", blank: "biological", textAfter: "perspective focuses on the role of the brain and nervous system." },
-        { id: 3, textBefore: "Ivan Pavlov is famous for his work on", blank: "classical", textAfter: "conditioning." },
-        { id: 4, textBefore: "The variable that is manipulated in an experiment is called the", blank: "independent", textAfter: "variable." },
-        { id: 5, textBefore: "Freud founded the", blank: "psychodynamic", textAfter: "approach to psychology." },
-    ];
+export function FillBlanksPage() {
+    const navigate = useNavigate();
+    const { isSidebarHidden, setIsSidebarHidden } = useSidebar();
+    
+    // In a real app we would load from lessonsData, but mocking here for the redesign
+    const questions = mockQuestions;
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [inputValue, setInputValue] = useState('');
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const question = questions[currentIndex];
 
     const handleSubmit = () => {
-        let newScore = 0;
-        questions.forEach(q => {
-            const userAnswer = answers[q.id]?.trim().toLowerCase();
-            if (userAnswer === q.blank.toLowerCase()) {
-                newScore++;
-            }
-        });
-        setScore(newScore);
-        setShowResults(true);
+        if (!inputValue.trim()) return;
+        setIsSubmitted(true);
     };
 
-    const handleRetry = () => {
-        setAnswers({});
-        setShowResults(false);
-        setScore(0);
+    const handleNext = () => {
+        setIsSubmitted(false);
+        setInputValue('');
+        setCurrentIndex((prev) => (prev + 1) % questions.length);
     };
+
+    const handlePrev = () => {
+        setIsSubmitted(false);
+        setInputValue('');
+        setCurrentIndex((prev) => (prev - 1 + questions.length) % questions.length);
+    };
+
+    const isCorrect = isSubmitted && inputValue.trim().toLowerCase() === question.blank.toLowerCase();
 
     return (
-        <div className="min-h-screen bg-black text-white relative overflow-hidden">
-            {/* Liquid Background Blobs */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                <div className="liquid-blob liquid-blob-1" style={{ opacity: 0.1 }} />
-                <div className="liquid-blob liquid-blob-2" style={{ opacity: 0.1 }} />
-            </div>
+        <div className="flex h-screen w-full overflow-hidden bg-[#0c0c0c]">
+            <div className="flex flex-1 flex-col border-r border-[#262626]">
+                {/* Header */}
+                <header className="flex h-14 items-center justify-between border-b border-[#262626] bg-[#0c0c0c] px-4">
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => navigate(-1)} className="text-[#a1a1aa] hover:text-white transition-colors">
+                            <ChevronLeft size={20} />
+                        </button>
+                        <h1 className="text-[15px] font-semibold tracking-tight text-white">
+                            Psychology of Learning
+                        </h1>
+                    </div>
+                    <div className="flex items-center gap-5 text-[13px] font-medium text-[#a1a1aa]">
+                        <button className="flex items-center gap-2 hover:text-white transition-colors">
+                            <Filter size={14} /> Filter by Topic
+                        </button>
+                        <button className="flex items-center gap-2 hover:text-white transition-colors">
+                            <Edit2 size={14} /> Edit Questions
+                        </button>
+                        <button 
+                            onClick={() => setIsSidebarHidden(!isSidebarHidden)} 
+                            className="flex items-center gap-1 hover:text-white transition-colors"
+                        >
+                            {isSidebarHidden ? "Show sidebar" : "Hide sidebar"}
+                            {!isSidebarHidden && <ChevronRight size={14} className="ml-1" />}
+                        </button>
+                    </div>
+                </header>
 
-            <StudyHeader
-                title="Fill in the Blanks"
-                progress={showResults ? "Module Decrypted" : `${Object.keys(answers).length}/${questions.length} Encrypted`}
-                onBack={() => window.history.back()}
-            />
-
-            <div className="max-w-4xl mx-auto px-6 py-12 relative z-10">
-                {!showResults ? (
-                    <div className="space-y-8">
-                        {questions.map((q, index) => (
-                            <ActivityCard key={q.id} className="liquid-glass border-white/5 squircle-xl p-8 hover:bg-white/10 transition-all duration-500 shadow-2xl group">
-                                <div className="flex items-baseline gap-4 text-xl md:text-2xl leading-relaxed flex-wrap font-bold tracking-tight">
-                                    <span className="text-gray-700 font-black tabular-nums">{String(index + 1).padStart(2, '0')}.</span>
-                                    <span className="text-white/90">{q.textBefore}</span>
-                                    <div className="relative group/input">
-                                        <input
-                                            type="text"
-                                            value={answers[q.id] || ''}
-                                            onChange={(e) => setAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
-                                            className="bg-white/5 border-b-2 border-white/10 px-4 py-1 text-center min-w-[160px] focus:outline-none focus:border-blue-500 text-blue-400 font-black placeholder-gray-800 transition-all duration-500"
-                                            placeholder="..."
-                                        />
-                                        <div className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-blue-500 group-focus-within/input:w-full transition-all duration-700 shadow-[0_0_15px_rgba(59,130,246,0.8)]" />
-                                    </div>
-                                    <span className="text-white/90">{q.textAfter}</span>
-                                </div>
-
-                                {/* Decorator */}
-                                <div className="absolute top-4 right-4 w-1.5 h-1.5 rounded-full bg-white/5 group-hover:bg-blue-500/50 transition-colors" />
-                            </ActivityCard>
-                        ))}
-
-                        <div className="pt-12">
-                            <button
-                                onClick={handleSubmit}
-                                disabled={Object.keys(answers).length === 0}
-                                className="w-full py-6 bg-white text-black hover:bg-blue-600 hover:text-white squircle-xl disabled:opacity-30 disabled:cursor-not-allowed transition-all font-black text-xl uppercase tracking-[0.2em] shadow-2xl active:scale-95 duration-500 border border-white/10"
-                            >
-                                Validate Neural Inputs
-                            </button>
+                {/* Main Content */}
+                <main className="flex flex-1 flex-col items-center justify-center p-6 bg-[#111111]">
+                    {/* Tags */}
+                    <div className="mb-16 flex flex-wrap gap-3">
+                        <div className="flex items-center gap-2 rounded-full border border-[#3b1717] bg-[#2a1111] px-3 py-1 font-medium text-[#ff6b6b] text-xs">
+                            <div className="h-1.5 w-1.5 rounded-full bg-[#ff6b6b]" /> 57 Unfamiliar
+                        </div>
+                        <div className="flex items-center gap-2 rounded-full border border-[#3b2a17] bg-[#2a1d11] px-3 py-1 font-medium text-[#ffd166] text-xs">
+                            <div className="h-1.5 w-1.5 rounded-full bg-[#ffd166]" /> 0 Learning
+                        </div>
+                        <div className="flex items-center gap-2 rounded-full border border-[#0066FF] bg-[#0066FF]/10 px-3 py-1 font-medium text-[#0066FF] text-xs">
+                            <div className="h-1.5 w-1.5 rounded-full bg-[#0066FF]" /> 0 Familiar
+                        </div>
+                        <div className="flex items-center gap-2 rounded-full border border-[#173b22] bg-[#112a17] px-3 py-1 font-medium text-[#06d6a0] text-xs">
+                            <div className="h-1.5 w-1.5 rounded-full bg-[#06d6a0]" /> 0 Mastered
                         </div>
                     </div>
-                ) : (
-                    <div className="space-y-12">
-                        {/* Results Card */}
-                        <div className="liquid-glass border-white/10 squircle-2xl p-16 text-center relative overflow-hidden shadow-2xl">
-                            <div className="absolute -top-24 -left-24 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full pointer-events-none" />
 
-                            <div className="relative z-10">
-                                <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10 shadow-inner">
-                                    <Trophy className="w-12 h-12 text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]" />
-                                </div>
-                                <h2 className="text-5xl font-black text-white mb-2 tracking-tighter bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">Decryption Results</h2>
-                                <div className="text-gray-500 font-black uppercase tracking-widest text-xs mb-10">Neural Compatibility Score</div>
+                    <div className="flex flex-col items-center justify-center w-full max-w-[800px] min-h-[350px] rounded-[24px] border border-[#262626] bg-[#1a1a1a] p-10 shadow-sm">
+                        
+                        <div className="text-center text-[22px] font-normal leading-[1.8] text-white max-w-[650px] mb-12">
+                            {question.textBefore}{' '}
+                            <span className="inline-block border-b border-[#52525b] text-[#52525b] pb-1 font-mono min-w-[200px] px-2 text-center mx-1">
+                                {isSubmitted ? (
+                                    <span className={isCorrect ? "text-[#06d6a0]" : "text-[#ff6b6b]"}>
+                                        {isCorrect ? question.blank : inputValue}
+                                    </span>
+                                ) : (
+                                    "___________________"
+                                )}
+                            </span>{' '}
+                            {question.textAfter}
+                        </div>
 
-                                <div className="relative inline-block mb-12">
-                                    <div className="text-8xl font-black text-blue-500 tabular-nums tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">{Math.round((score / questions.length) * 100)}<span className="text-3xl text-blue-900/50 ml-1">%</span></div>
-                                    <div className="absolute -inset-8 bg-blue-500/5 blur-3xl -z-10 rounded-full" />
-                                </div>
-
-                                <div className="flex gap-6 justify-center">
-                                    <Link to={`/book/${bookId}`} className="px-10 py-4 liquid-glass border-white/10 squircle-xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-all active:scale-95 duration-500">
-                                        Back to Node
-                                    </Link>
-                                    <button
-                                        onClick={handleRetry}
-                                        className="px-10 py-4 bg-white text-black hover:bg-blue-600 hover:text-white squircle-xl font-black uppercase tracking-widest text-xs transition-all flex items-center gap-3 active:scale-95 duration-500 shadow-xl"
+                        {!isSubmitted ? (
+                            <div className="w-full max-w-[400px] flex flex-col items-center gap-6">
+                                <input
+                                    type="text"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                    placeholder="Type your answer"
+                                    className="w-full rounded-[14px] border border-[#3f3f46] bg-[#141414] px-5 py-4 text-[15px] text-white placeholder:text-[#52525b] outline-none hover:border-[#52525b] focus:border-[#0066FF] transition-colors text-center"
+                                />
+                                <div className="flex w-full items-center justify-between mt-2">
+                                    <button className="flex items-center gap-2 text-[14px] font-medium text-[#71717a] hover:text-[#d4d4d8] transition-colors">
+                                        <Sparkles size={16} className="text-[#0066FF]" /> Need a hint?
+                                    </button>
+                                    <button 
+                                        onClick={handleSubmit}
+                                        disabled={!inputValue.trim()}
+                                        className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2.5 text-[14px] font-semibold text-white transition-colors"
                                     >
-                                        <RefreshCw className="w-4 h-4" /> Reset Module
+                                        Submit
                                     </button>
                                 </div>
                             </div>
+                        ) : (
+                            <div className="w-full max-w-[400px] flex flex-col items-center gap-6">
+                                <div className={`w-full rounded-[14px] border px-5 py-4 text-[15px] text-center font-medium ${isCorrect ? 'bg-[#112a17] border-[#06d6a0] text-[#06d6a0]' : 'bg-[#2a1111] border-[#ff6b6b] text-[#ff6b6b]'}`}>
+                                    {isCorrect ? "Correct answer!" : `Incorrect. The answer is "${question.blank}"`}
+                                </div>
+                                <button 
+                                    onClick={handleNext}
+                                    className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-8 py-2.5 text-[14px] font-semibold text-white transition-colors"
+                                >
+                                    Continue
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Pagination Controls */}
+                    <div className="mt-8 flex w-full max-w-[800px] items-center justify-between">
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#27272A] text-[#A1A1AA] transition-colors hover:bg-[#3F3F46] hover:text-white"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+                        
+                        <div className="text-[14px] font-medium text-[#A1A1AA]">
+                            {currentIndex + 1}/{questions.length}
                         </div>
 
-                        {/* Answers Review */}
-                        <div className="space-y-6">
-                            <h3 className="text-xs font-black text-gray-500 uppercase tracking-[0.3em] px-4 flex items-center gap-4">
-                                <div className="w-8 h-0.5 bg-white/10 rounded-full" />
-                                Cryptographic Review
-                            </h3>
-                            {questions.map((q) => {
-                                const userAnswer = answers[q.id]?.trim().toLowerCase();
-                                const isCorrect = userAnswer === q.blank.toLowerCase();
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#27272A] text-[#A1A1AA] transition-colors hover:bg-[#3F3F46] hover:text-white"
+                        >
+                            <ChevronRight size={18} />
+                        </button>
+                    </div>
+                </main>
+            </div>
 
-                                return (
-                                    <ActivityCard key={q.id} className={`liquid-glass border-white/10 squircle-xl p-8 shadow-xl ${isCorrect ? "bg-green-500/5 border-green-500/20" : "bg-red-500/5 border-red-500/20"}`}>
-                                        <div className="flex items-start gap-6">
-                                            <div className="mt-1">
-                                                {isCorrect ? (
-                                                    <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center border border-green-500/30">
-                                                        <CheckCircle className="w-5 h-5 text-green-400" />
-                                                    </div>
-                                                ) : (
-                                                    <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30">
-                                                        <XCircle className="w-5 h-5 text-red-400" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex-1">
-                                                <div className="flex items-baseline gap-3 text-xl font-bold tracking-tight flex-wrap mb-4">
-                                                    <span className="text-white/60">{q.textBefore}</span>
-                                                    <span className={`font-black border-b-2 px-2 pb-1 ${isCorrect ? "text-green-400 border-green-500/50" : "text-red-400 border-red-500/50"}`}>
-                                                        {answers[q.id] || 'NULL'}
-                                                    </span>
-                                                    <span className="text-white/60">{q.textAfter}</span>
-                                                </div>
-                                                {!isCorrect && (
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="text-[10px] font-black uppercase tracking-widest text-green-400 bg-green-400/10 px-3 py-1 squircle-lg border border-green-400/20">
-                                                            Solution: {q.blank}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </ActivityCard>
-                                );
-                            })}
+            {/* Right Sidebar */}
+            {!isSidebarHidden && (
+                <div className="flex w-[350px] shrink-0 flex-col bg-[#0c0c0c] border-l border-[#262626]">
+                    <div className="flex h-14 items-center px-4 border-b border-[#262626]">
+                        <div className="flex w-full gap-1 p-1 bg-[#1a1a1a] rounded-xl text-[13px] font-medium">
+                            <button className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-[#2a2a2a] py-1.5 text-white">
+                                <MessageSquare size={14} /> Chat
+                            </button>
+                            <button className="flex-1 flex items-center justify-center gap-2 rounded-lg py-1.5 text-[#7c7c7c] hover:text-white transition-colors">
+                                <Layout size={14} /> Content
+                            </button>
+                            <button className="flex-1 flex items-center justify-center gap-2 rounded-lg py-1.5 text-[#7c7c7c] hover:text-white transition-colors">
+                                <Edit2 size={14} /> Notes
+                            </button>
                         </div>
                     </div>
-                )}
-            </div>
+                    <div className="flex-1 flex items-center justify-center text-center px-6">
+                        <div className="flex flex-col items-center opacity-60">
+                            <div className="h-12 w-12 rounded-xl bg-[#1f1f1f] flex items-center justify-center mb-4 border border-[#2a2a2a]">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /></svg>
+                            </div>
+                            <p className="text-[14px] text-[#a1a1aa]">Here to help you learn</p>
+                        </div>
+                    </div>
+                    <div className="p-4 border-t border-[#262626]">
+                        <div className="relative">
+                            <input 
+                                type="text" 
+                                placeholder="Ask me anything about the material..." 
+                                className="w-full rounded-2xl border border-[#262626] bg-[#141414] py-3 pl-4 pr-12 text-sm text-white placeholder:text-[#52525b] outline-none hover:border-[#3f3f46] focus:border-[#0066FF] transition-colors"
+                            />
+                            <div className="absolute left-4 bottom-[-24px] flex items-center gap-1.5 text-[11px] text-[#52525b]">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" /><path d="M16 21v-5h5" /></svg> 
+                                Reset chat
+                            </div>
+                            <button className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-xl bg-[#2a2a2a] text-[#a1a1aa] hover:bg-[#3f3f46] hover:text-white transition-colors">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
