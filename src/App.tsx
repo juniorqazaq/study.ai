@@ -30,8 +30,8 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   );
 }
 
-import { StudySidebar } from './components/study/StudySidebar';
 import { useSidebar } from './context/SidebarContext';
+import { StudySidebar } from './components/study/StudySidebar';
 
 function AppContent() {
   const { isSidebarHidden } = useSidebar();
@@ -72,14 +72,11 @@ function AppContent() {
         <Route path="/notes-mode" element={<PageTransition><NotesPage /></PageTransition>} />
 
         {/* Book pages */}
-        <Route path="/book/:bookId" element={<Navigate to="quiz" replace />} />
-
-
+        <Route path="/book/:bookId" element={<Navigate to="notes-mode" replace />} />
         <Route path="/book/:bookId/quiz" element={<QuizPage />} />
         <Route path="/book/:bookId/mindmap" element={<MindMapPage />} />
         <Route path="/book/:bookId/flashcards" element={<FlashcardPage />} />
         <Route path="/book/:bookId/open-questions" element={<WrittenTestPage />} />
-
         <Route path="/book/:bookId/notes-mode" element={<NotesPage />} />
         <Route path="/book/:bookId/fill-blanks" element={<FillBlanksPage />} />
         <Route path="/book/:bookId/statistics" element={<StatisticsPage />} />

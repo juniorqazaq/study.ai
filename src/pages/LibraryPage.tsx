@@ -69,7 +69,7 @@ export function LibraryPage() {
   }, [books, filterType, searchQuery, sortBy]);
 
   return (
-    <div className="app-shell px-5 py-6 lg:px-8">
+    <div className="min-h-screen bg-black px-5 py-6 text-[#f4f4f5] lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
           <p className="app-muted-label mb-3">Library</p>
