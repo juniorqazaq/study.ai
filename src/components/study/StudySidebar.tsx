@@ -48,9 +48,8 @@ export function StudySidebar() {
       <div className={`${isCollapsed ? 'p-4' : 'px-6 py-6'}`}>
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
           {!isCollapsed && (
-            <div className="flex items-center gap-2 text-[20px] font-bold tracking-tight">
-              <span className="text-[#0066FF]">Study</span>
-              <span className="text-white">.ai</span>
+            <div className="flex items-center text-[20px] font-bold tracking-tight">
+              <span className="text-[#0066FF]">Study</span><span className="text-white">.ai</span>
             </div>
           )}
           {isCollapsed && <span className="text-xl font-bold text-[#0066FF]">S</span>}

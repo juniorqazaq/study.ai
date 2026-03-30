@@ -7,7 +7,7 @@ export function FeatureDeepDive() {
             subtitle: "Turn lectures into learning.",
             desc: "Don't waste hours rewriting notes. Our AI analyzes your uploads (PDFs, Videos, Docs) and automatically generates flashcards with key concepts and definitions.",
             points: ["Extracts from any text or video", "Smart concept grouping", "Easy to edit and customize"],
-            image: "bg-blue-50" // Placeholder class for image area
+            image: "bg-blue-50"
         },
         {
             title: "Smart Quizzes",

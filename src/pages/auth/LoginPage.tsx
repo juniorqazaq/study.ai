@@ -108,7 +108,7 @@ export function LoginPage() {
                     <div className="w-8 h-8 rounded-lg bg-[#0066FF]/20 border border-[#0066FF]/20 flex items-center justify-center font-bold text-[#0066FF]">
                         S
                     </div>
-                    <span className="text-xl font-bold tracking-tight"><span className="text-[#0066FF]">Study</span><span className="text-[#EAF4FF]">.ai</span></span>
+                    <div className="text-3xl font-black tracking-tight"><span className="text-[#0066FF]">Study</span><span className="text-white italic lowercase">.ai</span></div>
                 </div>
 
                 <div className="relative z-10 w-full max-w-[470px] rounded-[2rem] border border-white/8 bg-[#111827]/88 p-8 shadow-[0_32px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl">

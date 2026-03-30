@@ -1,6 +1,5 @@
 export const chatWithAI = async (message: string, _context: string): Promise<string> => {
-    // In a real app, this would call the Google Gemini API
-    // For this demo, we'll simulate a response
+
 
     return new Promise((resolve) => {
         setTimeout(() => {

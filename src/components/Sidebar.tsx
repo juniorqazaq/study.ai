@@ -48,8 +48,7 @@ export function Sidebar() {
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
           {!isCollapsed && (
             <span className="text-[17px] font-semibold tracking-tight">
-              <span className="text-[#0066FF]">Study</span>
-              <span className="text-[#f4f4f5]">.ai</span>
+              <span className="text-[#0066FF]">Study</span><span className="text-[#f4f4f5]">.ai</span>
             </span>
           )}
           {isCollapsed && <span className="text-lg font-semibold text-[#0066FF]">S</span>}
