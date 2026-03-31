@@ -30,9 +30,7 @@ export function Footer() {
                   <Sparkles size={18} className="text-white" />
                 </div>
                 <div>
-                  <div className="text-3xl font-black tracking-tight">
-                    <span className="text-[#0066FF]">Study</span><span className="text-white italic lowercase">.ai</span>
-                  </div>
+                  <div className="text-3xl font-black tracking-tight"><span className="text-[#0066FF]">Study</span><span className="text-white italic lowercase">.ai</span></div>
                   <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.26em] text-white/50">
                     Adaptive Learning Platform
                   </div>
