@@ -36,6 +36,10 @@ export const storageService = {
         return stored ? JSON.parse(stored) : null;
     },
 
+    clearUser: () => {
+        localStorage.removeItem(STORAGE_KEYS.USER);
+    },
+
     getStats: () => {
         const files = storageService.getFiles();
         storageService.getUser();
