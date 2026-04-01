@@ -16,10 +16,11 @@ dist
 .vscode/*
 !.vscode/extensions.json
 
-# Environment variables
+# Environment variables (never commit real secrets)
 .env
 .env.local
 .env.*.local
+backend/.env
 
 # OS files
 .DS_Store
@@ -35,6 +36,12 @@ yarn-error.log*
 # Testing
 coverage
 .nyc_output
+
+# Backend uploads (local file storage)
+backend/uploads/
+
+# Backend TypeScript build output
+backend/dist/
 
 # Temporary files
 *.tmp
