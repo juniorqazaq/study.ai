@@ -21,7 +21,7 @@ export const httpClient = {
     },
 
     safeRequest: async <T>(
-        method: 'get' | 'post' | 'put' | 'delete',
+        method: 'get' | 'post' | 'put' | 'patch' | 'delete',
         url: string,
         data?: any,
         headers?: any
@@ -51,6 +51,15 @@ export const httpClient = {
         config?: AxiosRequestConfig
     ): Promise<T> => {
         const response = await httpClient.safeRequest<T>('put', url, data, config);
+        return response?.data as T;
+    },
+
+    patch: async <T>(
+        url: string,
+        data?: any,
+        config?: AxiosRequestConfig
+    ): Promise<T> => {
+        const response = await httpClient.safeRequest<T>('patch', url, data, config);
         return response?.data as T;
     },
 
