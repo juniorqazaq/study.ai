@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ArrowUpDown, Clock, Download, FileText, Filter, Grid, List, Search } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ArrowUpDown, Clock, Download, FileText, Filter, Grid, List, Search, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { storageService } from '@/shared/services/storage.service';
+import { deleteBook, getBooks } from '@/shared/api/endpoints/books.api';
+import type { BookResponse } from '@/shared/api/endpoints/books.api';
 
 interface Book {
   id: string;
@@ -11,6 +12,7 @@ interface Book {
   type: 'pdf' | 'epub' | 'txt' | 'docx' | 'pptx' | 'url' | 'github' | 'image';
   size: string;
   uploadedAt: string;
+  createdAt: string;
   progress: number;
   tone: 'slate' | 'plum' | 'olive' | 'warm' | 'graphite';
 }
@@ -23,39 +25,93 @@ const toneClasses = {
   graphite: 'from-[#1c1c1c] to-[#151515]',
 };
 
+function mapApiToBook(book: BookResponse, index: number): Book {
+  const tones: Book['tone'][] = ['slate', 'plum', 'olive', 'warm', 'graphite'];
+  const raw = book.type.toLowerCase();
+  const uiType: Book['type'] = ['png', 'jpg', 'jpeg'].includes(raw)
+    ? 'image'
+    : raw === 'pdf' ||
+        raw === 'epub' ||
+        raw === 'txt' ||
+        raw === 'docx' ||
+        raw === 'pptx' ||
+        raw === 'url' ||
+        raw === 'github'
+      ? (raw as Book['type'])
+      : 'txt';
+
+  const first = book.files[0];
+  const size =
+    first?.sizeBytes != null && first.sizeBytes !== ''
+      ? `${(Number(first.sizeBytes) / (1024 * 1024)).toFixed(1)} MB`
+      : 'Unknown';
+
+  return {
+    id: book.id,
+    title: book.title,
+    author: book.author ?? 'Unknown',
+    type: uiType,
+    size,
+    uploadedAt: new Date(book.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' }),
+    createdAt: book.createdAt,
+    progress: book.progress,
+    tone: tones[index % tones.length],
+  };
+}
+
 export function LibraryPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [sortBy, setSortBy] = useState<'date' | 'name' | 'progress'>('date');
   const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const loadBooks = useCallback(async () => {
+    setLoadError(null);
+    setLoading(true);
+    try {
+      const apiBooks = await getBooks();
+      setBooks(apiBooks.map((book, index) => mapApiToBook(book, index)));
+    } catch (e) {
+      console.error(e);
+      setLoadError('Could not load your library. Please try again.');
+      setBooks([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const files = storageService.getFiles();
+    void loadBooks();
+  }, [loadBooks]);
 
-    const tones: Book['tone'][] = ['slate', 'plum', 'olive', 'warm', 'graphite'];
-
-    setBooks(
-      files.map((file, index) => ({
-        id: file.id,
-        title: file.name.replace(/\.[^/.]+$/, ''),
-        author: 'Source: unknown',
-        type: file.type,
-        size: file.size,
-        uploadedAt: file.uploadedAt,
-        progress: file.status === 'success' ? 24 + (index % 5) * 14 : 0,
-        tone: tones[index % tones.length],
-      })),
-    );
-  }, []);
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!window.confirm('Remove this book from your library?')) return;
+    setDeletingId(id);
+    try {
+      await deleteBook(id);
+      await loadBooks();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const filteredBooks = useMemo(() => {
     const next = books.filter((book) => {
       const matchesSearch =
         book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         book.author.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesFilter = filterType === 'all' || book.type === filterType;
-
+      const matchesFilter =
+        filterType === 'all' ||
+        book.type === filterType ||
+        (filterType === 'image' && ['png', 'jpg', 'jpeg', 'image'].includes(book.type));
       return matchesSearch && matchesFilter;
     });
 
@@ -63,6 +119,8 @@ export function LibraryPage() {
       next.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortBy === 'progress') {
       next.sort((a, b) => b.progress - a.progress);
+    } else {
+      next.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
 
     return next;
@@ -78,6 +136,12 @@ export function LibraryPage() {
             Personal knowledge archive with a calmer, darker reading surface and simpler navigation.
           </p>
         </div>
+
+        {loadError && (
+          <div className="mb-6 rounded-[18px] border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            {loadError}
+          </div>
+        )}
 
         <div className="app-panel mb-8 p-3">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
@@ -103,11 +167,12 @@ export function LibraryPage() {
                   <option value="all">All media</option>
                   <option value="pdf">PDF</option>
                   <option value="epub">EPUB</option>
+                  <option value="txt">TXT</option>
                   <option value="docx">DOCX</option>
                   <option value="pptx">PPTX</option>
+                  <option value="image">Images</option>
                   <option value="url">URL</option>
                   <option value="github">GitHub</option>
-                  <option value="image">Image</option>
                 </select>
               </div>
 
@@ -126,12 +191,14 @@ export function LibraryPage() {
 
               <div className="flex rounded-[18px] border border-[#2a2a2a] bg-[#1a1a1a] p-1">
                 <button
+                  type="button"
                   onClick={() => setViewMode('grid')}
                   className={`flex h-11 w-11 items-center justify-center rounded-[14px] transition-colors ${viewMode === 'grid' ? 'bg-[#232323] text-white' : 'text-[#7c7c7c] hover:text-white'}`}
                 >
                   <Grid className="h-4 w-4" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => setViewMode('list')}
                   className={`flex h-11 w-11 items-center justify-center rounded-[14px] transition-colors ${viewMode === 'list' ? 'bg-[#232323] text-white' : 'text-[#7c7c7c] hover:text-white'}`}
                 >
@@ -142,7 +209,9 @@ export function LibraryPage() {
           </div>
         </div>
 
-        {filteredBooks.length === 0 ? (
+        {loading ? (
+          <div className="app-panel p-16 text-center text-[#8d8d8d]">Loading your library…</div>
+        ) : filteredBooks.length === 0 ? (
           <div className="app-panel p-16 text-center">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[24px] border border-[#2a2a2a] bg-[#1a1a1a]">
               <FileText className="h-8 w-8 text-[#6b6b6b]" />
@@ -157,76 +226,98 @@ export function LibraryPage() {
         ) : viewMode === 'grid' ? (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {filteredBooks.map((book) => (
-              <Link key={book.id} to={`/book/${book.id}`} className="group">
-                <div className="app-panel overflow-hidden transition-colors hover:bg-[#1a1a1a]">
-                  <div className={`flex h-52 items-center justify-center border-b border-[#262626] bg-gradient-to-br ${toneClasses[book.tone]}`}>
-                    <FileText className="h-16 w-16 text-white/20" />
+              <div key={book.id} className="relative">
+                <button
+                  type="button"
+                  disabled={deletingId === book.id}
+                  onClick={(e) => void handleDelete(book.id, e)}
+                  className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-xl border border-[#2a2a2a] bg-[#141414]/90 text-[#a1a1aa] transition-colors hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-50"
+                  aria-label="Delete book"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+                <Link to={`/book/${book.id}`} className="group block">
+                  <div className="app-panel overflow-hidden transition-colors hover:bg-[#1a1a1a]">
+                    <div className={`flex h-52 items-center justify-center border-b border-[#262626] bg-gradient-to-br ${toneClasses[book.tone]}`}>
+                      <FileText className="h-16 w-16 text-white/20" />
+                    </div>
+
+                    <div className="p-6">
+                      <div className="mb-5 flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <h3 className="truncate text-2xl font-semibold tracking-tight text-white">{book.title}</h3>
+                          <p className="mt-2 text-xs uppercase tracking-[0.22em] text-[#6b6b6b]">{book.author}</p>
+                        </div>
+                        <span className="rounded-full border border-[#2a2a2a] bg-[#1b1b1b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b3b3b3]">
+                          {book.type}
+                        </span>
+                      </div>
+
+                      <div className="mb-5 rounded-[18px] border border-[#262626] bg-[#141414] px-4 py-4">
+                        <div className="mb-3 flex items-center justify-between text-[11px] uppercase tracking-[0.22em] text-[#6b6b6b]">
+                          <span>Mastery level</span>
+                          <span className="text-[#d7d7d7]">{book.progress}%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-[#212121]">
+                          <div className="h-full rounded-full bg-[#0066FF]" style={{ width: `${book.progress}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs text-[#8d8d8d]">
+                        <span className="flex items-center gap-2">
+                          <Download className="h-3.5 w-3.5" />
+                          {book.size}
+                        </span>
+                        <span className="flex items-center gap-2">
+                          <Clock className="h-3.5 w-3.5" />
+                          {book.uploadedAt}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-
-                  <div className="p-6">
-                    <div className="mb-5 flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <h3 className="truncate text-2xl font-semibold tracking-tight text-white">{book.title}</h3>
-                        <p className="mt-2 text-xs uppercase tracking-[0.22em] text-[#6b6b6b]">{book.author}</p>
-                      </div>
-                      <span className="rounded-full border border-[#2a2a2a] bg-[#1b1b1b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b3b3b3]">
-                        {book.type}
-                      </span>
-                    </div>
-
-                    <div className="mb-5 rounded-[18px] border border-[#262626] bg-[#141414] px-4 py-4">
-                      <div className="mb-3 flex items-center justify-between text-[11px] uppercase tracking-[0.22em] text-[#6b6b6b]">
-                        <span>Mastery level</span>
-                        <span className="text-[#d7d7d7]">{book.progress}%</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-[#212121]">
-                        <div className="h-full rounded-full bg-[#0066FF]" style={{ width: `${book.progress}%` }} />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between text-xs text-[#8d8d8d]">
-                      <span className="flex items-center gap-2">
-                        <Download className="h-3.5 w-3.5" />
-                        {book.size}
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <Clock className="h-3.5 w-3.5" />
-                        {book.uploadedAt}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         ) : (
           <div className="space-y-4">
             {filteredBooks.map((book) => (
-              <Link key={book.id} to={`/book/${book.id}`} className="group block">
-                <div className="app-panel p-5 transition-colors hover:bg-[#1a1a1a]">
-                  <div className="flex flex-col gap-5 xl:flex-row xl:items-center">
-                    <div className={`flex h-20 w-16 items-center justify-center rounded-[18px] bg-gradient-to-br ${toneClasses[book.tone]}`}>
-                      <FileText className="h-8 w-8 text-white/20" />
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <h3 className="truncate text-2xl font-semibold tracking-tight text-white">{book.title}</h3>
-                        <span className="rounded-full border border-[#2a2a2a] bg-[#1b1b1b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b3b3b3]">
-                          {book.type}
-                        </span>
+              <div key={book.id} className="relative">
+                <button
+                  type="button"
+                  disabled={deletingId === book.id}
+                  onClick={(e) => void handleDelete(book.id, e)}
+                  className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-xl border border-[#2a2a2a] bg-[#141414]/90 text-[#a1a1aa] transition-colors hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-50 xl:right-8"
+                  aria-label="Delete book"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+                <Link to={`/book/${book.id}`} className="group block">
+                  <div className="app-panel p-5 transition-colors hover:bg-[#1a1a1a]">
+                    <div className="flex flex-col gap-5 xl:flex-row xl:items-center">
+                      <div className={`flex h-20 w-16 items-center justify-center rounded-[18px] bg-gradient-to-br ${toneClasses[book.tone]}`}>
+                        <FileText className="h-8 w-8 text-white/20" />
                       </div>
-                      <p className="mt-2 text-xs uppercase tracking-[0.22em] text-[#6b6b6b]">{book.author}</p>
-                    </div>
 
-                    <div className="grid gap-3 sm:grid-cols-3 xl:w-[330px]">
-                      <MetaCell label="Mastery" value={`${book.progress}%`} />
-                      <MetaCell label="Size" value={book.size} />
-                      <MetaCell label="Added" value={book.uploadedAt} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <h3 className="truncate text-2xl font-semibold tracking-tight text-white">{book.title}</h3>
+                          <span className="rounded-full border border-[#2a2a2a] bg-[#1b1b1b] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b3b3b3]">
+                            {book.type}
+                          </span>
+                        </div>
+                        <p className="mt-2 text-xs uppercase tracking-[0.22em] text-[#6b6b6b]">{book.author}</p>
+                      </div>
+
+                      <div className="grid gap-3 sm:grid-cols-3 xl:w-[330px]">
+                        <MetaCell label="Mastery" value={`${book.progress}%`} />
+                        <MetaCell label="Size" value={book.size} />
+                        <MetaCell label="Added" value={book.uploadedAt} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         )}
