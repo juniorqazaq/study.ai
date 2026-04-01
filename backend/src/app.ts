@@ -6,10 +6,6 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { env } from './config/env.js';
-import { errorMiddleware } from './platform/error.middleware.js';
-import authRoutes from './auth/auth.routes.js';
-import booksRouter from './books/books.routes.js';
-import filesRouter from './files/files.routes.js';
 
 const uploadsDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadsDir)) {
