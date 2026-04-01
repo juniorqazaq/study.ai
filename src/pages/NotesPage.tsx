@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Bold,
   ChevronLeft,
@@ -17,15 +18,16 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 
 import PageTransition from '../components/PageTransition';
-import { chatWithAI } from '../services/geminiService';
 import { useSidebar } from '../context/SidebarContext';
-import { lessonsData } from '../shared/data/lessonData';
+import { chatWithBook, getLesson, type LessonContent } from '@/shared/api/endpoints/lessons.api';
 
 const NotesPage: React.FC = () => {
   const navigate = useNavigate();
   const { bookId } = useParams();
   const { setIsSidebarHidden } = useSidebar();
-  const lesson = bookId ? lessonsData[bookId] : null;
+  const [lesson, setLesson] = useState<LessonContent | null>(null);
+  const [lessonLoading, setLessonLoading] = useState(false);
+  const [lessonError, setLessonError] = useState<string | null>(null);
 
   const [isChatOpen, setIsChatOpen] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -80,20 +82,62 @@ const NotesPage: React.FC = () => {
     return () => setIsSidebarHidden(false);
   }, [setIsSidebarHidden]);
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+  useEffect(() => {
+    if (!bookId) {
+      setLesson(null);
+      setLessonLoading(false);
+      setLessonError(null);
+      return;
+    }
+    let cancelled = false;
+    setLessonLoading(true);
+    setLessonError(null);
+    void (async () => {
+      try {
+        const l = await getLesson(bookId);
+        if (!cancelled) {
+          setLesson(l);
+        }
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) {
+          setLessonError('Could not load notes.');
+          setLesson(null);
+        }
+      } finally {
+        if (!cancelled) setLessonLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [bookId]);
 
-    const userMsg = inputValue;
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || !bookId || !lesson) return;
+
+    const userMsg = inputValue.trim();
+    const prior = messages;
     setMessages((previous) => [...previous, { role: 'user', text: userMsg }]);
     setInputValue('');
     setIsLoading(true);
 
-    const aiResponse = await chatWithAI(
-      userMsg,
-      'The user is studying Psychology notes about Tabula Rasa and Unlearned Behaviors.',
-    );
-    setMessages((previous) => [...previous, { role: 'ai', text: aiResponse }]);
-    setIsLoading(false);
+    try {
+      const { reply } = await chatWithBook(
+        bookId,
+        userMsg,
+        prior.map((m) => ({ role: m.role, text: m.text })),
+      );
+      setMessages((previous) => [...previous, { role: 'ai', text: reply }]);
+    } catch (e) {
+      console.error(e);
+      setMessages((previous) => [
+        ...previous,
+        { role: 'ai', text: 'Something went wrong. Please try again.' },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toolbarButtonClass =
@@ -110,11 +154,13 @@ const NotesPage: React.FC = () => {
             >
               <ChevronLeft size={18} />
             </button>
-            <h1 className="text-lg font-semibold text-white">{lesson?.title || 'Psychology of Learning'}</h1>
+            <h1 className="text-lg font-semibold text-white">{lesson?.title || 'Notes'}</h1>
           </div>
 
           <div className="flex items-center gap-6 text-sm text-[#7c7c7c]">
-            <span className="hidden md:block">{lesson ? 'Last updated 114 days ago' : 'Unsaved draft'}</span>
+            <span className="hidden md:block">
+              {lessonLoading ? 'Loading…' : lesson?.updatedAt ? `Updated ${new Date(lesson.updatedAt).toLocaleString()}` : bookId ? 'No materials yet' : 'Library'}
+            </span>
             <button
               onClick={() => setIsChatOpen((previous) => !previous)}
               className="font-medium text-[#d4d4d8] transition-colors hover:text-white"
@@ -161,49 +207,33 @@ const NotesPage: React.FC = () => {
             </div>
           </div>
 
-          <div
-            className="flex-1 overflow-y-auto px-6 py-8 lg:px-8"
-            contentEditable={!lesson}
-            suppressContentEditableWarning={!lesson}
-          >
+          <div className="flex-1 overflow-y-auto px-6 py-8 lg:px-8" contentEditable={false}>
             <div className="mx-auto max-w-4xl">
-              {lesson ? (
+              {lessonError ? (
+                <p className="text-sm text-[#fca5a5]">{lessonError}</p>
+              ) : lessonLoading ? (
+                <p className="text-[#a1a1aa]">Loading notes…</p>
+              ) : !bookId ? (
+                <div className="rounded-2xl border border-[#262626] bg-[#141414] p-8 text-center">
+                  <p className="text-[#c2c2c2]">Open a book from your library to view notes.</p>
+                  <Link to="/library" className="app-primary-button mt-6 inline-block px-5 py-2 text-sm font-medium">
+                    Go to library
+                  </Link>
+                </div>
+              ) : !lesson ? (
+                <div className="rounded-2xl border border-[#262626] bg-[#141414] p-8 text-center">
+                  <p className="text-[#c2c2c2]">Generate study materials first to see AI-built notes for this book.</p>
+                  <Link
+                    to={`/book/${bookId}`}
+                    className="app-primary-button mt-6 inline-block px-5 py-2 text-sm font-medium"
+                  >
+                    Back to book
+                  </Link>
+                </div>
+              ) : (
                 <div className="[&_h1]:mb-8 [&_h1]:text-4xl [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:text-white [&_h2]:mb-5 [&_h2]:mt-12 [&_h2]:text-3xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-white [&_h3]:mb-4 [&_h3]:mt-10 [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:text-white [&_p]:mb-5 [&_p]:text-[17px] [&_p]:leading-9 [&_p]:text-[#c2c2c2] [&_strong]:text-white [&_ul]:mb-6 [&_ul]:space-y-3 [&_ul]:pl-6 [&_li]:text-[17px] [&_li]:leading-8 [&_li]:text-[#c2c2c2]">
                   <div dangerouslySetInnerHTML={{ __html: lesson.notes }} />
                 </div>
-              ) : (
-                <>
-                  <h1 className="mb-6 text-5xl font-semibold leading-tight tracking-tight text-white">
-                    🧠 The Psychology of Learning:<br />Part 1
-                  </h1>
-                  <p className="mb-10 text-[17px] leading-9 text-[#c2c2c2]">
-                    This is the first part of a two-part series exploring the psychology of learning. It focuses on
-                    foundational concepts, including unlearned behaviors and the principles of classical conditioning.
-                    The overarching ideas discussed are that all organisms are born with unlearned behaviors, learning
-                    is a permanent change in behavior resulting from experience, and various psychological models explain
-                    how learning occurs.
-                  </p>
-
-                  <h2 className="mb-5 mt-12 text-3xl font-semibold tracking-tight text-white">📜 Tabula Rasa Theory: The Blank Slate</h2>
-                  <p className="mb-10 text-[17px] leading-9 text-[#c2c2c2]">
-                    The term &quot;Tabula Rasa&quot; means &quot;blank slate.&quot; According to this theory, the mind is entirely
-                    blank at birth, and external factors like education, environment, and experiences shape a child&apos;s
-                    learning and development, leaving lasting effects on personality and thinking.
-                  </p>
-
-                  <h2 className="mb-5 mt-12 text-3xl font-semibold tracking-tight text-white">🧬 Unlearned Behaviors: Reflexes &amp; Instincts</h2>
-                  <p className="mb-8 text-[17px] leading-9 text-[#c2c2c2]">
-                    Despite the Tabula Rasa theory, humans are born with unlearned behaviors known as reflexes and
-                    instincts. These are innate, genetically hardwired behaviors passed down through evolution to aid
-                    an organism&apos;s adaptation to its environment.
-                  </p>
-
-                  <h3 className="mb-4 mt-10 text-2xl font-semibold text-white">⚡️ Reflexes</h3>
-                  <p className="text-[17px] leading-9 text-[#c2c2c2]">
-                    Reflexes are motor and neural reactions to stimuli, involving primitive centers of the central
-                    nervous system. They are involuntary and often used as basic examples of unlearned behavior.
-                  </p>
-                </>
               )}
             </div>
           </div>
@@ -279,12 +309,19 @@ const NotesPage: React.FC = () => {
                   value={inputValue}
                   onChange={(event) => setInputValue(event.target.value)}
                   onKeyDown={(event) => event.key === 'Enter' && handleSendMessage()}
-                  placeholder="Ask me anything about the material..."
+                  placeholder={
+                    !bookId
+                      ? 'Open a book to use chat…'
+                      : !lesson
+                        ? 'Generate study materials to enable chat…'
+                        : 'Ask me anything about the material...'
+                  }
                   className="app-input w-full pr-12"
+                  disabled={!bookId || !lesson}
                 />
                 <button
                   onClick={handleSendMessage}
-                  disabled={isLoading || !inputValue.trim()}
+                  disabled={isLoading || !inputValue.trim() || !bookId || !lesson}
                   className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#2a2a2a] bg-[#1d1d1d] text-[#b9b9b9] transition-colors hover:text-white disabled:opacity-40"
                 >
                   <Send size={16} />

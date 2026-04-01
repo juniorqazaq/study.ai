@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import {
   ReactFlow,
   Controls,
@@ -18,8 +18,9 @@ import { ChevronLeft, ChevronRight, Download, Edit2, Layout, MessageSquare, Shar
 import MindMapNode from './mindmap/MindMapNode';
 import { FloatingToolbar } from './mindmap/FloatingToolbar';
 import { getLayoutedElements } from './mindmap/MindMapLayouts';
-import { lessonsData } from '../shared/data/lessonData';
 import { useSidebar } from '../context/SidebarContext';
+import { getLesson, type LessonContent } from '@/shared/api/endpoints/lessons.api';
+import { mindmapDataToFlow } from '@/shared/lib/mindmapToFlow';
 
 const initialNodes: Node[] = [
   { id: 'root', type: 'mindMap', data: { label: 'Psychology', isRoot: true, color: '#3b82f6' }, position: { x: 0, y: 0 } },
@@ -47,12 +48,11 @@ const calculusEdges: Edge[] = [
   { id: 'e1-3', source: 'root', target: '3', animated: true, style: { stroke: '#f59e0b' } },
 ];
 
-const Flow = () => {
-  const { bookId } = useParams();
-  const isCalculus = bookId === 'calculus-mastery';
+type FlowProps = { initialNodes: Node[]; initialEdges: Edge[] };
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(isCalculus ? calculusNodes : initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(isCalculus ? calculusEdges : initialEdges);
+const Flow = ({ initialNodes, initialEdges }: FlowProps) => {
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const nodeTypes = useMemo(() => ({ mindMap: MindMapNode }), []);
@@ -230,7 +230,41 @@ export default function MindMapPage() {
   const { bookId } = useParams();
   const navigate = useNavigate();
   const { isSidebarHidden, setIsSidebarHidden } = useSidebar();
-  const lesson = bookId ? lessonsData[bookId] : null;
+  const [lesson, setLesson] = useState<LessonContent | null>(null);
+  const [lessonLoading, setLessonLoading] = useState(false);
+
+  useEffect(() => {
+    if (!bookId) {
+      setLesson(null);
+      setLessonLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setLessonLoading(true);
+    void (async () => {
+      try {
+        const l = await getLesson(bookId);
+        if (!cancelled) setLesson(l);
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) setLesson(null);
+      } finally {
+        if (!cancelled) setLessonLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [bookId]);
+
+  const flow = useMemo(() => {
+    const fromApi = lesson?.mindmap != null ? mindmapDataToFlow(lesson.mindmap) : null;
+    if (fromApi) return fromApi;
+    if (bookId === 'calculus-mastery') return { nodes: calculusNodes, edges: calculusEdges };
+    return { nodes: initialNodes, edges: initialEdges };
+  }, [lesson, bookId]);
+
+  const flowKey = `${bookId ?? 'nobook'}-${lesson?.updatedAt ?? 'default'}`;
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#0c0c0c]">
@@ -242,7 +276,7 @@ export default function MindMapPage() {
                         <ChevronLeft size={20} />
                     </button>
                     <h1 className="text-[15px] font-semibold tracking-tight text-white">
-                        {lesson?.title || "Psychology of Learning"}
+                        {lesson?.title || 'Mind map'}
                     </h1>
                 </div>
                 <div className="flex items-center gap-5 text-[13px] font-medium text-[#a1a1aa]">
@@ -263,9 +297,25 @@ export default function MindMapPage() {
             </header>
 
             {/* Main Canvas */}
-            <div className="flex-1 w-full relative">
-                <ReactFlowProvider>
-                    <Flow />
+            <div className="relative flex-1 w-full">
+                {bookId && !lessonLoading && !lesson ? (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-[#111111]/95 px-6 text-center">
+                    <p className="max-w-md text-sm text-[#a1a1aa]">Please generate study materials first.</p>
+                    <Link
+                      to={`/book/${bookId}`}
+                      className="rounded-xl border border-[#262626] bg-[#1a1a1a] px-4 py-2 text-sm font-medium text-white hover:bg-[#2a2a2a]"
+                    >
+                      Back to book
+                    </Link>
+                  </div>
+                ) : null}
+                {lessonLoading && bookId ? (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#111111]/90 text-sm text-[#a1a1aa]">
+                    Loading mind map…
+                  </div>
+                ) : null}
+                <ReactFlowProvider key={flowKey}>
+                    <Flow initialNodes={flow.nodes} initialEdges={flow.edges} />
                 </ReactFlowProvider>
             </div>
         </div>

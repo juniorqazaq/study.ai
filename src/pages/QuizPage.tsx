@@ -1,52 +1,73 @@
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Edit2, Filter, Layout, MessageSquare, Check, X } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, Edit2, Filter, Layout, Loader2, MessageSquare, Check, X } from 'lucide-react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSidebar } from '../context/SidebarContext';
-import { lessonsData } from '../shared/data/lessonData';
+import { getLesson, type LessonContent } from '@/shared/api/endpoints/lessons.api';
 import { QuizQuestion } from '../types';
-
-const mockQuestions: QuizQuestion[] = [
-  {
-    id: '1',
-    question: "What is the primary definition of 'learning' within the context of psychology?",
-    options: [
-      { id: '1', text: "It is a temporary shift in behavior from a single event." },
-      { id: '2', text: "It is an innate behavior present from birth in all organisms." },
-      { id: '3', text: "It is a conscious effort to recall forgotten information." },
-      { id: '4', text: "It is a permanent change in behavior resulting from experience." }
-    ],
-    correctId: '4'
-  }
-];
 
 export default function QuizPage() {
     const { bookId } = useParams();
     const navigate = useNavigate();
     const { isSidebarHidden, setIsSidebarHidden } = useSidebar();
-    
-    const lesson = bookId ? lessonsData[bookId] : null;
-    const questions = lesson ? lesson.questions : mockQuestions;
+    const [lesson, setLesson] = useState<LessonContent | null>(null);
+    const [loading, setLoading] = useState(!!bookId);
+
+    useEffect(() => {
+        if (!bookId) {
+            setLesson(null);
+            setLoading(false);
+            return;
+        }
+        let cancelled = false;
+        setLoading(true);
+        void (async () => {
+            try {
+                const l = await getLesson(bookId);
+                if (!cancelled) setLesson(l);
+            } catch (e) {
+                console.error(e);
+                if (!cancelled) setLesson(null);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [bookId]);
+
+    const questions: QuizQuestion[] = lesson?.questions ?? [];
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const question = questions[currentIndex];
+    useEffect(() => {
+        setCurrentIndex(0);
+        setSelectedOption(null);
+        setIsSubmitted(false);
+    }, [bookId, lesson?.updatedAt]);
+
+    const showEmpty = bookId && !loading && !lesson;
+    const hasQuestions = questions.length > 0;
+    const question = hasQuestions ? questions[currentIndex] : null;
 
     const handleOptionSelect = (id: string) => {
-        if (isSubmitted) return;
+        if (isSubmitted || !question) return;
         setSelectedOption(id);
         // Auto-submit for a cleaner MSQ flow
         setIsSubmitted(true);
     };
 
     const handleNext = () => {
+        if (!hasQuestions) return;
         setIsSubmitted(false);
         setSelectedOption(null);
         setCurrentIndex((prev) => (prev + 1) % questions.length);
     };
 
     const handlePrev = () => {
+        if (!hasQuestions) return;
         setIsSubmitted(false);
         setSelectedOption(null);
         setCurrentIndex((prev) => (prev - 1 + questions.length) % questions.length);
@@ -62,7 +83,7 @@ export default function QuizPage() {
                             <ChevronLeft size={20} />
                         </button>
                         <h1 className="text-[15px] font-semibold tracking-tight text-white">
-                            {lesson?.title || "Psychology of Learning"}
+                            {lesson?.title || 'Quiz'}
                         </h1>
                     </div>
                     <div className="flex items-center gap-5 text-[13px] font-medium text-[#a1a1aa]">
@@ -84,6 +105,47 @@ export default function QuizPage() {
 
                 {/* Main Content */}
                 <main className="flex flex-1 flex-col items-center justify-center p-6 bg-[#111111]">
+                    {loading && bookId ? (
+                        <div className="flex flex-col items-center gap-3 text-[#a1a1aa]">
+                            <Loader2 className="h-8 w-8 animate-spin text-[#0066FF]" />
+                            <p className="text-sm">Loading quiz…</p>
+                        </div>
+                    ) : null}
+
+                    {showEmpty ? (
+                        <div className="flex max-w-md flex-col items-center gap-4 text-center">
+                            <p className="text-sm text-[#a1a1aa]">Please generate study materials first.</p>
+                            <button
+                                type="button"
+                                onClick={() => navigate(-1)}
+                                className="rounded-xl border border-[#262626] bg-[#1a1a1a] px-4 py-2 text-sm font-medium text-white hover:bg-[#2a2a2a]"
+                            >
+                                Go back
+                            </button>
+                            {bookId ? (
+                                <Link to={`/book/${bookId}`} className="text-sm text-[#0066FF] hover:underline">
+                                    Open book hub
+                                </Link>
+                            ) : null}
+                        </div>
+                    ) : null}
+
+                    {!bookId ? (
+                        <p className="text-center text-sm text-[#a1a1aa]">
+                            Open the quiz from a book in your{' '}
+                            <Link to="/library" className="text-[#0066FF] hover:underline">
+                                library
+                            </Link>
+                            .
+                        </p>
+                    ) : null}
+
+                    {bookId && !loading && lesson && !hasQuestions ? (
+                        <p className="text-sm text-[#a1a1aa]">No questions in this lesson yet. Try regenerating from the book page.</p>
+                    ) : null}
+
+                    {question ? (
+                    <>
                     {/* Tags */}
                     <div className="mb-16 flex flex-wrap gap-3">
                         <div className="flex items-center gap-2 rounded-full border border-[#3b1717] bg-[#2a1111] px-3 py-1 font-medium text-[#ff6b6b] text-xs">
@@ -168,6 +230,8 @@ export default function QuizPage() {
                             <ChevronRight size={18} />
                         </button>
                     </div>
+                    </>
+                    ) : null}
                 </main>
             </div>
 

@@ -14,6 +14,7 @@ import { EmailVerificationSentPage } from './pages/auth/EmailVerificationSentPag
 import { PricingPage } from './pages/PricingPage';
 import FlashcardPage from './pages/FlashcardPage';
 import NotesPage from './pages/NotesPage';
+import { BookPage } from './pages/BookPage';
 import { FillBlanksPage } from './pages/FillBlanksPage';
 import { WrittenTestPage } from './pages/WrittenTestPage';
 import { StatisticsPage } from './pages/StatisticsPage';
@@ -64,7 +65,6 @@ function AppContent() {
         <Route path="/dashboard" element={<Navigate to="/library" replace />} />
 
         <Route path="/progress" element={<PageTransition><ProgressPage /></PageTransition>} />
-        <Route path="/progress" element={<PageTransition><ProgressPage /></PageTransition>} />
         <Route path="/profile" element={<PageTransition><ProfilePage /></PageTransition>} />
         <Route path="/statistics" element={<PageTransition><StatisticsPage /></PageTransition>} />
 
@@ -72,7 +72,7 @@ function AppContent() {
         <Route path="/notes-mode" element={<PageTransition><NotesPage /></PageTransition>} />
 
         {/* Book pages */}
-        <Route path="/book/:bookId" element={<Navigate to="notes-mode" replace />} />
+        <Route path="/book/:bookId" element={<PageTransition><BookPage /></PageTransition>} />
         <Route path="/book/:bookId/quiz" element={<QuizPage />} />
         <Route path="/book/:bookId/mindmap" element={<MindMapPage />} />
         <Route path="/book/:bookId/flashcards" element={<FlashcardPage />} />
