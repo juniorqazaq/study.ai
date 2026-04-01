@@ -1,69 +1,67 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Code, FileText, Link as LinkIcon, Upload } from 'lucide-react';
 
-import { FileMetadata, storageService } from '@/shared/services/storage.service';
+import { createBook, uploadBookFile } from '@/shared/api/endpoints/books.api';
+import { getApiErrorMessage } from '@/shared/util/authHelpers';
 
-type UploadedFile = FileMetadata;
+type UploadRow = {
+  id: string;
+  name: string;
+  displaySize: string;
+  progress: number;
+  status: 'uploading' | 'success' | 'error';
+  error?: string;
+};
+
+function newRowId() {
+  return typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
 
 export function UploadPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [activeTab, setActiveTab] = useState<'files' | 'url' | 'github'>('files');
-  const [files, setFiles] = useState<UploadedFile[]>([]);
-
-  useEffect(() => {
-    setFiles(storageService.getFiles());
-  }, []);
+  const [rows, setRows] = useState<UploadRow[]>([]);
 
   const handleFiles = useCallback((fileList: FileList) => {
-    const newFiles: UploadedFile[] = Array.from(fileList).map((file, index) => {
-      const ext = file.name.split('.').pop()?.toLowerCase() || '';
-      const typeMap: Record<string, string> = {
-        pdf: 'pdf',
-        epub: 'epub',
-        txt: 'txt',
-        doc: 'docx',
-        docx: 'docx',
-        ppt: 'pptx',
-        pptx: 'pptx',
-      };
+    const list = Array.from(fileList);
+    list.forEach((file) => {
+      const rowId = newRowId();
+      const displaySize = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+      setRows((previous) => [
+        {
+          id: rowId,
+          name: file.name,
+          displaySize,
+          progress: 0,
+          status: 'uploading',
+        },
+        ...previous,
+      ]);
 
-      return {
-        id: Date.now().toString() + index,
-        name: file.name,
-        type: (typeMap[ext] || 'txt') as FileMetadata['type'],
-        size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-        status: 'uploading',
-        progress: 0,
-        uploadedAt: 'Just now',
-      };
-    });
-
-    setFiles((previous) => [...newFiles, ...previous]);
-
-    newFiles.forEach((newFileMetadata, index) => {
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 10;
-        if (progress <= 90) {
-          setFiles((previous) =>
-            previous.map((file) => (file.id === newFileMetadata.id ? { ...file, progress } : file)),
+      void (async () => {
+        try {
+          const ext = file.name.split('.').pop()?.toLowerCase() ?? 'unknown';
+          const title = file.name.replace(/\.[^/.]+$/, '') || 'Untitled';
+          const book = await createBook({ title, type: ext });
+          await uploadBookFile(book.id, file, (pct) => {
+            setRows((previous) =>
+              previous.map((row) => (row.id === rowId ? { ...row, progress: pct } : row)),
+            );
+          });
+          setRows((previous) =>
+            previous.map((row) =>
+              row.id === rowId ? { ...row, progress: 100, status: 'success' as const } : row,
+            ),
           );
-        } else {
-          clearInterval(interval);
-          const uploadedFile = {
-            ...newFileMetadata,
-            progress: 100,
-            status: 'success' as const,
-          };
-
-          storageService.saveFile(uploadedFile);
-          setFiles((previous) =>
-            previous.map((file) =>
-              file.id === newFileMetadata.id ? { ...file, progress: 100, status: 'success' } : file,
+        } catch (err) {
+          const message = getApiErrorMessage(err);
+          setRows((previous) =>
+            previous.map((row) =>
+              row.id === rowId ? { ...row, status: 'error' as const, error: message } : row,
             ),
           );
         }
-      }, 220 + index * 100);
+      })();
     });
   }, []);
 
@@ -108,6 +106,7 @@ export function UploadPage() {
           ].map((tab) => (
             <button
               key={tab.id}
+              type="button"
               onClick={() => setActiveTab(tab.id as 'files' | 'url' | 'github')}
               className={`app-panel flex items-center justify-center gap-3 px-6 py-5 text-sm font-medium transition-colors ${
                 activeTab === tab.id ? 'bg-[#1f1f1f] text-white' : 'text-[#8d8d8d] hover:bg-[#1a1a1a] hover:text-white'
@@ -167,8 +166,10 @@ export function UploadPage() {
                 <p className="mt-3 text-base text-[#8d8d8d]">Enter a web link to import its content directly.</p>
 
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                  <input type="url" placeholder="https://example.com/document.pdf" className="app-input flex-1" />
-                  <button className="app-primary-button">Import</button>
+                  <input type="url" placeholder="https://example.com/document.pdf" className="app-input flex-1" readOnly />
+                  <button type="button" className="app-primary-button opacity-60" disabled>
+                    Import
+                  </button>
                 </div>
               </div>
             )}
@@ -182,15 +183,17 @@ export function UploadPage() {
                 <p className="mt-3 text-base text-[#8d8d8d]">Enter a repository path to import documentation.</p>
 
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                  <input type="text" placeholder="username/repository" className="app-input flex-1" />
-                  <button className="app-primary-button">Connect</button>
+                  <input type="text" placeholder="username/repository" className="app-input flex-1" readOnly />
+                  <button type="button" className="app-primary-button opacity-60" disabled>
+                    Connect
+                  </button>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {files.length > 0 && (
+        {rows.length > 0 && (
           <div className="app-panel mt-8 p-6 lg:p-8">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-[16px] border border-[#2a2a2a] bg-[#1a1a1a]">
@@ -200,7 +203,7 @@ export function UploadPage() {
             </div>
 
             <div className="space-y-3">
-              {files.map((file) => (
+              {rows.map((file) => (
                 <div key={file.id} className="rounded-[20px] border border-[#262626] bg-[#141414] p-5">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex items-center gap-4">
@@ -209,13 +212,20 @@ export function UploadPage() {
                       </div>
                       <div>
                         <div className="font-medium text-white">{file.name}</div>
-                        <div className="mt-1 text-sm text-[#7c7c7c]">{file.size} • Uploaded just now</div>
+                        <div className="mt-1 text-sm text-[#7c7c7c]">
+                          {file.displaySize} • {file.status === 'success' ? 'Uploaded' : file.status === 'error' ? 'Failed' : 'Uploading'}
+                        </div>
+                        {file.error && <p className="mt-2 text-sm text-red-300">{file.error}</p>}
                       </div>
                     </div>
 
                     {file.status === 'success' ? (
                       <span className="rounded-full border border-[#2a2a2a] bg-[#1a1a1a] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#d7d7d7]">
                         Processed
+                      </span>
+                    ) : file.status === 'error' ? (
+                      <span className="rounded-full border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-red-200">
+                        Error
                       </span>
                     ) : (
                       <div className="flex items-center gap-4">
