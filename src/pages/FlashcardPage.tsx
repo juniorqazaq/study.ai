@@ -1,37 +1,64 @@
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Edit2, Filter, Layout, MessageSquare, Trash2 } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, Edit2, Filter, Layout, Loader2, MessageSquare, Trash2 } from 'lucide-react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSidebar } from '../context/SidebarContext';
-import { lessonsData } from '../shared/data/lessonData';
-
-const mockFlashcards = [
-    { id: 1, front: "What is the primary focus of psychology as a scientific discipline?", back: "The scientific study of behavior and mental processes." },
-    { id: 2, front: "Define 'Neuroplasticity'", back: "The brain's ability to reorganize itself by forming new neural connections throughout life." },
-    { id: 3, front: "What is the 'Amygdala' responsible for?", back: "Processing emotions, particularly fear and aggression." },
-    { id: 4, front: "What is Operant Conditioning?", back: "A method of learning that employs rewards and punishments for behavior." },
-    { id: 5, front: "Who founded the first psychology laboratory?", back: "Wilhelm Wundt in 1879." }
-];
+import { getLesson, type LessonContent } from '@/shared/api/endpoints/lessons.api';
 
 export default function FlashcardPage() {
     const { bookId } = useParams();
     const navigate = useNavigate();
     const { isSidebarHidden, setIsSidebarHidden } = useSidebar();
-    
-    const lesson = bookId ? lessonsData[bookId] : null;
-    const flashcards = lesson ? lesson.flashcards : mockFlashcards;
+    const [lesson, setLesson] = useState<LessonContent | null>(null);
+    const [loading, setLoading] = useState(!!bookId);
+
+    useEffect(() => {
+        if (!bookId) {
+            setLesson(null);
+            setLoading(false);
+            return;
+        }
+        let cancelled = false;
+        setLoading(true);
+        void (async () => {
+            try {
+                const l = await getLesson(bookId);
+                if (!cancelled) setLesson(l);
+            } catch (e) {
+                console.error(e);
+                if (!cancelled) setLesson(null);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [bookId]);
+
+    const flashcards = lesson?.flashcards ?? [];
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
 
+    useEffect(() => {
+        setCurrentIndex(0);
+        setIsFlipped(false);
+    }, [bookId, lesson?.updatedAt]);
+
     const handleNext = () => {
+        if (flashcards.length === 0) return;
         setIsFlipped(false);
         setCurrentIndex((prev) => (prev + 1) % flashcards.length);
     };
 
     const handlePrev = () => {
+        if (flashcards.length === 0) return;
         setIsFlipped(false);
         setCurrentIndex((prev) => (prev - 1 + flashcards.length) % flashcards.length);
     };
+
+    const showEmpty = bookId && !loading && !lesson;
+    const showCards = flashcards.length > 0;
 
     return (
         <div className="flex h-screen w-full overflow-hidden bg-[#0c0c0c]">
@@ -43,7 +70,7 @@ export default function FlashcardPage() {
                             <ChevronLeft size={20} />
                         </button>
                         <h1 className="text-[15px] font-semibold tracking-tight text-white">
-                            {lesson?.title || "Psychology of Learning"}
+                            {lesson?.title || 'Flashcards'}
                         </h1>
                     </div>
                     <div className="flex items-center gap-5 text-[13px] font-medium text-[#a1a1aa]">
@@ -65,6 +92,47 @@ export default function FlashcardPage() {
 
                 {/* Main Content */}
                 <main className="flex flex-1 flex-col items-center justify-center p-6 bg-[#111111]">
+                    {loading && bookId ? (
+                        <div className="flex flex-col items-center gap-3 text-[#a1a1aa]">
+                            <Loader2 className="h-8 w-8 animate-spin text-[#0066FF]" />
+                            <p className="text-sm">Loading flashcards…</p>
+                        </div>
+                    ) : null}
+
+                    {showEmpty ? (
+                        <div className="flex max-w-md flex-col items-center gap-4 text-center">
+                            <p className="text-sm text-[#a1a1aa]">Please generate study materials first.</p>
+                            <button
+                                type="button"
+                                onClick={() => navigate(-1)}
+                                className="rounded-xl border border-[#262626] bg-[#1a1a1a] px-4 py-2 text-sm font-medium text-white hover:bg-[#2a2a2a]"
+                            >
+                                Go back
+                            </button>
+                            {bookId ? (
+                                <Link to={`/book/${bookId}`} className="text-sm text-[#0066FF] hover:underline">
+                                    Open book hub
+                                </Link>
+                            ) : null}
+                        </div>
+                    ) : null}
+
+                    {!bookId ? (
+                        <p className="text-center text-sm text-[#a1a1aa]">
+                            Open flashcards from a book in your{' '}
+                            <Link to="/library" className="text-[#0066FF] hover:underline">
+                                library
+                            </Link>
+                            .
+                        </p>
+                    ) : null}
+
+                    {bookId && !loading && lesson && !showCards ? (
+                        <p className="text-sm text-[#a1a1aa]">No flashcards in this lesson yet. Try regenerating from the book page.</p>
+                    ) : null}
+
+                    {showCards ? (
+                    <>
                     {/* Tags */}
                     <div className="mb-8 flex flex-wrap gap-3">
                         <div className="flex items-center gap-2 rounded-full border border-[#3b1717] bg-[#2a1111] px-3 py-1 font-medium text-[#ff6b6b] text-xs">
@@ -80,7 +148,6 @@ export default function FlashcardPage() {
                             <div className="h-1.5 w-1.5 rounded-full bg-[#06d6a0]" /> 0 Mastered
                         </div>
                     </div>
-
                     {/* Card */}
                     <div 
                         className="relative flex w-full max-w-[800px] h-[500px] cursor-pointer flex-col items-center justify-center rounded-[24px] border border-[#262626] bg-[#1a1a1a] p-8 text-center transition-colors hover:bg-[#1f1f1f]"
@@ -125,6 +192,8 @@ export default function FlashcardPage() {
                             <ChevronRight size={18} />
                         </button>
                     </div>
+                    </>
+                    ) : null}
                 </main>
             </div>
 
