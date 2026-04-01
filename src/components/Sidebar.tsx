@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { useSidebar } from '@/context/SidebarContext';
+import { logout as logoutUser } from '@/shared/api/endpoints/auth.api';
 
 const IcoLibrary = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>;
 const IcoUpload = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>;
@@ -19,6 +21,18 @@ export function Sidebar() {
   const { isCollapsed, toggleSidebar } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      await logoutUser();
+    } finally {
+      navigate('/');
+      setLoggingOut(false);
+    }
+  };
 
   const getLinkClass = (isActive: boolean) =>
     `flex items-center ${isCollapsed ? 'justify-center h-11 w-11' : 'gap-3 px-4 py-3'} rounded-2xl border transition-colors ${isActive
@@ -108,12 +122,14 @@ export function Sidebar() {
           {!isCollapsed && <span className="text-[14px]">Settings</span>}
         </NavLink>
         <button
-          onClick={() => navigate('/')}
+          type="button"
+          onClick={() => void handleLogout()}
+          disabled={loggingOut}
           title="Log Out"
-          className={`flex w-full items-center ${isCollapsed ? 'justify-center h-11 w-11 mx-auto' : 'gap-3 px-4 py-3'} rounded-2xl border border-transparent text-[#8d8d8d] transition-colors hover:border-white/[0.07] hover:bg-[#111520] hover:text-white`}
+          className={`flex w-full items-center ${isCollapsed ? 'justify-center h-11 w-11 mx-auto' : 'gap-3 px-4 py-3'} rounded-2xl border border-transparent text-[#8d8d8d] transition-colors hover:border-white/[0.07] hover:bg-[#111520] hover:text-white disabled:opacity-50`}
         >
           <IcoLogOut />
-          {!isCollapsed && <span className="text-[14px]">Log Out</span>}
+          {!isCollapsed && <span className="text-[14px]">{loggingOut ? 'Logging out…' : 'Log Out'}</span>}
         </button>
       </div>
     </aside>

@@ -6,8 +6,8 @@ import {
     TokenResponse,
     GithubLoginResponse
 } from '../../types/auth';
-import { setAuthToken } from '../axiosInstance';
 import { httpClient } from '../client';
+import { clearAuthTokens, getRefreshToken } from '../../util/authHelpers';
 
 export const login = async (
     credentials: LoginCredentials
@@ -31,14 +31,16 @@ export const githubLogin = async (
     return await httpClient.post<GithubLoginResponse>('/auth/github', { code });
 };
 
-export const logout = (): void => {
-    Cookies.remove('token');
-    Cookies.remove('user');
-    setAuthToken(null);
-
-    window.dispatchEvent(new CustomEvent('authStatusChanged', {
-        detail: { isAuthenticated: false }
-    }));
+export const logout = async (): Promise<void> => {
+    const refreshToken = getRefreshToken();
+    if (refreshToken) {
+        try {
+            await httpClient.post<{ message: string }>('/auth/logout', { refreshToken });
+        } catch {
+            // Still clear local session if the server is unreachable
+        }
+    }
+    clearAuthTokens();
 };
 
 export const getCurrentUser = () => {

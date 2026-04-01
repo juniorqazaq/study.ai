@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { googleLogin, githubLogin } from "@/shared/api/endpoints/auth.api.ts";
-import { setAuthToken } from "@/shared/api/axiosInstance.ts";
-import Cookies from "js-cookie";
+import { login, googleLogin, githubLogin } from "@/shared/api/endpoints/auth.api.ts";
 import { useGoogleLogin } from '@react-oauth/google';
-import { storageService } from '@/shared/services/storage.service';
+import {
+  saveAuthTokens,
+  parseAccessTokenUser,
+  getApiErrorMessage,
+} from '@/shared/util/authHelpers';
+import type { TokenResponse } from '@/shared/types/auth';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -30,72 +33,109 @@ const IconGithub = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="n
 const IconEye = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>;
 const IconEyeOff = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>;
 
+type OAuthAuthResult = TokenResponse & {
+    user?: { id: string; email: string; fullName: string };
+};
+
 export function LoginPage() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         setIsLoading(true);
-        // Simulate network delay for smooth UX
-        setTimeout(() => {
-            const mockToken = 'mock_token_' + Date.now();
-            setAuthToken(mockToken);
-            Cookies.set('token', mockToken);
-            storageService.saveUser({ id: '1', email, fullName: email.split('@')[0] });
-            setIsLoading(false);
+        try {
+            const { accessToken, refreshToken } = await login({ email, password });
+            const user = parseAccessTokenUser(accessToken);
+            if (!user) {
+                throw new Error('Invalid token response');
+            }
+            saveAuthTokens(accessToken, refreshToken, user);
             window.scrollTo(0, 0);
-            navigate('/dashboard');
-        }, 800);
+            navigate('/library');
+        } catch (err) {
+            setError(getApiErrorMessage(err));
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
+            setError(null);
+            setIsLoading(true);
             try {
-                const response = await googleLogin(tokenResponse.access_token);
-                if (response) {
-                    const { accessToken } = response;
-                    setAuthToken(accessToken);
-                    Cookies.set('token', accessToken);
-                    window.scrollTo(0, 0);
-                    navigate('/dashboard');
+                const response = (await googleLogin(tokenResponse.access_token)) as OAuthAuthResult;
+                const { accessToken, refreshToken, user } = response;
+                const u = user ?? parseAccessTokenUser(accessToken);
+                if (!u) {
+                    throw new Error('Invalid token response');
                 }
-            } catch (error) {
-                console.error('Google login failed:', error);
+                saveAuthTokens(accessToken, refreshToken, u);
+                window.scrollTo(0, 0);
+                navigate('/library');
+            } catch (err) {
+                setError(getApiErrorMessage(err));
+            } finally {
+                setIsLoading(false);
             }
         },
         onError: () => {
-            console.error('Google login failed');
+            setError('Google sign-in was cancelled or failed.');
         }
     });
 
     const handleGithubLogin = () => {
         const clientId = "Ov23lieKTVcp8Gu4LbHy";
-        const redirectUri = "http://localhost:5173/login";
-        const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email`;
+        const redirectUri = `${window.location.origin}/login`;
+        const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email`;
         window.location.href = githubUrl;
     };
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
+        if (!code) return;
 
-        if (code) {
-            githubLogin(code).then(response => {
-                if (response) {
-                    const { accessToken } = response;
-                    setAuthToken(accessToken);
-                    Cookies.set('token', accessToken);
-                    window.scrollTo(0, 0);
-                    navigate('/dashboard');
-                }
-            }).catch(error => {
-                console.error('GitHub login failed:', error);
-            });
+        const sessionKey = `github_oauth_${code}`;
+        if (typeof sessionStorage !== 'undefined') {
+            if (sessionStorage.getItem(sessionKey)) {
+                window.history.replaceState({}, '', window.location.pathname);
+                return;
+            }
+            sessionStorage.setItem(sessionKey, '1');
         }
+
+        let cancelled = false;
+        (async () => {
+            setError(null);
+            setIsLoading(true);
+            try {
+                const response = (await githubLogin(code)) as OAuthAuthResult;
+                const { accessToken, refreshToken, user } = response;
+                const u = user ?? parseAccessTokenUser(accessToken);
+                if (!u) {
+                    throw new Error('Invalid token response');
+                }
+                saveAuthTokens(accessToken, refreshToken, u);
+                window.history.replaceState({}, '', window.location.pathname);
+                window.scrollTo(0, 0);
+                if (!cancelled) navigate('/library');
+            } catch (err) {
+                if (!cancelled) setError(getApiErrorMessage(err));
+            } finally {
+                if (!cancelled) setIsLoading(false);
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
     }, [navigate]);
 
     return (
@@ -125,6 +165,12 @@ export function LoginPage() {
                         <h1 className="text-4xl font-black tracking-tight text-[#e2e8f0]">Welcome Back</h1>
                         <p className="text-[#e2e8f0]/58 text-[15px] leading-7">Log in to continue your study sessions, review weak spots, and pick up where you stopped.</p>
                     </div>
+
+                    {error && (
+                        <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200" role="alert">
+                            {error}
+                        </p>
+                    )}
 
                     <form onSubmit={handleSubmit} className="mt-8 space-y-4">
                         <div className="space-y-4">
@@ -203,13 +249,13 @@ export function LoginPage() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <Button variant="outline" className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#171d2b] border-[#2a3349] hover:bg-[#20283b] transition-colors" onClick={() => handleGoogleLogin()}>
+                        <Button type="button" variant="outline" disabled={isLoading} className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#171d2b] border-[#2a3349] hover:bg-[#20283b] transition-colors" onClick={() => handleGoogleLogin()}>
                             <svg className="mr-2 h-5 w-5" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
                                 <path fill="#4285F4" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
                             </svg>
                             Google
                         </Button>
-                        <Button variant="outline" className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#171d2b] border-[#2a3349] hover:bg-[#20283b] transition-colors" onClick={handleGithubLogin}>
+                        <Button type="button" variant="outline" disabled={isLoading} className="h-12 rounded-xl text-[#e2e8f0] font-medium bg-[#171d2b] border-[#2a3349] hover:bg-[#20283b] transition-colors" onClick={handleGithubLogin}>
                             <IconGithub />
                             <span className="ml-2">GitHub</span>
                         </Button>
