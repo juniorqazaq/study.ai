@@ -11,7 +11,7 @@ import { SidebarProvider } from './context/SidebarContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_PLACEHOLDER">
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ''}>
             <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
                 <SidebarProvider>
                     <App />
