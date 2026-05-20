@@ -4,44 +4,44 @@
 
 @layer base {
   :root {
-    --background: 223 26% 6%;
-    --foreground: 220 20% 95%;
+    --background: 0 0% 0%; /* #000000 */
+    --foreground: 0 0% 96%; /* #F5F5F5 */
 
-    --card: 223 23% 10%;
-    --card-foreground: 220 20% 95%;
+    --card: 0 0% 8%; /* #141414 */
+    --card-foreground: 0 0% 96%;
 
-    --popover: 223 23% 10%;
-    --popover-foreground: 220 20% 95%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 221 83% 53%;
+    --primary: 221 100% 50%; /* #0066FF */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 223 18% 12%;
-    --secondary-foreground: 220 20% 95%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 223 18% 12%;
-    --muted-foreground: 220 10% 62%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 62%;
 
-    --accent: 223 18% 12%;
-    --accent-foreground: 220 20% 95%;
+    --accent: 221 100% 50%;
+    --accent-foreground: 0 0% 96%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 10% 24%;
-    --input: 220 10% 24%;
-    --ring: 221 83% 53%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 221 100% 50%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 222 18% 8%;
-    --sidebar-foreground: 220 20% 95%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 221 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 18% 12%;
-    --sidebar-accent-foreground: 220 20% 95%;
-    --sidebar-border: 220 10% 24%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 221 100% 50%;
   }
 }
 
@@ -51,13 +51,23 @@
   }
 
   body {
-    @apply text-[#f4f4f5];
+    @apply text-[#F5F5F5];
     font-family: 'Inter', sans-serif;
     overflow-y: scroll;
-    background-color: #0a0d14;
-    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
-    background-size: 24px 24px;
+    background-color: #000000;
   }
+
+  /* Blue focus ring */
+  *:focus-visible {
+    outline: 2px solid #0066FF !important;
+    outline-color: #0066FF !important;
+    outline-offset: 2px;
+  }
+}
+
+/* ─── Fixed Noise Overlay ─── */
+.noise-overlay {
+  display: none;
 }
 
 /* ─── Strict UI Rules ─── */
@@ -65,25 +75,25 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px #1a1d2e inset !important;
-    -webkit-text-fill-color: #e2e8f0 !important;
+    -webkit-box-shadow: 0 0 0 1000px #141414 inset !important;
+    -webkit-text-fill-color: #F5F5F5 !important;
 }
 
 /* ─── React Flow Dark Mode ─── */
 .react-flow__controls {
-  background-color: #111 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #141414 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 8px !important;
   overflow: hidden !important;
 }
 .react-flow__controls-button {
   background-color: transparent !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   color: #fff !important;
   fill: #fff !important;
 }
 .react-flow__controls-button:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 .react-flow__controls-button:last-child {
   border-bottom: none !important;
@@ -110,104 +120,101 @@ input:-webkit-autofill:active {
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   }
 
-  /* Gradient button — Azure Blue */
+  /* Gradient button — Blue Gradient */
   .btn-gradient {
-    background: #0066FF;
+    background: linear-gradient(135deg, #0066FF, #3B82F6);
     color: white;
-    transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
   .btn-gradient:hover {
-    background: #be6036;
+    opacity: 0.9;
     transform: translateY(-1px);
   }
   .btn-gradient:active { transform: scale(0.97); }
 
   /* Outline secondary button */
   .btn-outline-dark {
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     background: transparent;
     color: white;
     transition: background 0.2s ease, border-color 0.2s ease;
   }
   .btn-outline-dark:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   /* Glassmorphism card */
   .glass-card {
-    background: #171717;
-    border: 1px solid #262626;
+    background: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
   }
   .glass-card:hover {
-    background: #1b1b1b;
-    border-color: #303030;
+    background: #181818;
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   /* Glow accents */
   .glow-blue {
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
-  }
-  .glow-indigo {
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 30px rgba(0, 102, 255, 0.2);
   }
 
   /* Section base */
   .section-dark {
-    background: #111111;
+    background: #000000;
   }
 
   .dot-grid-bg {
-    background-color: #0a0d14;
-    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-color: #000000;
+    background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .sidebar-grid-bg {
-    background-color: #0f1218;
-    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-color: #000000;
+    background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 
   .hero-grid-bg {
-    background-color: #0a0d14;
+    background-color: #000000;
     background-image:
-      linear-gradient(rgba(37,99,235,0.12) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(37,99,235,0.12) 1px, transparent 1px);
+      linear-gradient(rgba(0,102,255,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,102,255,0.08) 1px, transparent 1px);
     background-size: 40px 40px;
     mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
     -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
   }
 
   .app-shell {
-    @apply min-h-screen text-[#f4f4f5];
-    background-color: #0a0d14;
-    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    @apply min-h-screen text-[#F5F5F5];
+    background-color: #000000;
+    background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .app-panel {
     @apply rounded-2xl border;
-    background: #111520;
-    border-color: rgba(255,255,255,0.07);
+    background: #141414;
+    border-color: rgba(255,255,255,0.08);
   }
 
   .app-panel-soft {
     @apply rounded-2xl border;
-    background: #111520;
-    border-color: rgba(255,255,255,0.07);
+    background: #141414;
+    border-color: rgba(255,255,255,0.08);
   }
 
   .app-input {
     @apply rounded-[18px] border px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-[#6b7280];
-    background: #111520;
-    border-color: rgba(255,255,255,0.07);
+    background: #141414;
+    border-color: rgba(255,255,255,0.08);
   }
 
   .app-input:focus {
-    border-color: rgba(255,255,255,0.16);
-    background: #141925;
+    border-color: #0066FF;
+    background: #181818;
   }
 
   .app-muted-label {
@@ -216,19 +223,19 @@ input:-webkit-autofill:active {
 
   .app-primary-button {
     @apply rounded-[18px] border px-5 py-3 text-sm font-semibold text-white transition-colors;
-    background: #2563eb;
-    border-color: rgba(255,255,255,0.07);
+    background: #0066FF;
+    border-color: rgba(255,255,255,0.08);
   }
 
   .app-secondary-button {
     @apply rounded-[18px] border px-5 py-3 text-sm font-medium text-[#d4d4d8] transition-colors hover:text-white;
-    background: #111520;
-    border-color: rgba(255,255,255,0.07);
+    background: #141414;
+    border-color: rgba(255,255,255,0.08);
   }
 
   .matte-panel {
-    background: #111520;
-    border: 1px solid rgba(255,255,255,0.07);
+    background: #141414;
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px;
   }
 }
@@ -249,20 +256,20 @@ input:-webkit-autofill:active {
 .animate-blob  { animation: blob 7s infinite alternate ease-in-out; }
 .animate-mesh  { background-size: 200% 200%; animation: mesh 15s infinite ease-in-out; }
 
-/* Liquid blobs (used by LiquidBackground) */
+/* Liquid blobs */
 .liquid-mesh-primary {
   background-image:
-    radial-gradient(at 0%   0%,  hsla(221, 83%, 53%, 0.12) 0px, transparent 50%),
-    radial-gradient(at 50%  0%,  hsla(221, 83%, 53%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%,  hsla(221, 83%, 53%, 0.12) 0px, transparent 50%);
+    radial-gradient(at 0%   0%,  hsla(221, 100%, 50%, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50%  0%,  hsla(221, 100%, 50%, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%,  hsla(221, 100%, 50%, 0.12) 0px, transparent 50%);
 }
 
 .liquid-glass {
-  @apply border border-[#262626] bg-[#171717];
+  @apply border border-[#262626] bg-[#141414];
   box-shadow: none;
 }
 .liquid-glass-dark {
-  @apply border border-[#262626] bg-[#141414];
+  @apply border border-[#262626] bg-[#000000];
 }
 
 .liquid-glow { position: relative; }
@@ -290,6 +297,7 @@ input:-webkit-autofill:active {
   z-index: 0;
   opacity: 0.04;
   pointer-events: none;
+  display: none !important;
 }
 .liquid-blob-1 {
   width: 500px; height: 500px;
@@ -311,5 +319,5 @@ input:-webkit-autofill:active {
 }
 
 .glass-nav {
-  @apply border-b border-[#262626] bg-[#121212];
+  @apply border-b border-white/[0.08] bg-[#000000];
 }

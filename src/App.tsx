@@ -8,9 +8,9 @@ import { ProfilePage } from './pages/ProfilePage';
 import QuizPage from './pages/QuizPage';
 import MindMapPage from './pages/MindMapPage';
 import { LandingPage } from './pages/LandingPage';
-import { LoginPage } from './pages/auth/LoginPage.tsx';
-import { RegisterPage } from './pages/auth/RegisterPage.tsx';
-import { EmailVerificationSentPage } from './pages/auth/EmailVerificationSentPage.tsx';
+import { Login } from './pages/auth/Login';
+import { Register } from './pages/auth/Register';
+import { EmailVerificationSentPage } from './pages/auth/EmailVerificationSentPage';
 import { PricingPage } from './pages/PricingPage';
 import FlashcardPage from './pages/FlashcardPage';
 import NotesPage from './pages/NotesPage';
@@ -49,8 +49,8 @@ function AppContent() {
       <Routes>
         {/* Redirect root to dashboard */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/email-verification-sent" element={<EmailVerificationSentPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/features" element={<PageTransition><FeaturesPage /></PageTransition>} />

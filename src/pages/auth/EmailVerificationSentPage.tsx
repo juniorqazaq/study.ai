@@ -13,7 +13,9 @@ export function EmailVerificationSentPage() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                             </svg>
                         </div>
-                        <span className="font-bold">AI StudyBook</span>
+                        <span className="shrink-0 text-[1.2rem] font-bold tracking-tight">
+                            <span className="text-[#0066FF]">Study</span><span className="text-[#F5F5F5] italic lowercase">.ai</span>
+                        </span>
                     </Link>
                 </div>
             </nav>
@@ -31,15 +33,15 @@ export function EmailVerificationSentPage() {
                             We have sent a verification link to your email address.
                         </p>
                         <p className="text-sm text-gray-400">
-                            Please check your inbox and click the link to verify your account.
-                            If you don't see the email, please check your spam folder.
+                             Please check your inbox and click the link to verify your account.
+                             If you don't see the email, please check your spam folder.
                         </p>
                     </div>
 
                     <div className="space-y-3">
                         <Link
                             to="/login"
-                            className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:from-purple-500 hover:via-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                            className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 via-blue-600 to-cyan-600 hover:from-blue-500 hover:via-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
                             Return to Login
                             <ArrowRight className="w-5 h-5" />

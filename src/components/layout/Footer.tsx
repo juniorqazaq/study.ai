@@ -1,109 +1,32 @@
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Globe, Sparkles, Twitter, Github, Linkedin, Instagram } from "lucide-react";
-
-const SOCIALS = [
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Github, href: "#", label: "Github" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Instagram, href: "#", label: "Instagram" }
-];
-
-const NAV_ITEMS = [
-  { name: "Home", href: "/" },
-  { name: "How It Works", href: "/how-it-works" },
-  { name: "Resources", href: "/resources" },
-  { name: "Pricing", href: "/pricing" },
-  { name: "Support", href: "/support" },
-  { name: "Register", href: "/register" }
-];
+import { Link } from 'react-router-dom';
+import { Github, Linkedin, Twitter } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="dot-grid-bg relative overflow-hidden border-t border-white/5 font-sans text-white">
-      <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-20">
-        <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="flex flex-col justify-between gap-10">
-            <div>
-              <Link to="/" className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#0066FF] shadow-[0_16px_40px_rgba(0,102,255,0.35)]">
-                  <Sparkles size={18} className="text-white" />
-                </div>
-                <div>
-                  <div className="text-3xl font-black tracking-tight"><span className="text-[#0066FF]">Study</span><span className="text-white italic lowercase">.ai</span></div>
-                  <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.26em] text-white/50">
-                    Adaptive Learning Platform
-                  </div>
-                </div>
-              </Link>
-
-              <p className="mt-10 max-w-md text-lg leading-9 text-white/78">
-                Our mission is to help students turn dense material into faster understanding, better revision habits, and stronger recall.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              {SOCIALS.map((social, idx) => (
-                <motion.a
-                  key={idx}
-                  href={social.href}
-                  whileHover={{ scale: 1.08, y: -2 }}
-                  whileTap={{ scale: 0.96 }}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.07] bg-[#111520] text-white/78 transition-all duration-200 hover:border-white/15 hover:bg-[#151a26] hover:text-white"
-                  aria-label={social.label}
-                >
-                  <social.icon size={16} />
-                </motion.a>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-[2rem] border border-white/[0.07] bg-[#111520] p-6 md:p-8">
-            <div className="grid gap-6 md:grid-cols-[120px_1fr]">
-              <div className="text-[11px] font-black uppercase tracking-[0.3em] text-white/35">
-                Navigate
-              </div>
-
-              <div className="space-y-4">
-                {NAV_ITEMS.map((item, idx) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="group flex items-center justify-between gap-4 rounded-[1.4rem] border border-white/[0.07] bg-[#111520] px-5 py-4 transition-all duration-200 hover:border-white/15 hover:bg-[#151a26]"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-[11px] font-black uppercase tracking-[0.24em] text-white/35">
-                        0{idx + 1}
-                      </span>
-                      <span className="text-2xl font-medium tracking-tight text-white md:text-3xl">
-                        {item.name}
-                      </span>
-                    </div>
-                    <span className="text-white/30 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-white/70">
-                      →
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
+    <footer className="w-full border-t border-transparent bg-transparent py-8 text-neutral-400 font-sans text-sm mt-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6 text-center md:text-left">
+          <Link to="/" className="text-white font-bold tracking-tight hover:opacity-85 transition-opacity">
+            Study.ai
+          </Link>
+          <span className="text-neutral-500">© 2026. All rights reserved.</span>
+          <div className="flex items-center gap-4 text-xs">
+            <Link to="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <span className="text-neutral-700">|</span>
+            <Link to="#" className="hover:text-white transition-colors">Terms</Link>
           </div>
         </div>
 
-        <div className="mt-14 border-t border-white/8 pt-6">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="text-sm text-white/55">
-              Copyright 2026 Study.ai, All Rights Reserved
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/55">
-              <Link to="#" className="transition-colors hover:text-white">Privacy Policy</Link>
-              <Link to="#" className="transition-colors hover:text-white">Terms &amp; Conditions</Link>
-              <div className="flex items-center gap-2 rounded-full border border-white/[0.07] bg-[#111520] px-4 py-2 text-white/65">
-                <Globe size={12} />
-                <span>English</span>
-              </div>
-            </div>
-          </div>
+        <div className="flex items-center gap-4">
+          <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="Twitter">
+            <Twitter size={18} />
+          </a>
+          <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="GitHub">
+            <Github size={18} />
+          </a>
+          <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
+            <Linkedin size={18} />
+          </a>
         </div>
       </div>
     </footer>

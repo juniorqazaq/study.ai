@@ -6,6 +6,10 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { env } from './config/env.js';
+import authRoutes from './routes/auth.routes.js';
+import booksRouter from './routes/books.routes.js';
+import filesRouter from './routes/files.routes.js';
+import { errorMiddleware } from './middleware/error.middleware.js';
 
 const uploadsDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -14,24 +18,14 @@ if (!fs.existsSync(uploadsDir)) {
 
 const app = express();
 
-/**
- * Middleware order (top → bottom):
- * 1. cors
- * 2. helmet
- * 3. conditional express.json() — skipped for multipart and any *\/upload path (so body stream reaches multer)
- * 4. cookieParser
- * 5. /auth + rate limit
- * 6. static /uploads
- * 7. /books filesRouter (uploads) then booksRouter (CRUD)
- * 8. GET /health
- * 9. errorMiddleware
- *
- * Note: express.urlencoded() is NOT used — no global body parser besides json below.
- */
+const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+if (env.FRONTEND_ORIGIN && !allowedOrigins.includes(env.FRONTEND_ORIGIN)) {
+  allowedOrigins.push(env.FRONTEND_ORIGIN);
+}
 
 app.use(
   cors({
-    origin: env.FRONTEND_ORIGIN,
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
@@ -75,9 +69,12 @@ app.use('/auth', authLimiter, authRoutes);
 
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
-// Mount files router first so POST /books/:bookId/upload is matched before generic /books/:id routes.
 app.use('/books', filesRouter);
 app.use('/books', booksRouter);
+
+app.get('/', (_req, res) => {
+  res.status(200).send('Study.ai Backend API is running');
+});
 
 app.get('/health', (_req, res) => {
   res.status(200).json({ ok: true });
